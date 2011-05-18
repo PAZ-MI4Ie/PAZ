@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Zitting.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -94,6 +95,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\AvansLogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\thumb-up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\thumb_down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\paz.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

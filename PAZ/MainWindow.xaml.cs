@@ -25,7 +25,8 @@ namespace PAZ
     public partial class MainWindow : Window
     {
         private List<Zitting> _master;
-        public ICollectionView Zittingen{get; private set;}
+        public ICollectionView Zittingen { get; private set; }
+        bool match;
         public MainWindow()
         {
             InitializeComponent();
@@ -187,7 +188,13 @@ namespace PAZ
 
             Zittingen = CollectionViewSource.GetDefaultView(_master);
             bitch.ItemsSource = Zittingen;
+
+
+
+
         }
+
+
 
         private void buttonExportPDF_Click(object sender, RoutedEventArgs e)
         {
@@ -279,10 +286,43 @@ namespace PAZ
             }
         }
 
+        private void textboxSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (comboBoxSearch.SelectedIndex > 1)
+            {
+                Zittingen.Filter = delegate(object item)
+                {
 
 
+                    switch (comboBoxSearch.SelectedIndex)
+                    {
+                        case 1: match = ((Zitting)(item)).Datum.ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 2: match = ((Zitting)(item)).Tijd.ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 3: match = ((Zitting)(item)).Lokaal.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 4: match = ((Zitting)(item)).Leerlingen.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 5: match = ((Zitting)(item)).Docenten.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 6: match = ((Zitting)(item)).Deskundige.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 7: match = ((Zitting)(item)).AantalGasten.ToString().Contains(textboxSearch.Text.ToLower()); break;
+
+                    }
+
+                    return match;
+                };
+            }
+            else
+                comboBoxSearch.SelectedIndex = 0;
 
 
+        }
 
+        private void comboBoxSearch_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboBoxSearch.SelectedIndex == 0)
+                Zittingen.Filter = delegate(object item)
+                {
+                    item = new Zitting();
+                    return true;
+                };
+        }
     }
 }

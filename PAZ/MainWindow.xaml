@@ -11,11 +11,29 @@
         <TabControl Height="544" HorizontalAlignment="Left" Margin="12,53,0,0" Name="tabControl" VerticalAlignment="Top" Width="779" Background="White">
             
             <TabItem Header="Overzicht" Name="tabItemOverzicht" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">
+
+               
                 <Grid Name="GridOverzicht">
-                    
-                    <DataGrid Name="bitch" RowHeight="50" RowEditEnding="bitch_RowEditEnding" ColumnWidth="105" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="#FFDEDEDE" Foreground="#FF6F6F6F" AlternatingRowBackground="#FFF8F8F8">
-                       
+                    <GroupBox Header="Zoeken" Height="64" HorizontalAlignment="Left" Margin="6,0,0,0" Name="groupBoxSearch" VerticalAlignment="Top" Width="757">
+                        <Grid Height="44">
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="81,8,0,0" Name="textboxSearch" VerticalAlignment="Top" Width="167" TextChanged="textboxSearch_TextChanged" />
+                            <Label Content="Zoeken op" Height="28" HorizontalAlignment="Left" Margin="6,6,0,0" Name="labelSearch" VerticalAlignment="Top" Width="97" Foreground="#FF3E3E3E" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="282,8,0,0" Name="comboBoxSearch" VerticalAlignment="Top" Width="212" SelectionChanged="comboBoxSearch_SelectionChanged">
+                                <ComboBoxItem Content="Selecteer filter" />
+                                <ComboBoxItem Content="Datum" />
+                                <ComboBoxItem Content="Tijd" />
+                                <ComboBoxItem Content="Lokaal" />
+                                <ComboBoxItem Content="Leerlingen" />
+                                <ComboBoxItem Content="Docenten" />
+                                <ComboBoxItem Content="Deskundigen" />
+                                <ComboBoxItem Content="Aantal" />
+                            </ComboBox>
+                        </Grid>
+                    </GroupBox>
+
+                    <DataGrid Name="bitch" RowHeight="50" Margin="0, 70, 0, 0" RowEditEnding="bitch_RowEditEnding" ColumnWidth="105" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="#FFDEDEDE" Foreground="#FF6F6F6F" AlternatingRowBackground="#FFF8F8F8">
                     </DataGrid>
+
                 </Grid>
             </TabItem>
 

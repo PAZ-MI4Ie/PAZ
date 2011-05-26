@@ -58,9 +58,13 @@
     <Compile Include="Control\ControllerIO.cs" />
     <Compile Include="Control\PAZController.cs" />
     <Compile Include="Model\Admin.cs" />
+    <Compile Include="Model\Blocked_timeslot.cs" />
     <Compile Include="Model\Classroom.cs" />
     <Compile Include="Model\Day.cs" />
+    <Compile Include="Model\Daytime.cs" />
     <Compile Include="Model\Expert.cs" />
+    <Compile Include="Model\Pair.cs" />
+    <Compile Include="Model\Pair_attachment.cs" />
     <Compile Include="Model\Planning.cs" />
     <Compile Include="Model\Session.cs" />
     <Compile Include="Model\Student.cs" />

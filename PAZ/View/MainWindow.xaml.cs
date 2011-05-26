@@ -12,6 +12,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using Microsoft.Win32;
+using System.IO;
 
 namespace PAZ
 {
@@ -187,7 +189,7 @@ namespace PAZ
             };
 
             Zittingen = CollectionViewSource.GetDefaultView(_master);
-            bitch.ItemsSource = Zittingen;
+            GridOverzichtList.ItemsSource = Zittingen;
 
 
 
@@ -278,7 +280,7 @@ namespace PAZ
             }
         }
 
-        private void bitch_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        private void GridOverzichtList_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
             if (MessageBox.Show("Wilt u de wijzigingen opslaan?", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
@@ -323,6 +325,84 @@ namespace PAZ
                     item = new Zitting();
                     return true;
                 };
+        }
+
+
+        /*
+         * import button
+         * (C) Mark de Mol
+         * 
+         * Shows a browse dialog. User must select a CSV file to import.
+         * The CSV file must contain user data.
+         * 
+         * TO DO:
+         *  - ADD EACH ITEM TO THE DATABASE
+         */
+        private void buttonImport_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.DefaultExt = ".csv";
+            dlg.Title = "Open een CSV-gebruikers bestand";
+            dlg.Filter = "CSV-bestand|*.csv";
+            Nullable<bool> result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                if (dlg.CheckFileExists)
+                {
+                    string filename = dlg.FileName;
+                    string line; 
+                    StreamReader file = null;
+
+                    try
+                    {
+                        file = new StreamReader( filename );
+                        while ((line = file.ReadLine()) != null)
+                        {
+
+                            string[] csvResult = line.Split(new Char[] { ',' });
+
+                            for (int i = 0; i < csvResult.Length; i++)
+                            {
+
+                                /*
+                                 * ADD THE RESULTS TO THE DATABASE OVER HERE,
+                                 * 
+                                 * I SAID, OVER HERE DAMNED!
+                                 * 
+                                 * FIRST 12 ITEMS ARE THE COLUMS!!!!!
+                                 * this way you can easily add them.. naaisssss!
+                                 */
+
+
+                                /*
+                                 * test to show each item
+                                 * 
+                                 *  MessageBox.Show(csvResult[i]);
+                                 *  Console.WriteLine(csvResult[i]);
+                                 *  
+                                 */
+                            }
+
+                            /*
+                             * test to show each line
+                             * 
+                             *  MessageBox.Show(line);
+                             */
+
+                        }
+                    }
+                    finally
+                    {
+                        if (file != null)
+                            file.Close();
+                    }
+
+                }
+                else
+                    MessageBox.Show("Bestand niet gevonden.");
+            }
+
         }
     }
 }

@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using PAZ.Model;
 
 namespace PAZ
 {
@@ -19,6 +20,7 @@ namespace PAZ
     public partial class Login : Window
     {
         
+        
         public Login()
         {
             InitializeComponent();
@@ -27,10 +29,17 @@ namespace PAZ
        
         private void labelButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MainWindow tt = new MainWindow();
-            tt.Show();
-            Application.Current.Windows[0].Close();
-            this.Close();
+
+            if (login.checkUsername(passwordBox1.Password))
+            {
+                MainWindow tt = new MainWindow();
+                tt.Show();
+                Application.Current.Windows[0].Close();
+                this.Close();
+            }
+            else
+                MessageBox.Show("Wachtwoord is onjuist.");
+             
         }
 
     }

@@ -1,14 +1,19 @@
 ﻿<Window x:Class="PAZ.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Avans PAZ" Height="649" Width="825" Icon="/PAZ;component/Images/paz.ico">
-    <Grid Background="#FFD51D53" DataContext="{Binding}" Height="609">
+        xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+        Title="Avans PAZ" Height="696" Width="819" Icon="/PAZ;component/Resources/paz.ico">
+    <Grid Background="#FFD51D53" DataContext="{Binding}" Height="650" ShowGridLines="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="612*" />
+            <RowDefinition Height="38*" />
+        </Grid.RowDefinitions>
         <Label Height="34" HorizontalAlignment="Left" Margin="675,12,0,0" Name="label4" VerticalAlignment="Top" Width="116">
             <Label.Background>
-                <ImageBrush ImageSource="/PAZ;component/Images/AvansLogo.png" />
+                <ImageBrush ImageSource="/PAZ;component/Resources/AvansLogo.png" />
             </Label.Background>
         </Label>
-        <TabControl Height="544" HorizontalAlignment="Left" Margin="12,53,0,0" Name="tabControl" VerticalAlignment="Top" Width="779" Background="White">
+        <TabControl Height="585" HorizontalAlignment="Left" Margin="12,53,0,0" Name="tabControl" VerticalAlignment="Top" Width="779" Background="White" Grid.RowSpan="2">
             
             <TabItem Header="Overzicht" Name="tabItemOverzicht" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">
 
@@ -19,7 +24,7 @@
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="81,8,0,0" Name="textboxSearch" VerticalAlignment="Top" Width="167" TextChanged="textboxSearch_TextChanged" />
                             <Label Content="Zoeken op" Height="28" HorizontalAlignment="Left" Margin="6,6,0,0" Name="labelSearch" VerticalAlignment="Top" Width="97" Foreground="#FF3E3E3E" />
                             <ComboBox Height="23" HorizontalAlignment="Left" Margin="282,8,0,0" Name="comboBoxSearch" VerticalAlignment="Top" Width="212" SelectionChanged="comboBoxSearch_SelectionChanged">
-                                <ComboBoxItem Content="Selecteer filter" />
+                                <ComboBoxItem Content="Leeg filter" />
                                 <ComboBoxItem Content="Datum" />
                                 <ComboBoxItem Content="Tijd" />
                                 <ComboBoxItem Content="Lokaal" />
@@ -31,143 +36,14 @@
                         </Grid>
                     </GroupBox>
 
-                    <DataGrid Name="bitch" RowHeight="50" Margin="0, 70, 0, 0" RowEditEnding="bitch_RowEditEnding" ColumnWidth="105" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="#FFDEDEDE" Foreground="#FF6F6F6F" AlternatingRowBackground="#FFF8F8F8">
+                    <DataGrid Name="GridOverzichtList" RowHeight="50" Margin="0, 70, 0, 0" RowEditEnding="GridOverzichtList_RowEditEnding" ColumnWidth="105" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="#FFDEDEDE" Foreground="#FF6F6F6F" AlternatingRowBackground="#FFF8F8F8">
                     </DataGrid>
 
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="Data" Name="tabItemData" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">
-                <Grid Name="GridData">
-                    <GroupBox Header="Algemene informatie" Height="135" HorizontalAlignment="Left" Margin="6,6,0,0" Name="groupBoxDataInfo" VerticalAlignment="Top" Width="757">
-                        <Grid Height="105">
-                            <TextBlock Height="23" HorizontalAlignment="Left" Margin="24,15,0,0" Name="textBlockAlgemeneInfo1" Text="Ontvangen Items: 53" Foreground="#FF5E5353" FontStyle="Italic" VerticalAlignment="Top" Width="138" TextWrapping="Wrap" />
-                            <TextBlock Height="23" HorizontalAlignment="Left" Margin="288,44,0,0" Name="textBlockAlgemeneInfo2" Text="Ontvangen deskundigen : 4" Foreground="#FF5E5353" FontStyle="Italic" VerticalAlignment="Top" Width="160" TextWrapping="Wrap" />
-                            <TextBlock Height="23" HorizontalAlignment="Left" Margin="288,15,0,0" Name="textBlockAlgemeneInfo3" Text="Ontvangen leerlingen: 32" Foreground="#FF5E5353" FontStyle="Italic" VerticalAlignment="Top" Width="138" TextWrapping="Wrap" />
-                            <TextBlock Height="23" HorizontalAlignment="Left" Margin="24,44,0,0" Name="textBlockAlgemeneInfo4" Text="Goedgekeurde Items: 11" Foreground="#FF5E5353" FontStyle="Italic" VerticalAlignment="Top" Width="138" TextWrapping="Wrap" />
-                            <TextBlock Height="23" HorizontalAlignment="Left" Margin="24,76,0,0" Name="textBlockAlgemeneInfo5" Text="Ontvangen docenten: 9" Foreground="#FF5E5353" FontStyle="Italic" VerticalAlignment="Top" Width="138" TextWrapping="Wrap" />
-                            <TextBlock Height="23" HorizontalAlignment="Left" Margin="532,15,0,0" Name="textBlockAlgemeneInfo6" Text="Afgekeurde items: 2" Foreground="#FF5E5353" FontStyle="Italic" VerticalAlignment="Top" Width="138" TextWrapping="Wrap" />
-                            <TextBlock Height="23" HorizontalAlignment="Left" Margin="288,76,0,0" Name="textBlockAlgemeneInfo7" Text="Ontvangen begeleiders : 6" Foreground="#FF5E5353" FontStyle="Italic" VerticalAlignment="Top" Width="138" TextWrapping="Wrap" />
-                            <TextBlock Height="23" HorizontalAlignment="Left" Margin="532,76,0,0" Name="textBlockAlgemeneInfo8" Text="Ingestelde deadline: 25 juni 2011" Foreground="#FF5E5353" FontStyle="Italic" VerticalAlignment="Top" Width="206" TextWrapping="Wrap" />
-                            <TextBlock Height="23" HorizontalAlignment="Left" Margin="532,44,0,0" Name="textBlockAlgemeneInfo9" Text="Start datum: 1 juni 2011" Foreground="#FF5E5353" FontStyle="Italic" VerticalAlignment="Top" Width="138" TextWrapping="Wrap" />
-
-
-                        </Grid>
-                        </GroupBox>
-
                    
-
-
-                    <GroupBox Header="Ontvangen aanmeldingen" Height="358" HorizontalAlignment="Left" Margin="6,156,0,0" Name="groupBoxDataData2" VerticalAlignment="Top" Width="757">
-                        <ScrollViewer  ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="1" Height="300" Width="740">
-
-                            <StackPanel CanVerticallyScroll="True" Grid.Column="1" Grid.Row="4"  HorizontalAlignment="Left" Name="stackpanel" VerticalAlignment="Top" Width="740" Grid.ColumnSpan="3">
-
-                                <Rectangle Height="106" HorizontalAlignment="Left" Margin="6,-6,0,0" Name="rectangle2"  VerticalAlignment="Top" Width="720" Fill="#FFF8F8F8" />
-                                    
-                                    <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,-96,0,0" Name="textBlockDataData10" Text="Studentennummer: 2048797" VerticalAlignment="Top" />
-                                    <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,-65,0,0" Name="textBlockDataData11" Text="Voornaam: John" VerticalAlignment="Top" />
-                                    <TextBlock Height="23" HorizontalAlignment="Left" Margin="206,-65,0,0" Name="textBlockDataData12" Text="Blocked Day: 25-06-2011" VerticalAlignment="Top" />
-                                    <TextBlock Height="23" HorizontalAlignment="Left" Margin="398,-65,0,0" Name="textBlockDataData13" Text="Leraar #2: Ger Saris" VerticalAlignment="Top" />
-                                    <TextBlock Height="23" HorizontalAlignment="Left" Margin="206,-96,0,0" Name="textBlockDataData14" Text="Achternaam: Doe" VerticalAlignment="Top" />
-                                    <TextBlock Height="23" HorizontalAlignment="Left" Margin="398,-96,0,0" Name="textBlockDataData15" Text="Leraar #1: Piet Pieterson" VerticalAlignment="Top" />
-                                    <TextBlock Height="23" HorizontalAlignment="Left" Margin="206,-34,0,0" Name="textBlockDataData16" Text="Expert #2: Teun Klein" VerticalAlignment="Top" />
-                                    <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,-34,0,0" Name="textBlockDataData17" Text="Expert #1: Freek Groot" VerticalAlignment="Top" />
-                                    <TextBlock Height="23" HorizontalAlignment="Left" Margin="398,-34,0,0" Name="textBlockDataData18" Text="E:mail: John.Doe@hotmail.com" VerticalAlignment="Top" />
-                                    <Label Height="28" HorizontalAlignment="Left" Margin="626,-65,0,0" Name="ThumbUp2" VerticalAlignment="Top" Width="28" MouseDown="Agree">
-                                        <Label.Background>
-                                            <ImageBrush ImageSource="/PAZ;component/Images/thumb-up.png" />
-                                        </Label.Background>
-                                    </Label>
-                                    <Label Height="28" HorizontalAlignment="Left" Margin="690,-65,0,0" Name="label2" VerticalAlignment="Top" Width="28" MouseDown="Decline">
-                                        <Label.Background>
-                                            <ImageBrush ImageSource="/PAZ;component/Images/thumb_down.png" />
-                                        </Label.Background>
-                                    </Label>
-
-                                <!--2-->
-
-
-                                <Rectangle Height="106" HorizontalAlignment="Left" Margin="6,-6,0,0" Name="rectangle3"  VerticalAlignment="Top" Width="720" />
-
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,-96,0,0" Name="textBlockDataData19" Text="Studentennummer: 2048797" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,-65,0,0" Name="textBlockDataData20" Text="Voornaam: John" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="206,-65,0,0" Name="textBlockDataData21" Text="Blocked Day: 25-06-2011" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="398,-65,0,0" Name="textBlockDataData22" Text="Leraar #2: Ger Saris" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="206,-96,0,0" Name="textBlockDataData23" Text="Achternaam: Doe" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="398,-96,0,0" Name="textBlockDataData24" Text="Leraar #1: Piet Pieterson" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="206,-34,0,0" Name="textBlockDataData25" Text="Expert #2: Teun Klein" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,-34,0,0" Name="textBlockDataData26" Text="Expert #1: Freek Groot" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="398,-34,0,0" Name="textBlockDataData27" Text="E:mail: John.Doe@hotmail.com" VerticalAlignment="Top" />
-                                <Label Height="28" HorizontalAlignment="Left" Margin="626,-65,0,0" Name="ThumbUp3" VerticalAlignment="Top" Width="28" MouseDown="Agree">
-                                    <Label.Background>
-                                        <ImageBrush ImageSource="/PAZ;component/Images/thumb-up.png" />
-                                    </Label.Background>
-                                </Label>
-                                <Label Height="28" HorizontalAlignment="Left" Margin="690,-65,0,0" Name="label3" VerticalAlignment="Top" Width="28" MouseDown="Decline">
-                                    <Label.Background>
-                                        <ImageBrush ImageSource="/PAZ;component/Images/thumb_down.png" />
-                                    </Label.Background>
-                                </Label>
-
-
-
-                                <Rectangle Height="106" HorizontalAlignment="Left" Margin="6,-6,0,0" Name="rectangle4"  VerticalAlignment="Top" Width="720" Fill="#FFF8F8F8" />
-
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,-96,0,0" Name="textBlockDataData28" Text="Studentennummer: 2048797" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,-65,0,0" Name="textBlockDataData29" Text="Voornaam: John" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="206,-65,0,0" Name="textBlockDataData30" Text="Blocked Day: 25-06-2011" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="398,-65,0,0" Name="textBlockDataData31" Text="Leraar #2: Ger Saris" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="206,-96,0,0" Name="textBlockDataData32" Text="Achternaam: Doe" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="398,-96,0,0" Name="textBlockDataData33" Text="Leraar #1: Piet Pieterson" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="206,-34,0,0" Name="textBlockDataData34" Text="Expert #2: Teun Klein" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,-34,0,0" Name="textBlockDataData35" Text="Expert #1: Freek Groot" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="398,-34,0,0" Name="textBlockDataData36" Text="E:mail: John.Doe@hotmail.com" VerticalAlignment="Top" />
-                                <Label Height="28" HorizontalAlignment="Left" Margin="626,-65,0,0" Name="ThumbUp4" VerticalAlignment="Top" Width="28" MouseDown="Agree">
-                                    <Label.Background>
-                                        <ImageBrush ImageSource="/PAZ;component/Images/thumb-up.png" />
-                                    </Label.Background>
-                                </Label>
-                                <Label Height="28" HorizontalAlignment="Left" Margin="690,-65,0,0" Name="label5" VerticalAlignment="Top" Width="28" MouseDown="Decline">
-                                    <Label.Background>
-                                        <ImageBrush ImageSource="/PAZ;component/Images/thumb_down.png" />
-                                    </Label.Background>
-                                </Label>
-
-
-                                <Rectangle Height="106" HorizontalAlignment="Left" Margin="6,-6,0,0" Name="rectangle5"  VerticalAlignment="Top" Width="720" />
-
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,-96,0,0" Name="textBlockDataData37" Text="Studentennummer: 2048797" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,-65,0,0" Name="textBlockDataData38" Text="Voornaam: John" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="206,-65,0,0" Name="textBlockDataData39" Text="Blocked Day: 25-06-2011" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="398,-65,0,0" Name="textBlockDataData40" Text="Leraar #2: Ger Saris" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="206,-96,0,0" Name="textBlockDataData41" Text="Achternaam: Doe" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="398,-96,0,0" Name="textBlockDataData42" Text="Leraar #1: Piet Pieterson" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="206,-34,0,0" Name="textBlockDataData43" Text="Expert #2: Teun Klein" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,-34,0,0" Name="textBlockDataData44" Text="Expert #1: Freek Groot" VerticalAlignment="Top" />
-                                <TextBlock Height="23" HorizontalAlignment="Left" Margin="398,-34,0,0" Name="textBlockDataData45" Text="E:mail: John.Doe@hotmail.com" VerticalAlignment="Top" />
-                                <Label Height="28" HorizontalAlignment="Left" Margin="626,-65,0,0" Name="ThumbUp5" VerticalAlignment="Top" Width="28" MouseDown="Agree">
-                                    <Label.Background>
-                                        <ImageBrush ImageSource="/PAZ;component/Images/thumb-up.png" />
-                                    </Label.Background>
-                                </Label>
-                                <Label Height="28" HorizontalAlignment="Left" Margin="690,-65,0,0" Name="label6" VerticalAlignment="Top" Width="28" MouseDown="Decline">
-                                    <Label.Background>
-                                        <ImageBrush ImageSource="/PAZ;component/Images/thumb_down.png" />
-                                    </Label.Background>
-                                </Label>
-
-
-
-
-
-
-                            </StackPanel>
-                        </ScrollViewer>
-                    </GroupBox>
-                  
                 </Grid>
             </TabItem>
+
+            
 
             <!-- TOEVOEGEN-->
             <TabItem Header="Toevoegen" Name="tabItemToevoegen" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">
@@ -332,36 +208,42 @@
             <!-- ACTIES-->
             <TabItem Header="Acties" Name="tabItemActies" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">
                 <Grid Name="GridActies">
+                    
+                    <GroupBox Header="Importeer gebruikers" Height="82" Margin="10,2,5,0" Name="groupBoxImport" VerticalAlignment="Top">
+                        <Grid>
+                            <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockImport" Text="Deze actie kan een .csv-bestand importeren die gebruikers bevat." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
+                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonImport" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonImport_Click" />
+                        </Grid>
+                    </GroupBox>
 
-
-                    <GroupBox Header="Exporteer rooster" Height="82" Margin="10,2,5,0" Name="groupBoxExportPDF" VerticalAlignment="Top">
+                    <GroupBox Header="Exporteer rooster" Height="82" Margin="10,92,5,0" Name="groupBoxExportPDF" VerticalAlignment="Top">
                         <Grid>
                             <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockExportPDF" Text="Deze actie zal het rooster exporteren naar een pdf-bestand." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
                             <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonExportPDF" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonExportPDF_Click" />
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="Verwijder gebruikers" Height="82" Margin="10,92,5,0" Name="groupBoxVerwijderGebruikers" VerticalAlignment="Top">
+                    <GroupBox Header="Verwijder gebruikers" Height="82" Margin="10,182,5,0" Name="groupBoxVerwijderGebruikers" VerticalAlignment="Top">
                         <Grid>
                             <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockVerwijderGebruikers" Text="Deze actie verwijderd alle gebruikers, behalve de administratoren." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
                             <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonVerwijderGebruikers" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonVerwijderGebruikers_Click" />
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="Verwijder lokalen" Height="82" Margin="10,182,5,0" Name="groupBox1" VerticalAlignment="Top">
+                    <GroupBox Header="Verwijder lokalen" Height="82" Margin="10,272,5,0" Name="groupBox1" VerticalAlignment="Top">
                         <Grid>
                             <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockVerwijderLokalen" Text="Deze actie verwijderd alle lokalen." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
                             <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonVerwijderLokalen" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonVerwijderLokalen_Click" />
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Email versturen" Height="82" Margin="10,272,5,0" Name="groupBoxEmailVersturen" VerticalAlignment="Top">
+                    <GroupBox Header="Email versturen" Height="82" Margin="10,362,5,0" Name="groupBoxEmailVersturen" VerticalAlignment="Top">
                             <Grid>
                                 <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockEmailVersturen" Text="Deze actie verstuurt alle emails naar de personen." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
                                 <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonEmailVersturen" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonEmailVersturen_Click" />
                             </Grid>
                         </GroupBox>
 
-                        <GroupBox Header="Brief printen" Height="82" Margin="10,362,5,0" Name="groupBoxBriefPrinten" VerticalAlignment="Top">
+                        <GroupBox Header="Brief printen" Height="82" Margin="10,452,5,0" Name="groupBoxBriefPrinten" VerticalAlignment="Top">
                                 <Grid>
                                     <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockBriefPrinten" Text="Deze actie print een brief uit." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
                                     <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonBriefPrinten" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonBriefPrinten_Click" />

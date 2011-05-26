@@ -31,12 +31,12 @@ namespace PAZ.Model
             set { _surname = value; }
         }
 
-        private String _lastname;
+        private String _firstname;
 
-        public String Lastname
+        public String Firstname
         {
-            get { return _lastname; }
-            set { _lastname = value; }
+            get { return _firstname; }
+            set { _firstname = value; }
         }
 
         private string _email;

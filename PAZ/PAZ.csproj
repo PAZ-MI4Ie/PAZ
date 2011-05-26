@@ -36,6 +36,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data, Version=1.0.10.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -57,6 +61,7 @@
     </ApplicationDefinition>
     <Compile Include="Control\ControllerIO.cs" />
     <Compile Include="Control\PAZController.cs" />
+    <Compile Include="Model\Mapper\Mapper.cs" />
     <Compile Include="Model\Admin.cs" />
     <Compile Include="Model\Blocked_timeslot.cs" />
     <Compile Include="Model\Classroom.cs" />
@@ -71,6 +76,8 @@
     <Compile Include="Model\Student.cs" />
     <Compile Include="Model\Teacher.cs" />
     <Compile Include="Model\User.cs" />
+    <Compile Include="Model\Mapper\MysqlDb.cs" />
+    <Compile Include="Model\Mapper\UserMapper.cs" />
     <Compile Include="View\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>

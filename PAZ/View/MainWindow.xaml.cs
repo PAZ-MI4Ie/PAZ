@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 using Microsoft.Win32;
 using System.IO;
+using PAZMySQL;
 
 namespace PAZ
 {
@@ -32,6 +33,12 @@ namespace PAZ
         public MainWindow()
         {
             InitializeComponent();
+
+            //TEST CODE:
+            MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "******", "MI4Ie_db");//Must be somewhere central
+            UserMapper usermapper = new UserMapper(db);
+            Console.WriteLine(usermapper.FindAll());
+            //END OF TEST CODE
 
             _master = new List<Zitting>
             {

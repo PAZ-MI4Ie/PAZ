@@ -36,9 +36,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="itextsharp">
+      <HintPath>.\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=1.0.10.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\MySql.Data.dll</HintPath>
+      <HintPath>.\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -71,6 +74,7 @@
     <Compile Include="Model\login.cs" />
     <Compile Include="Model\Pair.cs" />
     <Compile Include="Model\Pair_attachment.cs" />
+    <Compile Include="Model\PDFExport.cs" />
     <Compile Include="Model\Planning.cs" />
     <Compile Include="Model\Session.cs" />
     <Compile Include="Model\Student.cs" />

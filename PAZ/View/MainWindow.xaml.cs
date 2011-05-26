@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.ComponentModel;
 using Microsoft.Win32;
 using System.IO;
 using PAZMySQL;
+using PAZ.Model;
 
 namespace PAZ
 {
@@ -30,12 +24,14 @@ namespace PAZ
         private List<Zitting> _master;
         public ICollectionView Zittingen { get; private set; }
         bool match;
+        private PDFExport _pdfExport;
+
         public MainWindow()
         {
             InitializeComponent();
 
             //TEST CODE:
-            MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "******", "MI4Ie_db");//Must be somewhere central
+            MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
             UserMapper usermapper = new UserMapper(db);
             Console.WriteLine(usermapper.FindAll());
             //END OF TEST CODE
@@ -43,173 +39,180 @@ namespace PAZ
             _master = new List<Zitting>
             {
                 new Zitting
-                {
-                    Datum = "10-5-2011",
-                    Tijd = "13:30",
-                    Lokaal = "OB002",
-                    Leerlingen = "Piet Jan \nJan Piet",
-                    Docenten = "Ger Saris \nKeesjan hogenboom",
-                    Deskundige = "Ad Groot 2 \nAad Klein",
-                    AantalGasten = 12
-                },
+                (
+                    "10-5-2011",
+                    "13:30",
+                    "OB002",
+                    "Piet Jan \nJan Piet",
+                    "Ger Saris \nKeesjan hogenboom",
+                    "Ad Groot 2 \nAad Klein",
+                    12
+                ),
                 new Zitting
-                {
-                    Datum = "10-5-2011",
-                    Tijd = "14:00",
-                    Lokaal = "OB002",
-                    Leerlingen = "Ibrahim Boven\nJeroen Schipper",
-                    Docenten = "Freek Hogenboom\nSjaak Lauris",
-                    Deskundige = "Kees Prof 2 \n Piet Hogensluiter",
-                    AantalGasten = 4
-                },
+                (
+                    "10-5-2011",
+                    "14:00",
+                    "OB002",
+                    "Ibrahim Boven\nJeroen Schipper",
+                    "Freek Hogenboom\nSjaak Lauris",
+                    "Kees Prof 2 \n Piet Hogensluiter",
+                    4
+                ),
                 new Zitting
-                {
-                    Datum = "10-5-2011",
-                    Tijd = "14:30",
-                    Lokaal = "OB002",
-                    Leerlingen = "Freek Netes\nMark Hos",
-                    Docenten = "Bruno Marks\nMandy Tregis",
-                    Deskundige = "Kelly Bruins\nPatricia Kaai",
-                    AantalGasten = 6
-                },
+                (
+                    "10-5-2011",
+                    "14:30",
+                    "OB002",
+                    "Freek Netes\nMark Hos",
+                    "Bruno Marks\nMandy Tregis",
+                    "Kelly Bruins\nPatricia Kaai",
+                    6
+                ),
                 new Zitting
-                {
-                    Datum = "10-5-2011",
-                    Tijd = "13:30",
-                    Lokaal = "OB002",
-                    Leerlingen = "Piet Jan \nJan Piet",
-                    Docenten = "Ger Saris \nKeesjan hogenboom",
-                    Deskundige = "Ad Groot 2 \nAad Klein",
-                    AantalGasten = 10
-                },
+                (
+                    "10-5-2011",
+                    "13:30",
+                    "OB002",
+                    "Piet Jan \nJan Piet",
+                    "Ger Saris \nKeesjan hogenboom",
+                    "Ad Groot 2 \nAad Klein",
+                    10
+                ),
                 new Zitting
-                {
-                    Datum = "10-5-2011",
-                    Tijd = "14:00",
-                    Lokaal = "OB002",
-                    Leerlingen = "Ibrahim Boven\nJeroen Schipper",
-                    Docenten = "Freek Hogenboom\nSjaak Lauris",
-                    Deskundige = "Kees Prof 2 \n Piet Hogensluiter",
-                    AantalGasten = 11
-                },
+                (
+                    "10-5-2011",
+                    "14:00",
+                    "OB002",
+                    "Ibrahim Boven\nJeroen Schipper",
+                    "Freek Hogenboom\nSjaak Lauris",
+                    "Kees Prof 2 \n Piet Hogensluiter",
+                    11
+                ),
                 new Zitting
-                {
-                    Datum = "10-5-2011",
-                    Tijd = "14:30",
-                    Lokaal = "OB002",
-                    Leerlingen = "Freek Netes\nMark Hos",
-                    Docenten = "Bruno Marks\nMandy Tregis",
-                    Deskundige = "Kelly Bruins\nPatricia Kaai",
-                    AantalGasten = 8
-                },
+                (
+                    "10-5-2011",
+                    "14:30",
+                    "OB002",
+                    "Freek Netes\nMark Hos",
+                    "Bruno Marks\nMandy Tregis",
+                    "Kelly Bruins\nPatricia Kaai",
+                    8
+                ),
                 new Zitting
-                {
-                    Datum = "10-5-2011",
-                    Tijd = "13:30",
-                    Lokaal = "OB002",
-                    Leerlingen = "Piet Jan \nJan Piet",
-                    Docenten = "Ger Saris \nKeesjan hogenboom",
-                    Deskundige = "Ad Groot 2 \nAad Klein",
-                    AantalGasten = 12
-                },
+                (
+                    "10-5-2011",
+                    "13:30",
+                    "OB002",
+                    "Piet Jan \nJan Piet",
+                    "Ger Saris \nKeesjan hogenboom",
+                    "Ad Groot 2 \nAad Klein",
+                    12
+                ),
                 new Zitting
-                {
-                    Datum = "10-5-2011",
-                    Tijd = "14:00",
-                    Lokaal = "OB002",
-                    Leerlingen = "Ibrahim Boven\nJeroen Schipper",
-                    Docenten = "Freek Hogenboom\nSjaak Lauris",
-                    Deskundige = "Kees Prof 2 \n Piet Hogensluiter",
-                    AantalGasten = 3
-                },
+                (
+                    "10-5-2011",
+                    "14:00",
+                    "OB002",
+                    "Ibrahim Boven\nJeroen Schipper",
+                    "Freek Hogenboom\nSjaak Lauris",
+                    "Kees Prof 2 \n Piet Hogensluiter",
+                    3
+                ),
                 new Zitting
-                {
-                    Datum = "10-5-2011",
-                    Tijd = "14:30",
-                    Lokaal = "OB002",
-                    Leerlingen = "Freek Netes\nMark Hos",
-                    Docenten = "Bruno Marks\nMandy Tregis",
-                    Deskundige = "Kelly Bruins\nPatricia Kaai",
-                    AantalGasten = 13
-                },
+                (
+                    "10-5-2011",
+                    "14:30",
+                    "OB002",
+                    "Freek Netes\nMark Hos",
+                    "Bruno Marks\nMandy Tregis",
+                    "Kelly Bruins\nPatricia Kaai",
+                    13
+                ),
                 new Zitting
-                {
-                    Datum = "10-5-2011",
-                    Tijd = "13:30",
-                    Lokaal = "OB002",
-                    Leerlingen = "Piet Jan \nJan Piet",
-                    Docenten = "Ger Saris \nKeesjan hogenboom",
-                    Deskundige = "Ad Groot 2 \nAad Klein",
-                    AantalGasten = 7
-                },
+                (
+                    "10-5-2011",
+                    "13:30",
+                    "OB002",
+                    "Piet Jan \nJan Piet",
+                    "Ger Saris \nKeesjan hogenboom",
+                    "Ad Groot 2 \nAad Klein",
+                    7
+                ),
                 new Zitting
-                {
-                    Datum = "10-5-2011",
-                    Tijd = "14:00",
-                    Lokaal = "OB002",
-                    Leerlingen = "Ibrahim Boven\nJeroen Schipper",
-                    Docenten = "Freek Hogenboom\nSjaak Lauris",
-                    Deskundige = "Kees Prof 2 \n Piet Hogensluiter",
-                    AantalGasten = 17
-                },
+                (
+                    "10-5-2011",
+                    "14:00",
+                    "OB002",
+                    "Ibrahim Boven\nJeroen Schipper",
+                    "Freek Hogenboom\nSjaak Lauris",
+                    "Kees Prof 2 \n Piet Hogensluiter",
+                    17
+                ),
                 new Zitting
-                {
-                    Datum = "10-5-2011",
-                    Tijd = "14:30",
-                    Lokaal = "OB002",
-                    Leerlingen = "Freek Netes\nMark Hos",
-                    Docenten = "Bruno Marks\nMandy Tregis",
-                    Deskundige = "Kelly Bruins\nPatricia Kaai",
-                    AantalGasten = 3
-                },
+                (
+                    "10-5-2011",
+                    "14:30",
+                    "OB002",
+                    "Freek Netes\nMark Hos",
+                    "Bruno Marks\nMandy Tregis",
+                    "Kelly Bruins\nPatricia Kaai",
+                    3
+                ),
                 new Zitting
-                {
-                    Datum = "10-5-2011",
-                    Tijd = "13:30",
-                    Lokaal = "OB002",
-                    Leerlingen = "Piet Jan \nJan Piet",
-                    Docenten = "Ger Saris \nKeesjan hogenboom",
-                    Deskundige = "Ad Groot 2 \nAad Klein",
-                    AantalGasten = 9
-                },
+                (
+                    "10-5-2011",
+                    "13:30",
+                    "OB002",
+                    "Piet Jan \nJan Piet",
+                    "Ger Saris \nKeesjan hogenboom",
+                    "Ad Groot 2 \nAad Klein",
+                    9
+                ),
                 new Zitting
-                {
-                    Datum = "10-5-2011",
-                    Tijd = "14:00",
-                    Lokaal = "OB002",
-                    Leerlingen = "Ibrahim Boven\nJeroen Schipper",
-                    Docenten = "Freek Hogenboom\nSjaak Lauris",
-                    Deskundige = "Kees Prof 2 \n Piet Hogensluiter",
-                    AantalGasten = 8
-                },
+                (
+                    "10-5-2011",
+                    "14:00",
+                    "OB002",
+                    "Ibrahim Boven\nJeroen Schipper",
+                    "Freek Hogenboom\nSjaak Lauris",
+                    "Kees Prof 2 \n Piet Hogensluiter",
+                    8
+                ),
                 new Zitting
-                {
-                    Datum = "10-5-2011",
-                    Tijd = "14:30",
-                    Lokaal = "OB002",
-                    Leerlingen = "Freek Netes\nMark Hos",
-                    Docenten = "Bruno Marks\nMandy Tregis",
-                    Deskundige = "Kelly Bruins\nPatricia Kaai",
-                    AantalGasten = 8
-                }
+                (
+                    "10-5-2011",
+                    "14:30",
+                    "OB002",
+                    "Freek Netes\nMark Hos",
+                    "Bruno Marks\nMandy Tregis",
+                    "Kelly Bruins\nPatricia Kaai",
+                    8
+                )
 
             };
 
             Zittingen = CollectionViewSource.GetDefaultView(_master);
             GridOverzichtList.ItemsSource = Zittingen;
 
-
-
-
+            // maak object
+            _pdfExport = new PDFExport(GridOverzichtList);
         }
 
 
 
         private void buttonExportPDF_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Weet u zeker dat u het rooster wilt omzetten naar een pdf bestand?", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            // dit zorgt ervoor dat er geen filters worden toegepast in de PDF uitdraai
+            textboxSearch.Text = "";
+
+            // Maak en open een save dialog
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.DefaultExt = ".pdf";
+            dlg.Filter = "PDF (.pdf)|*.pdf";
+            if (dlg.ShowDialog() == true)
             {
-                MessageBoxResult result = MessageBox.Show("Het PDF-bestand is gemaakt.", "PDF-bestand gemaakt");
+                // maak en exporteer als pdf
+                _pdfExport.createPdf(dlg.FileName);
             }
         }
 
@@ -320,18 +323,21 @@ namespace PAZ
             }
             else
                 comboBoxSearch.SelectedIndex = 0;
-
-
         }
 
         private void comboBoxSearch_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // Nieuw: Gewijzigd door Yorg, dit werkt ook zo, oude manier was niet handig met nieuwe Zitting constructor
             if (comboBoxSearch.SelectedIndex == 0)
-                Zittingen.Filter = delegate(object item)
-                {
-                    item = new Zitting();
-                    return true;
-                };
+                Zittingen.Filter = null; 
+
+            // Oud
+            //if (comboBoxSearch.SelectedIndex == 0)
+            //    Zittingen.Filter = delegate(object item)
+            //    {
+            //        item = new Zitting();
+            //        return true;
+            //    };
         }
 
 

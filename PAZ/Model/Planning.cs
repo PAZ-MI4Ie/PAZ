@@ -5,6 +5,9 @@ using System.Text;
 
 namespace PAZ.Model
 {
+    /* 
+     * TODO: alles
+     */
     class Planning
     {
     }

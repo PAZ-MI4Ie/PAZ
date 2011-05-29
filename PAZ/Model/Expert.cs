@@ -5,43 +5,10 @@ using System.Text;
 
 namespace PAZ.Model
 {
-    class Expert
+    class Expert : User
     {
-
-        private User _id;
-
-        internal User Id
-        {
-            get { return _id; }
-            set { _id = value; }
-        }
-
-
-        private string _company;
-
-        public string Company
-        {
-            get { return _company; }
-            set { _company = value; }
-        }
-
-
-        private string _address;
-
-        public string Address
-        {
-            get { return _address; }
-            set { _address = value; }
-        }
-
-
-        private string _postcode;
-
-        public string Postcode
-        {
-            get { return _postcode; }
-            set { _postcode = value; }
-        }
-
+        public string Company { get; set; }
+        public string Address { get; set; }
+        public string Postcode { get; set; }
     }
 }

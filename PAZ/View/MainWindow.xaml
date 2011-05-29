@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
         Title="Avans PAZ" Height="696" Width="819" Icon="/PAZ;component/Resources/paz.ico">
-    <Grid Background="#FFD51D53" DataContext="{Binding}" Height="650" ShowGridLines="False">
+    <Grid Background="#FFD51D53" DataContext="{Binding}" Height="650" ShowGridLines="False" ClipToBounds="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="612*" />
             <RowDefinition Height="38*" />

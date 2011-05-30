@@ -34,8 +34,16 @@ namespace PAZ
 
             //TEST CODE:
             MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
-            UserMapper usermapper = new UserMapper(db);
-            Console.WriteLine(usermapper.FindAll());
+            StudentMapper studentmapper = new StudentMapper(db);
+            Student verlept = new Student();
+            verlept.Firstname = "Henk";
+            verlept.Surname = "de Vries";
+            verlept.Study = "Bierkunde";
+            verlept.Studentnumber = 53290523;
+            verlept.Username = "hdevries";
+            verlept.Status = "accepted";
+            verlept.Email = "hdevries@avans.nl";
+            //studentmapper.Save(verlept);
             //END OF TEST CODE
 
             

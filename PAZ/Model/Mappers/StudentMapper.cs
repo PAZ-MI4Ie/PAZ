@@ -7,7 +7,7 @@ using PAZ.Model;
 
 namespace PAZMySQL
 {
-    class StudentMapper : Mapper
+    class StudentMapper : UserMapper
     {
         public StudentMapper(MysqlDb db)
             : base(db)
@@ -15,18 +15,9 @@ namespace PAZMySQL
 
         }
 
-        private Student ProcessRow(MySqlDataReader Reader)
+        protected Student ProcessRow(Student student, MySqlDataReader Reader)
         {
-            Student student = new Student();
-
-            //user data
-            student.Id = Reader.GetInt32(0);
-            student.Username = Reader.GetString(1);
-            student.Firstname = Reader.GetString(2);
-            student.Surname = Reader.GetString(3);
-            student.Email = Reader.GetString(4);
-            student.User_type = Reader.GetString(5);
-            student.Status = Reader.GetString(6);
+            base.ProcessRow(student, Reader);
             //student data
             student.Studentnumber = Reader.GetInt32(7);
             student.Study = Reader.GetString(8);
@@ -35,26 +26,56 @@ namespace PAZMySQL
 
         public Student Find(int id)
         {
+            this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
-            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, studentnumber, study FROM user, student WHERE user.id = student.user_id AND id = ?id";
-            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = 1;
+            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, studentnumber, study FROM user, student WHERE user.id = student.user_id AND user.id = ?id";
+            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             Reader.Read();//Only 1 row
-            return this.ProcessRow(Reader);
+            this._db.CloseConnection();
+            return this.ProcessRow(new Student(), Reader);
         }
 
-        public Student[] FindAll()
+        public List<Student> FindAll()
         {
+            this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
             command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, studentnumber, study FROM user, student WHERE user.id = student.user_id";
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
-            Student[] result = new Student[170];//Temporary 170, have to find a way to make size dynamic in F*cking C#
-            int i = 0;
+            List<Student> result = new List<Student>();
             while (Reader.Read())
             {
-                result[i++] = this.ProcessRow(Reader);
+                result.Add(this.ProcessRow(new Student(), Reader));
             }
+            this._db.CloseConnection();
             return result;
+        }
+
+        public void Save(Student student)
+        {
+            Boolean insert = true;
+            if (student.Id != 0)
+            {
+                insert = false;
+            }
+            base.Save(student);
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            if (insert)
+            {
+                command.CommandText = "INSERT INTO student (user_id, studentnumber, study) VALUES " +
+                "(?user_id, ?studentnumber, ?study)";
+            }
+            else
+            {
+                command.CommandText = "UPDATE student (studentnumber, study) VALUES " +
+                "(?studentnumber, ?study) WHERE user_id = ?user_id";
+            }
+            command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.Int32)).Value = student.Id;
+            command.Parameters.Add(new MySqlParameter("?studentnumber", MySqlDbType.Int32)).Value = student.Studentnumber;
+            command.Parameters.Add(new MySqlParameter("?study", MySqlDbType.String)).Value = student.Study;
+            this._db.ExecuteCommand(command);
+            this._db.CloseConnection();
         }
     }
 }

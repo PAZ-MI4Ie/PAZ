@@ -7,7 +7,7 @@ using PAZ.Model;
 
 namespace PAZMySQL
 {
-    class ExpertMapper : Mapper
+    class ExpertMapper : UserMapper
     {
         public ExpertMapper(MysqlDb db)
             : base(db)
@@ -15,18 +15,9 @@ namespace PAZMySQL
 
         }
 
-        private Expert ProcessRow(MySqlDataReader Reader)
+        protected Expert ProcessRow(Expert expert, MySqlDataReader Reader)
         {
-            Expert expert = new Expert();
-
-            //user data
-            expert.Id = Reader.GetInt32(0);
-            expert.Username = Reader.GetString(1);
-            expert.Firstname = Reader.GetString(2);
-            expert.Surname = Reader.GetString(3);
-            expert.Email = Reader.GetString(4);
-            expert.User_type = Reader.GetString(5);
-            expert.Status = Reader.GetString(6);
+            base.ProcessRow(expert, Reader);
             //expert data
             expert.Company = Reader.GetString(7);
             expert.Address = Reader.GetString(8);
@@ -41,19 +32,18 @@ namespace PAZMySQL
             command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = 1;
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             Reader.Read();//Only 1 row
-            return this.ProcessRow(Reader);
+            return this.ProcessRow(new Expert(), Reader);
         }
 
-        public Expert[] FindAll()
+        public List<Expert> FindAll()
         {
             MySqlCommand command = this._db.CreateCommand();
             command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, company, address, postcode FROM user, expert WHERE user.id = expert.user_id";
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
-            Expert[] result = new Expert[170];//Temporary 170, have to find a way to make size dynamic in F*cking C#
-            int i = 0;
+            List<Expert> result = new List<Expert>();
             while (Reader.Read())
             {
-                result[i++] = this.ProcessRow(Reader);
+                result.Add(this.ProcessRow(new Expert(), Reader));
             }
             return result;
         }

@@ -14,9 +14,8 @@ namespace PAZMySQL
             
         }
 
-        private User ProcessRow(MySqlDataReader Reader)
+        protected User ProcessRow(User user, MySqlDataReader Reader)
         {
-            User user = new User();
             user.Id = Reader.GetInt32(0);
             user.Username = Reader.GetString(1);
             user.Firstname = Reader.GetString(2);
@@ -29,26 +28,61 @@ namespace PAZMySQL
 
         public User Find(int id)
         {
+            this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
             command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status FROM user WHERE id = ?id";
-            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = 1;
+            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             Reader.Read();//Only 1 row
-            return this.ProcessRow(Reader);
+            this._db.CloseConnection();
+            return this.ProcessRow(new User(), Reader);
         }
 
-        public User[] FindAll()
+        public List<User> FindAll()
         {
+            this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
             command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status FROM user";
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
-            User[] result = new User[170];//Temporary 170, have to find a way to make size dynamic in F*cking C#
-            int i = 0;
+            List<User> result = new List<User>();
             while (Reader.Read())
             {
-                result[i++] = this.ProcessRow(Reader);
+                result.Add(this.ProcessRow(new User(), Reader));
             }
+            this._db.CloseConnection();
             return result;
+        }
+
+        public void Save(User user)
+        {
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            if (user.Id != 0)
+            {
+                command.CommandText = "UPDATE user (username, firstname, surname, email, user_type, status) VALUES " +
+                "(?username, ?firstname, ?surname, ?email, ?user_type, ?status) WHERE id = ?id";
+                command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = user.Id;
+            }
+            else
+            {
+                command.CommandText = "INSERT INTO user (username, firstname, surname, email, user_type, status) VALUES "+
+                "(?username, ?firstname, ?surname, ?email, ?user_type, ?status)";
+            }
+            command.Parameters.Add(new MySqlParameter("?username", MySqlDbType.String)).Value = user.Username;
+            command.Parameters.Add(new MySqlParameter("?firstname", MySqlDbType.String)).Value = user.Firstname;
+            command.Parameters.Add(new MySqlParameter("?surname", MySqlDbType.String)).Value = user.Surname;
+            command.Parameters.Add(new MySqlParameter("?email", MySqlDbType.String)).Value = user.Email;
+            command.Parameters.Add(new MySqlParameter("?user_type", MySqlDbType.String)).Value = user.User_type;
+            command.Parameters.Add(new MySqlParameter("?status", MySqlDbType.String)).Value = user.Status;
+            this._db.ExecuteCommand(command);
+            this._db.CloseConnection();
+            this._db.OpenConnection();
+            MySqlCommand command2 = this._db.CreateCommand();
+            command2.CommandText = "SELECT LAST_INSERT_ID()";
+            MySqlDataReader Reader = this._db.ExecuteCommand(command2);
+            Reader.Read();
+            this._db.CloseConnection();
+            user.Id = Reader.GetInt32(0);
         }
     }
 }

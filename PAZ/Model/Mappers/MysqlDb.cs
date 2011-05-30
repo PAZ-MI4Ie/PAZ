@@ -26,7 +26,19 @@ namespace PAZMySQL
                 "UID="+this._username+";" +
                 "PASSWORD="+this._password+";";
             this._connection = new MySqlConnection(MyConString);
-            this._connection.Open();
+        }
+
+        public void OpenConnection()
+        {
+            if (this._connection.State != System.Data.ConnectionState.Open)
+            {
+                this._connection.Open();
+            }
+        }
+
+        public void CloseConnection()
+        {
+            this._connection.Close();
         }
 
         public MySqlCommand CreateCommand()
@@ -36,7 +48,7 @@ namespace PAZMySQL
 
         public MySqlDataReader ExecuteCommand(MySqlCommand command)
         {
-            command.ExecuteNonQuery();
+            //command.ExecuteNonQuery();
             return command.ExecuteReader();
         }
     }

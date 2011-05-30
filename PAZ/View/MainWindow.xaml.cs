@@ -9,6 +9,8 @@ using Microsoft.Win32;
 using System.IO;
 using PAZMySQL;
 using PAZ.Model;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace PAZ
 {
@@ -36,6 +38,7 @@ namespace PAZ
             Console.WriteLine(usermapper.FindAll());
             //END OF TEST CODE
 
+            
             _master = new List<Zitting>
             {
                 new Zitting
@@ -196,6 +199,8 @@ namespace PAZ
 
             // maak object
             _pdfExport = new PDFExport(GridOverzichtList);
+
+            genCalender();
         }
 
 
@@ -340,7 +345,74 @@ namespace PAZ
             //    };
         }
 
+        private void genCalender()
+        {
+            DateTime startDate = new DateTime(2011, 5, 11);
+            DateTime stopDate = new DateTime(2011, 6, 15);
+            int interval = 1;
 
+            // Define header stuff
+            ColumnDefinition colum = new ColumnDefinition();
+            GridLength width = new GridLength(50);
+            colum.Width = width;
+            FUCKYOUEVILBITCH.ColumnDefinitions.Add(colum);
+            FUCKYOUEVILBITCH.RowDefinitions.Add(new RowDefinition());
+
+            // Making Colums
+            int c = 0;
+            bool color = false;
+            for (DateTime dateTime = startDate; dateTime <= stopDate; dateTime += TimeSpan.FromDays(interval))
+            {
+                Label temp = new Label();
+                temp.Content = dateTime.ToShortDateString();
+                temp.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+                temp.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+                colum = new ColumnDefinition();
+                width = new GridLength(100);
+                colum.Width = width;
+                if (color)
+                {
+                    Rectangle lol = new Rectangle();
+                    lol.Fill = Brushes.AliceBlue;
+                    Grid.SetColumn(lol, c + 1);
+                    Grid.SetRow(lol, 1);
+                    Grid.SetRowSpan(lol, 18);
+                    FUCKYOUEVILBITCH.Children.Add(lol);
+                }
+                FUCKYOUEVILBITCH.ColumnDefinitions.Add(colum);
+                Grid.SetColumn(temp, c+1);
+                Grid.SetRow(temp, 0);
+                FUCKYOUEVILBITCH.Children.Add(temp);
+                c++;
+                color = !color;
+            }
+            
+            for (int r = 0; r < 17; r++)
+            {
+                Label temp = new Label();
+                temp.Content = "8:30";
+                temp.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+                temp.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+                RowDefinition row = new RowDefinition();
+                width = new GridLength(100);
+                row.Height = width;
+                FUCKYOUEVILBITCH.RowDefinitions.Add(row);
+                if (color)
+                {
+                    Rectangle lol = new Rectangle();
+                    lol.Fill = Brushes.AliceBlue;
+                    Grid.SetColumn(lol, 1);
+                    Grid.SetRow(lol, r+1);
+                    Grid.SetColumnSpan(lol, c);
+                    FUCKYOUEVILBITCH.Children.Add(lol);
+                }
+                Grid.SetColumn(temp, 0);
+                Grid.SetRow(temp, r+1);
+                FUCKYOUEVILBITCH.Children.Add(temp);
+                color = !color;
+            }
+
+        }
         /*
          * import button
          * (C) Mark de Mol

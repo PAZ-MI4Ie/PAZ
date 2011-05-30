@@ -41,7 +41,7 @@ namespace PAZ
             verlept.Username = "hdevries";
             verlept.Status = "accepted";
             verlept.Email = "hdevries@avans.nl";
-            studentmapper.Save(verlept);
+            //studentmapper.Save(verlept);
             //END OF TEST CODE
 
             _master = new List<Zitting>

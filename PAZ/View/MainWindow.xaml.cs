@@ -33,8 +33,7 @@ namespace PAZ
             InitializeComponent();
 
             //TEST CODE:
-            MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
-            StudentMapper studentmapper = new StudentMapper(db);
+            StudentMapper studentmapper = new StudentMapper(MysqlDb.GetInstance());
             Student verlept = new Student();
             verlept.Firstname = "Henk";
             verlept.Surname = "de Vries";

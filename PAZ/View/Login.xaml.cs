@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using PAZ.Model;
+using PAZMySQL;
 
 namespace PAZ
 {
@@ -29,8 +30,8 @@ namespace PAZ
        
         private void labelButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
-            if (login.checkUsername(passwordBox1.Password))
+            AdminMapper adminmapper = new AdminMapper(MysqlDb.GetInstance());
+            if (adminmapper.CheckLogin("admin", passwordBox1.Password))
             {
                 MainWindow tt = new MainWindow();
                 tt.Show();

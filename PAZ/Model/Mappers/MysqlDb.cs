@@ -14,6 +14,16 @@ namespace PAZMySQL
         private String _password;
         private String _database;
         private MySqlConnection _connection;
+        private static MysqlDb _db;
+
+        public static MysqlDb GetInstance()
+        {
+            if (MysqlDb._db == null)
+            {
+                MysqlDb._db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");
+            }
+            return MysqlDb._db;
+        }
 
         public MysqlDb(String host, String username, String password, String database)
         {

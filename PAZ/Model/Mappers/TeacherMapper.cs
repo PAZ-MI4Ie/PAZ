@@ -25,16 +25,19 @@ namespace PAZMySQL
 
         public Teacher Find(int id)
         {
+            this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
             command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, session_spread FROM user, teacher WHERE user.id = teacher.user_id AND id = ?id";
             command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             Reader.Read();//Only 1 row
+            this._db.CloseConnection();
             return this.ProcessRow(new Teacher(), Reader);
         }
 
         public List<Teacher> FindAll()
         {
+            this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
             command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, session_spread FROM user, teacher WHERE user.id = teacher.user_id";
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
@@ -43,6 +46,7 @@ namespace PAZMySQL
             {
                 result.Add(this.ProcessRow(new Teacher(), Reader));
             }
+            this._db.CloseConnection();
             return result;
         }
     }

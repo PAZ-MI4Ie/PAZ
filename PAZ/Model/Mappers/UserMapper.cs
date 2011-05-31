@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,13 +16,18 @@ namespace PAZMySQL
 
         protected User ProcessRow(User user, MySqlDataReader Reader)
         {
-            user.Id = Reader.GetInt32(0);
-            user.Username = Reader.GetString(1);
-            user.Firstname = Reader.GetString(2);
-            user.Surname = Reader.GetString(3);
-            user.Email = Reader.GetString(4);
-            user.User_type = Reader.GetString(5);
-            user.Status = Reader.GetString(6);
+            return this.ProcessRow(user, Reader, 0);
+        }
+
+        protected User ProcessRow(User user, MySqlDataReader Reader, int offset)
+        {
+            user.Id = Reader.GetInt32(0 + offset);
+            user.Username = Reader.GetString(1 + offset);
+            user.Firstname = Reader.GetString(2 + offset);
+            user.Surname = Reader.GetString(3 + offset);
+            user.Email = Reader.GetString(4 + offset);
+            user.User_type = Reader.GetString(5 + offset);
+            user.Status = Reader.GetString(6 + offset);
             return user;
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,29 +22,14 @@ namespace PAZMySQL
 		public Session ProcessRow(Session session, MySqlDataReader Reader, int offset)
 		{
 			session.Id = Reader.GetInt32(0 + offset);
-			session.Daytime = 
-
+            session.Daytime_id = Reader.GetInt32(1 + offset);
+            session.Classroom_id = Reader.GetInt32(2 + offset);
+            session.Pair_id = Reader.GetInt32(3 + offset);
 			return session;
 		}
 
-        public Session Find(int id)
-        {
-			return null;
-        }
-
         public List<Session> FindAll()
 		{
-			this._db.OpenConnection();
-			MySqlCommand command = this._db.CreateCommand();
-			command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, studentnumber, study FROM user, student WHERE user.id = student.user_id";
-			MySqlDataReader Reader = this._db.ExecuteCommand(command);
-			List<Session> result = new List<Session>();
-			while (Reader.Read())
-			{
-				result.Add(this.ProcessRow(new Session(), Reader));
-			}
-			this._db.CloseConnection();
-			return result;
 			/*
             List<Session> result = new List<Session>();
 			
@@ -63,6 +48,19 @@ namespace PAZMySQL
 			result.Add(new Session(daytime, classroom, pair));
 			return result;
 			 * */
+            return null;
 		}
+
+        public Session Find(int id)
+        {
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "SELECT id, daytime_id, classroom_id, pair_id FROM session WHERE id = ?id";
+            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
+            MySqlDataReader Reader = this._db.ExecuteCommand(command);
+            Reader.Read();//Only 1 row
+            this._db.CloseConnection();
+            return this.ProcessRow(new Session(), Reader);
+        }
     }
 }

@@ -33,7 +33,6 @@ namespace PAZ
             InitializeComponent();
 
             //TEST CODE:
-<<<<<<< HEAD
             MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
             SessionMapper sessionmapper = new SessionMapper(db);
 			Console.WriteLine(sessionmapper.FindAll());
@@ -42,7 +41,6 @@ namespace PAZ
 
 			Sessions = CollectionViewSource.GetDefaultView(_master);
             GridOverzichtList.ItemsSource = Sessions;
-=======
             StudentMapper studentmapper = new StudentMapper(MysqlDb.GetInstance());
             Student verlept = new Student();
             verlept.Firstname = "Henk";
@@ -55,7 +53,7 @@ namespace PAZ
             //studentmapper.Save(verlept);
             //END OF TEST CODE
 
-            
+            /*
             _master = new List<Zitting>
             {
                 new Zitting
@@ -210,10 +208,10 @@ namespace PAZ
                 )
 
             };
+			 */
 
-            Zittingen = CollectionViewSource.GetDefaultView(_master);
-            GridOverzichtList.ItemsSource = Zittingen;
->>>>>>> 7c014160c86cd4afae85895094821690273f00b2
+            Sessions = CollectionViewSource.GetDefaultView(_master);
+            GridOverzichtList.ItemsSource = Sessions;
 
             // maak object
             _pdfExport = new PDFExport(GridOverzichtList);

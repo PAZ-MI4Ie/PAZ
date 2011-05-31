@@ -11,5 +11,12 @@ namespace PAZ.Model
         public Daytime Daytime { get; set; }
         public Classroom Classroom { get; set; }
         public Pair Pair { get; set; }
+
+		public Session(Daytime daytime, Classroom classroom, Pair pair)
+		{
+			Daytime = daytime;
+			Classroom = classroom;
+			Pair = pair;
+		}
     }
 }

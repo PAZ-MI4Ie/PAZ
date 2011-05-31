@@ -14,5 +14,16 @@ namespace PAZ.Model
         public string Email { get; set; }
         public string User_type { get; set; }
         public string Status { get; set; }
+
+		public User()
+		{
+
+		}
+
+		public User(string surname, string firstname)
+		{
+			Surname = surname;
+			Firstname = firstname;
+		}
     }
 }

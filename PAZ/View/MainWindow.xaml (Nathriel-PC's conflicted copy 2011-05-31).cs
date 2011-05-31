@@ -22,7 +22,7 @@ namespace PAZ
     public partial class MainWindow : Window
     {
         private List<Session> _master;
-        public ICollectionView Sessions { get; private set; }
+        public ICollectionView Zittingen { get; private set; }
         bool match;
         private PDFExport _pdfExport;
 
@@ -33,12 +33,173 @@ namespace PAZ
             //TEST CODE:
             MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
             SessionMapper sessionmapper = new SessionMapper(db);
-			Console.WriteLine(sessionmapper.FindAll());
+            Console.WriteLine(sessionmapper.FindAll());
 			_master = sessionmapper.FindAll();
             //END OF TEST CODE
 
-			Sessions = CollectionViewSource.GetDefaultView(_master);
-            GridOverzichtList.ItemsSource = Sessions;
+			
+			
+
+
+			/*
+			_master = new List<Zitting>
+			{
+				new Zitting
+				(
+					"10-5-2011",
+					"13:30",
+					"OB002",
+					"Piet Jan \nJan Piet",
+					"Ger Saris \nKeesjan hogenboom",
+					"Ad Groot 2 \nAad Klein",
+					12
+				),
+				new Zitting
+				(
+					"10-5-2011",
+					"14:00",
+					"OB002",
+					"Ibrahim Boven\nJeroen Schipper",
+					"Freek Hogenboom\nSjaak Lauris",
+					"Kees Prof 2 \n Piet Hogensluiter",
+					4
+				),
+				new Zitting
+				(
+					"10-5-2011",
+					"14:30",
+					"OB002",
+					"Freek Netes\nMark Hos",
+					"Bruno Marks\nMandy Tregis",
+					"Kelly Bruins\nPatricia Kaai",
+					6
+				),
+				new Zitting
+				(
+					"10-5-2011",
+					"13:30",
+					"OB002",
+					"Piet Jan \nJan Piet",
+					"Ger Saris \nKeesjan hogenboom",
+					"Ad Groot 2 \nAad Klein",
+					10
+				),
+				new Zitting
+				(
+					"10-5-2011",
+					"14:00",
+					"OB002",
+					"Ibrahim Boven\nJeroen Schipper",
+					"Freek Hogenboom\nSjaak Lauris",
+					"Kees Prof 2 \n Piet Hogensluiter",
+					11
+				),
+				new Zitting
+				(
+					"10-5-2011",
+					"14:30",
+					"OB002",
+					"Freek Netes\nMark Hos",
+					"Bruno Marks\nMandy Tregis",
+					"Kelly Bruins\nPatricia Kaai",
+					8
+				),
+				new Zitting
+				(
+					"10-5-2011",
+					"13:30",
+					"OB002",
+					"Piet Jan \nJan Piet",
+					"Ger Saris \nKeesjan hogenboom",
+					"Ad Groot 2 \nAad Klein",
+					12
+				),
+				new Zitting
+				(
+					"10-5-2011",
+					"14:00",
+					"OB002",
+					"Ibrahim Boven\nJeroen Schipper",
+					"Freek Hogenboom\nSjaak Lauris",
+					"Kees Prof 2 \n Piet Hogensluiter",
+					3
+				),
+				new Zitting
+				(
+					"10-5-2011",
+					"14:30",
+					"OB002",
+					"Freek Netes\nMark Hos",
+					"Bruno Marks\nMandy Tregis",
+					"Kelly Bruins\nPatricia Kaai",
+					13
+				),
+				new Zitting
+				(
+					"10-5-2011",
+					"13:30",
+					"OB002",
+					"Piet Jan \nJan Piet",
+					"Ger Saris \nKeesjan hogenboom",
+					"Ad Groot 2 \nAad Klein",
+					7
+				),
+				new Zitting
+				(
+					"10-5-2011",
+					"14:00",
+					"OB002",
+					"Ibrahim Boven\nJeroen Schipper",
+					"Freek Hogenboom\nSjaak Lauris",
+					"Kees Prof 2 \n Piet Hogensluiter",
+					17
+				),
+				new Zitting
+				(
+					"10-5-2011",
+					"14:30",
+					"OB002",
+					"Freek Netes\nMark Hos",
+					"Bruno Marks\nMandy Tregis",
+					"Kelly Bruins\nPatricia Kaai",
+					3
+				),
+				new Zitting
+				(
+					"10-5-2011",
+					"13:30",
+					"OB002",
+					"Piet Jan \nJan Piet",
+					"Ger Saris \nKeesjan hogenboom",
+					"Ad Groot 2 \nAad Klein",
+					9
+				),
+				new Zitting
+				(
+					"10-5-2011",
+					"14:00",
+					"OB002",
+					"Ibrahim Boven\nJeroen Schipper",
+					"Freek Hogenboom\nSjaak Lauris",
+					"Kees Prof 2 \n Piet Hogensluiter",
+					8
+				),
+				new Zitting
+				(
+					"10-5-2011",
+					"14:30",
+					"OB002",
+					"Freek Netes\nMark Hos",
+					"Bruno Marks\nMandy Tregis",
+					"Kelly Bruins\nPatricia Kaai",
+					8
+				)
+
+			};
+			 * */
+
+			Zittingen = CollectionViewSource.GetDefaultView(_master);
+            GridOverzichtList.ItemsSource = Zittingen;
 
             // maak object
             _pdfExport = new PDFExport(GridOverzichtList);
@@ -148,7 +309,7 @@ namespace PAZ
         {
             if (comboBoxSearch.SelectedIndex > 1)
             {
-                Sessions.Filter = delegate(object item)
+                Zittingen.Filter = delegate(object item)
                 {
 
 
@@ -175,7 +336,7 @@ namespace PAZ
         {
             // Nieuw: Gewijzigd door Yorg, dit werkt ook zo, oude manier was niet handig met nieuwe Zitting constructor
             if (comboBoxSearch.SelectedIndex == 0)
-                Sessions.Filter = null; 
+                Zittingen.Filter = null; 
 
             // Oud
             //if (comboBoxSearch.SelectedIndex == 0)

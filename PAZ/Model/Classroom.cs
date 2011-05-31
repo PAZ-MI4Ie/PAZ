@@ -9,5 +9,11 @@ namespace PAZ.Model
     {
         public int Id { get; set; }
         public string Room_number { get; set; }
+
+		public Classroom(int id, string room_number)
+		{
+			Id = id;
+			Room_number = room_number;
+		}
     }
 }

@@ -48,7 +48,17 @@ namespace PAZMySQL
 			result.Add(new Session(daytime, classroom, pair));
 			return result;
 			 * */
-            return null;
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "SELECT id, daytime_id, classroom_id, pair_id FROM session";
+            MySqlDataReader Reader = this._db.ExecuteCommand(command);
+            List<Session> result = new List<Session>();
+            while (Reader.Read())
+            {
+                result.Add(this.ProcessRow(new Session(), Reader));
+            }
+            this._db.CloseConnection();
+            return result;
 		}
 
         public Session Find(int id)

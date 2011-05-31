@@ -24,8 +24,8 @@ namespace PAZ
 
     public partial class MainWindow : Window
     {
-        private List<Zitting> _master;
-        public ICollectionView Zittingen { get; private set; }
+        private List<Session> _master;
+        public ICollectionView Sessions { get; private set; }
         bool match;
         private PDFExport _pdfExport;
 
@@ -34,6 +34,14 @@ namespace PAZ
             InitializeComponent();
 
             //TEST CODE:
+            MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
+            SessionMapper sessionmapper = new SessionMapper(db);
+			Console.WriteLine(sessionmapper.FindAll());
+			_master = sessionmapper.FindAll();
+            //END OF TEST CODE
+
+			Sessions = CollectionViewSource.GetDefaultView(_master);
+            GridOverzichtList.ItemsSource = Sessions;
             StudentMapper studentmapper = new StudentMapper(MysqlDb.GetInstance());
             Student verlept = new Student();
             verlept.Firstname = "Henk";
@@ -46,7 +54,7 @@ namespace PAZ
             //studentmapper.Save(verlept);
             //END OF TEST CODE
 
-            
+            /*
             _master = new List<Zitting>
             {
                 new Zitting
@@ -201,9 +209,10 @@ namespace PAZ
                 )
 
             };
+			 */
 
-            Zittingen = CollectionViewSource.GetDefaultView(_master);
-            GridOverzichtList.ItemsSource = Zittingen;
+            Sessions = CollectionViewSource.GetDefaultView(_master);
+            GridOverzichtList.ItemsSource = Sessions;
 
             // maak object
             _pdfExport = new PDFExport(GridOverzichtList);
@@ -315,7 +324,7 @@ namespace PAZ
         {
             if (comboBoxSearch.SelectedIndex > 1)
             {
-                Zittingen.Filter = delegate(object item)
+                Sessions.Filter = delegate(object item)
                 {
 
 
@@ -342,7 +351,7 @@ namespace PAZ
         {
             // Nieuw: Gewijzigd door Yorg, dit werkt ook zo, oude manier was niet handig met nieuwe Zitting constructor
             if (comboBoxSearch.SelectedIndex == 0)
-                Zittingen.Filter = null; 
+                Sessions.Filter = null; 
 
             // Oud
             //if (comboBoxSearch.SelectedIndex == 0)

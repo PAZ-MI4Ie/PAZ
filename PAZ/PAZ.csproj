@@ -64,7 +64,11 @@
     </ApplicationDefinition>
     <Compile Include="Control\ControllerIO.cs" />
     <Compile Include="Control\PAZController.cs" />
+
+    <Compile Include="Model\Mappers\SessionMapper.cs" />
+
     <Compile Include="Model\Mappers\AdminMapper.cs" />
+
     <Compile Include="Model\Mappers\ExpertMapper.cs" />
     <Compile Include="Model\Mappers\Mapper.cs" />
     <Compile Include="Model\Admin.cs" />
@@ -85,6 +89,7 @@
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\Mappers\MysqlDb.cs" />
     <Compile Include="Model\Mappers\UserMapper.cs" />
+    <Compile Include="Model\Mappers\PairMapper.cs" />
     <Compile Include="View\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>

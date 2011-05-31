@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +10,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using PAZ.Model;
+using PAZMySQL;
 
 namespace PAZ
 {
@@ -19,6 +21,7 @@ namespace PAZ
     public partial class Login : Window
     {
         
+        
         public Login()
         {
             InitializeComponent();
@@ -27,10 +30,25 @@ namespace PAZ
        
         private void labelButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MainWindow tt = new MainWindow();
-            tt.Show();
-            Application.Current.Windows[0].Close();
-            this.Close();
+            try
+            {
+                AdminMapper adminmapper = new AdminMapper(MysqlDb.GetInstance());
+                if (adminmapper.CheckLogin("admin", passwordBox1.Password))
+                {
+                    MainWindow tt = new MainWindow();
+                    tt.Show();
+                    Application.Current.Windows[0].Close();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Wachtwoord is onjuist.");
+                }
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show("Kan geen connectie met de database maken.");
+            }             
         }
 
     }

@@ -9,8 +9,13 @@ namespace PAZ.Model
     {
         public int Studentnumber { get; set; }
         public string Study { get; set; }
+		
+		public Student()
+		{
+			this.User_type = "student";
+		}
 
-        public Student()
+        public Student(string surname, string firstname) : base(surname, firstname)
         {
             this.User_type = "student";
         }

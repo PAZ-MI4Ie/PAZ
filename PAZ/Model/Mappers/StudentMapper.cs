@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,12 +15,17 @@ namespace PAZMySQL
 
         }
 
-        protected Student ProcessRow(Student student, MySqlDataReader Reader)
+        public Student ProcessRow(Student student, MySqlDataReader Reader)
         {
-            base.ProcessRow(student, Reader);
+            return this.ProcessRow(student, Reader, 0);
+        }
+
+        public Student ProcessRow(Student student, MySqlDataReader Reader, int offset)
+        {
+            base.ProcessRow(student, Reader, offset);
             //student data
-            student.Studentnumber = Reader.GetInt32(7);
-            student.Study = Reader.GetString(8);
+            student.Studentnumber = Reader.GetInt32(7 + offset);
+            student.Study = Reader.GetString(8 + offset);
             return student;
         }
 

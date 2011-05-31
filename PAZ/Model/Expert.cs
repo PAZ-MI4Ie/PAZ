@@ -10,5 +10,10 @@ namespace PAZ.Model
         public string Company { get; set; }
         public string Address { get; set; }
         public string Postcode { get; set; }
+
+		public Expert() : base()
+		{
+
+		}
     }
 }

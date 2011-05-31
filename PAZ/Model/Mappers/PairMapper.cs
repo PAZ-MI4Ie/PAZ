@@ -3,57 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using PAZMySQL;
+using MySql.Data.MySqlClient;
 
-namespace PAZ.Model
+namespace PAZ.Model.Mappers
 {
-    class Pair
+    class PairMapper : Mapper
     {
-        public int ID { get; set; }
-        private User _student1;
-        public int Student1_id { get; set; }
-        public User Student1 {
-            get
-            {
-                if (this._student1 == null)
-                {
-                    this.Student1 = (new StudentMapper(MysqlDb.GetInstance())).Find(this.Student1_id);
-                }
-                return this._student1;
-            }
-            set
-            {
-                this._student1 = value;
-            }
-        }
-        private User _student2;
-        public int Student2_id { get; set; }
-        public User Student2 {
-            get
-            {
-                if (this._student2 == null)
-                {
-                    this.Student2 = (new StudentMapper(MysqlDb.GetInstance())).Find(this.Student2_id);
-                }
-                return this._student2;
-            }
-            set
-            {
-                this._student2 = value;
-            }
-        }
-        public int Number_of_guests { get; set; }
-
-        public Pair()
+        public PairMapper(MysqlDb db)
+            : base(db)
         {
 
         }
 
-		public Pair(int id, User student1, User student2, int number_of_guests)
-		{
-			ID = id;
-			Student1 = student1;
-			Student2 = student2;
-			Number_of_guests = number_of_guests;
-		}
+        protected Pair ProcessRow(Pair pair, MySqlDataReader Reader)
+        {
+            pair.ID = Reader.GetInt32(0);
+            pair.Number_of_guests = Reader.GetInt32(1);
+            StudentMapper studentmapper = new StudentMapper(MysqlDb.GetInstance());
+            pair.Student1_id = Reader.GetInt32(2);
+            pair.Student2_id = Reader.GetInt32(3);
+            return pair;
+        }
+
+        public Pair Find(int id)
+        {
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "SELECT id, number_of_guests, student1, student2 FROM pair WHERE pair.id = ?id";
+            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
+            MySqlDataReader Reader = this._db.ExecuteCommand(command);
+            Reader.Read();//Only 1 row
+            this._db.CloseConnection();
+            return this.ProcessRow(new Pair(), Reader);
+        }
     }
 }

@@ -89,6 +89,7 @@
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\Mappers\MysqlDb.cs" />
     <Compile Include="Model\Mappers\UserMapper.cs" />
+    <Compile Include="Model\Mappers\PairMapper.cs" />
     <Compile Include="View\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>

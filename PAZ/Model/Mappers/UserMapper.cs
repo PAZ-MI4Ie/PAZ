@@ -14,12 +14,12 @@ namespace PAZMySQL
             
         }
 
-        protected User ProcessRow(User user, MySqlDataReader Reader)
+        public User ProcessRow(User user, MySqlDataReader Reader)
         {
             return this.ProcessRow(user, Reader, 0);
         }
 
-        protected User ProcessRow(User user, MySqlDataReader Reader, int offset)
+        public User ProcessRow(User user, MySqlDataReader Reader, int offset)
         {
             user.Id = Reader.GetInt32(0 + offset);
             user.Username = Reader.GetString(1 + offset);

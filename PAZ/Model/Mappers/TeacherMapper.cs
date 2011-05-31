@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -48,6 +48,32 @@ namespace PAZMySQL
             }
             this._db.CloseConnection();
             return result;
+        }
+
+        public void Save(Teacher teacher)
+        {
+            Boolean insert = true;
+            if (teacher.Id != 0)
+            {
+                insert = false;
+            }
+            base.Save(teacher);
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            if (insert)
+            {
+                command.CommandText = "INSERT INTO teacher (user_id, session_spread) VALUES " +
+                "(?user_id, ?session_spread)";
+            }
+            else
+            {
+                command.CommandText = "UPDATE student (session_spread) VALUES " +
+                "(?session_spread) WHERE user_id = ?user_id";
+            }
+            command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.Int32)).Value = teacher.Id;
+            command.Parameters.Add(new MySqlParameter("?session_spread", MySqlDbType.String)).Value = teacher.Session_spread.ToString();
+            this._db.ExecuteCommand(command);
+            this._db.CloseConnection();
         }
     }
 }

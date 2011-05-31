@@ -11,6 +11,7 @@ using PAZMySQL;
 using PAZ.Model;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Globalization;
 
 namespace PAZ
 {
@@ -352,74 +353,134 @@ namespace PAZ
             //    };
         }
 
+
+        /*
+         * CALENDER
+         */
         private void genCalender()
         {
-            DateTime startDate = new DateTime(2011, 5, 11);
-            DateTime stopDate = new DateTime(2011, 6, 15);
+            DateTime startDate = new DateTime(2011, 5, 1);
+            DateTime stopDate = new DateTime(2011, 5, 15);
             int interval = 1;
 
-            // Define header stuff
-            ColumnDefinition colum = new ColumnDefinition();
-            GridLength width = new GridLength(50);
-            colum.Width = width;
-            FUCKYOUEVILBITCH.ColumnDefinitions.Add(colum);
-            FUCKYOUEVILBITCH.RowDefinitions.Add(new RowDefinition());
+            List<Classroom> classrooms = new List<Classroom>();
+            Classroom room = new Classroom();
+            room.Room_number = "OB202";
+            classrooms.Add(room);
+            room = new Classroom();
+            room.Room_number = "OB203";
+            classrooms.Add(room);
+            room = new Classroom();
+            room.Room_number = "OB204";
+            classrooms.Add(room);
+            room = new Classroom();
+            room.Room_number = "OB205";
+            classrooms.Add(room);
+            room = new Classroom();
+            room.Room_number = "OC201";
+            classrooms.Add(room);
+            room = new Classroom();
+            room.Room_number = "OB201";
+            classrooms.Add(room);
+            room = new Classroom();
+            room.Room_number = "OC302";
+            classrooms.Add(room);
+            room = new Classroom();
+            room.Room_number = "OC202";
+            classrooms.Add(room);
 
-            // Making Colums
-            int c = 0;
-            bool color = false;
+            //Making rows
+            int columns = 0;
+            int rows = 0;
+
+            Rectangle rec = new Rectangle();
+            rec.Fill = Brushes.Gray;
+            Grid.SetColumn(rec, 0);
+            Grid.SetRow(rec, 0);
+            Grid.SetRowSpan(rec, 80);
+            calender.Children.Add(rec);
+
+            RowDefinition row = new RowDefinition();
+            GridLength height = new GridLength(120);
+
             for (DateTime dateTime = startDate; dateTime <= stopDate; dateTime += TimeSpan.FromDays(interval))
             {
-                Label temp = new Label();
-                temp.Content = dateTime.ToShortDateString();
-                temp.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
-                temp.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
-                colum = new ColumnDefinition();
-                width = new GridLength(100);
-                colum.Width = width;
-                if (color)
+                if (dateTime.DayOfWeek != DayOfWeek.Sunday && dateTime.DayOfWeek != DayOfWeek.Saturday)
                 {
-                    Rectangle lol = new Rectangle();
-                    lol.Fill = Brushes.AliceBlue;
-                    Grid.SetColumn(lol, c + 1);
-                    Grid.SetRow(lol, 1);
-                    Grid.SetRowSpan(lol, 18);
-                    FUCKYOUEVILBITCH.Children.Add(lol);
+                    rec = new Rectangle();
+                    rec.Fill = Brushes.Gray;
+                    Grid.SetColumn(rec, 0);
+                    Grid.SetRow(rec, rows);
+                    Grid.SetColumnSpan(rec, classrooms.Count + 1);
+                    calender.Children.Add(rec);
+                    //Add labels
+                    for (int c = 0; c < classrooms.Count + 1; c++)
+                    {
+                        if (calender.ColumnDefinitions.Count != classrooms.Count+1)
+                        {
+                            //making columns
+                            ColumnDefinition column = new ColumnDefinition();
+                            GridLength width = new GridLength(120);
+                            column.Width = width;
+                            calender.ColumnDefinitions.Add(column);
+                            columns++;
+                        }
+                        //making labels
+                        Label header = new Label();
+                        if (c == 0)
+                            header.Content = dateTime.ToString("dddd",
+                      new CultureInfo("nl-NL")) + "\n" + dateTime.ToShortDateString();
+                        else
+                            header.Content = classrooms[c - 1].Room_number;
+                        header.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+                        header.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+                        Grid.SetColumn(header, c);
+                        Grid.SetRow(header, rows);
+                        calender.Children.Add(header);
+
+
+                    }
+                    for (int blok = 1; blok <= 4; blok++)
+                    {
+                        row = new RowDefinition();
+                        row.Height = height;
+                        calender.RowDefinitions.Add(row);
+                        rows++;
+
+                        Label blk = new Label();
+                        blk.Content = "Blok " + blok;
+                        blk.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+                        blk.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+                        Grid.SetColumn(blk, 0);
+                        Grid.SetRow(blk, rows);
+                        calender.Children.Add(blk);
+                    }
+                    row = new RowDefinition();
+                    row.Height = height;
+                    calender.RowDefinitions.Add(row);
+                    rows++;
+
                 }
-                FUCKYOUEVILBITCH.ColumnDefinitions.Add(colum);
-                Grid.SetColumn(temp, c+1);
-                Grid.SetRow(temp, 0);
-                FUCKYOUEVILBITCH.Children.Add(temp);
-                c++;
-                color = !color;
-            }
-            
-            for (int r = 0; r < 17; r++)
-            {
-                Label temp = new Label();
-                temp.Content = "8:30";
-                temp.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
-                temp.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
-                RowDefinition row = new RowDefinition();
-                width = new GridLength(100);
-                row.Height = width;
-                FUCKYOUEVILBITCH.RowDefinitions.Add(row);
-                if (color)
-                {
-                    Rectangle lol = new Rectangle();
-                    lol.Fill = Brushes.AliceBlue;
-                    Grid.SetColumn(lol, 1);
-                    Grid.SetRow(lol, r+1);
-                    Grid.SetColumnSpan(lol, c);
-                    FUCKYOUEVILBITCH.Children.Add(lol);
-                }
-                Grid.SetColumn(temp, 0);
-                Grid.SetRow(temp, r+1);
-                FUCKYOUEVILBITCH.Children.Add(temp);
-                color = !color;
+
+                
             }
 
+                addZitting(1, 1, "8:30", "11:00");
+            
         }
+
+        private void addZitting(int column, int row, string starttime, string endtime)
+        {
+            Label session = new Label();
+            session.Content = "Mark de Mol\nFreek Laurijssen\n\nGer Saris\nMarco Huysmans";
+            session.BorderBrush = Brushes.LightGray;
+            session.BorderThickness = new Thickness(1);
+            Grid.SetColumn(session, column);
+            Grid.SetRow(session, row);
+            session.ToolTip = "lol";
+            calender.Children.Add(session);
+        }
+
         /*
          * import button
          * (C) Mark de Mol

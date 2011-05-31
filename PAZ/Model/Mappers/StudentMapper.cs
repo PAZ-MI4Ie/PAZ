@@ -15,12 +15,12 @@ namespace PAZMySQL
 
         }
 
-        protected Student ProcessRow(Student student, MySqlDataReader Reader)
+        public Student ProcessRow(Student student, MySqlDataReader Reader)
         {
             return this.ProcessRow(student, Reader, 0);
         }
 
-        protected Student ProcessRow(Student student, MySqlDataReader Reader, int offset)
+        public Student ProcessRow(Student student, MySqlDataReader Reader, int offset)
         {
             base.ProcessRow(student, Reader, offset);
             //student data

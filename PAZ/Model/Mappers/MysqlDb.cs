@@ -14,6 +14,16 @@ namespace PAZMySQL
         private String _password;
         private String _database;
         private MySqlConnection _connection;
+        private static MysqlDb _db;
+
+        public static MysqlDb GetInstance()
+        {
+            if (MysqlDb._db == null)
+            {
+                MysqlDb._db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");
+            }
+            return MysqlDb._db;
+        }
 
         public MysqlDb(String host, String username, String password, String database)
         {
@@ -26,7 +36,19 @@ namespace PAZMySQL
                 "UID="+this._username+";" +
                 "PASSWORD="+this._password+";";
             this._connection = new MySqlConnection(MyConString);
-            this._connection.Open();
+        }
+
+        public void OpenConnection()
+        {
+            if (this._connection.State != System.Data.ConnectionState.Open)
+            {
+                this._connection.Open();
+            }
+        }
+
+        public void CloseConnection()
+        {
+            this._connection.Close();
         }
 
         public MySqlCommand CreateCommand()
@@ -36,7 +58,7 @@ namespace PAZMySQL
 
         public MySqlDataReader ExecuteCommand(MySqlCommand command)
         {
-            command.ExecuteNonQuery();
+            //command.ExecuteNonQuery();
             return command.ExecuteReader();
         }
     }

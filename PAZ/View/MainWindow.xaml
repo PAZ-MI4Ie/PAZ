@@ -14,7 +14,12 @@
             </Label.Background>
         </Label>
         <TabControl Height="585" HorizontalAlignment="Left" Margin="12,53,0,0" Name="tabControl" VerticalAlignment="Top" Width="779" Background="White" Grid.RowSpan="2">
-            
+            <TabItem Header="Calender TEST!!!!!!" Name="tabCalender" Background="White" Padding="5" Width="100" HorizontalAlignment="Center">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+                    <Grid Name="FUCKYOUEVILBITCH">
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
             <TabItem Header="Overzicht" Name="tabItemOverzicht" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">
 
                
@@ -38,13 +43,8 @@
 
                     <DataGrid Name="GridOverzichtList" RowHeight="50" Margin="0, 70, 0, 0" RowEditEnding="GridOverzichtList_RowEditEnding" ColumnWidth="105" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="#FFDEDEDE" Foreground="#FF6F6F6F" AlternatingRowBackground="#FFF8F8F8">
                     </DataGrid>
-
-                   
                 </Grid>
             </TabItem>
-
-            
-
             <!-- TOEVOEGEN-->
             <TabItem Header="Toevoegen" Name="tabItemToevoegen" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">
                 <Grid Name="GridToevoegen">
@@ -294,5 +294,6 @@
 
 
         </TabControl>
+        <GridSplitter Height="100" HorizontalAlignment="Left" Margin="-116,404,0,0" Name="gridSplitter1" VerticalAlignment="Top" Width="10" />
     </Grid>
 </Window>

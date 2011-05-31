@@ -64,7 +64,11 @@
     </ApplicationDefinition>
     <Compile Include="Control\ControllerIO.cs" />
     <Compile Include="Control\PAZController.cs" />
+<<<<<<< HEAD
     <Compile Include="Model\Mappers\SessionMapper.cs" />
+=======
+    <Compile Include="Model\Mappers\AdminMapper.cs" />
+>>>>>>> 7c014160c86cd4afae85895094821690273f00b2
     <Compile Include="Model\Mappers\ExpertMapper.cs" />
     <Compile Include="Model\Mappers\Mapper.cs" />
     <Compile Include="Model\Admin.cs" />

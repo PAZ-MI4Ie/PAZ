@@ -9,6 +9,8 @@ using Microsoft.Win32;
 using System.IO;
 using PAZMySQL;
 using PAZ.Model;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace PAZ
 {
@@ -31,6 +33,7 @@ namespace PAZ
             InitializeComponent();
 
             //TEST CODE:
+<<<<<<< HEAD
             MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
             SessionMapper sessionmapper = new SessionMapper(db);
 			Console.WriteLine(sessionmapper.FindAll());
@@ -39,9 +42,183 @@ namespace PAZ
 
 			Sessions = CollectionViewSource.GetDefaultView(_master);
             GridOverzichtList.ItemsSource = Sessions;
+=======
+            StudentMapper studentmapper = new StudentMapper(MysqlDb.GetInstance());
+            Student verlept = new Student();
+            verlept.Firstname = "Henk";
+            verlept.Surname = "de Vries";
+            verlept.Study = "Bierkunde";
+            verlept.Studentnumber = 53290523;
+            verlept.Username = "hdevries";
+            verlept.Status = "accepted";
+            verlept.Email = "hdevries@avans.nl";
+            //studentmapper.Save(verlept);
+            //END OF TEST CODE
+
+            
+            _master = new List<Zitting>
+            {
+                new Zitting
+                (
+                    "10-5-2011",
+                    "13:30",
+                    "OB002",
+                    "Piet Jan \nJan Piet",
+                    "Ger Saris \nKeesjan hogenboom",
+                    "Ad Groot 2 \nAad Klein",
+                    12
+                ),
+                new Zitting
+                (
+                    "10-5-2011",
+                    "14:00",
+                    "OB002",
+                    "Ibrahim Boven\nJeroen Schipper",
+                    "Freek Hogenboom\nSjaak Lauris",
+                    "Kees Prof 2 \n Piet Hogensluiter",
+                    4
+                ),
+                new Zitting
+                (
+                    "10-5-2011",
+                    "14:30",
+                    "OB002",
+                    "Freek Netes\nMark Hos",
+                    "Bruno Marks\nMandy Tregis",
+                    "Kelly Bruins\nPatricia Kaai",
+                    6
+                ),
+                new Zitting
+                (
+                    "10-5-2011",
+                    "13:30",
+                    "OB002",
+                    "Piet Jan \nJan Piet",
+                    "Ger Saris \nKeesjan hogenboom",
+                    "Ad Groot 2 \nAad Klein",
+                    10
+                ),
+                new Zitting
+                (
+                    "10-5-2011",
+                    "14:00",
+                    "OB002",
+                    "Ibrahim Boven\nJeroen Schipper",
+                    "Freek Hogenboom\nSjaak Lauris",
+                    "Kees Prof 2 \n Piet Hogensluiter",
+                    11
+                ),
+                new Zitting
+                (
+                    "10-5-2011",
+                    "14:30",
+                    "OB002",
+                    "Freek Netes\nMark Hos",
+                    "Bruno Marks\nMandy Tregis",
+                    "Kelly Bruins\nPatricia Kaai",
+                    8
+                ),
+                new Zitting
+                (
+                    "10-5-2011",
+                    "13:30",
+                    "OB002",
+                    "Piet Jan \nJan Piet",
+                    "Ger Saris \nKeesjan hogenboom",
+                    "Ad Groot 2 \nAad Klein",
+                    12
+                ),
+                new Zitting
+                (
+                    "10-5-2011",
+                    "14:00",
+                    "OB002",
+                    "Ibrahim Boven\nJeroen Schipper",
+                    "Freek Hogenboom\nSjaak Lauris",
+                    "Kees Prof 2 \n Piet Hogensluiter",
+                    3
+                ),
+                new Zitting
+                (
+                    "10-5-2011",
+                    "14:30",
+                    "OB002",
+                    "Freek Netes\nMark Hos",
+                    "Bruno Marks\nMandy Tregis",
+                    "Kelly Bruins\nPatricia Kaai",
+                    13
+                ),
+                new Zitting
+                (
+                    "10-5-2011",
+                    "13:30",
+                    "OB002",
+                    "Piet Jan \nJan Piet",
+                    "Ger Saris \nKeesjan hogenboom",
+                    "Ad Groot 2 \nAad Klein",
+                    7
+                ),
+                new Zitting
+                (
+                    "10-5-2011",
+                    "14:00",
+                    "OB002",
+                    "Ibrahim Boven\nJeroen Schipper",
+                    "Freek Hogenboom\nSjaak Lauris",
+                    "Kees Prof 2 \n Piet Hogensluiter",
+                    17
+                ),
+                new Zitting
+                (
+                    "10-5-2011",
+                    "14:30",
+                    "OB002",
+                    "Freek Netes\nMark Hos",
+                    "Bruno Marks\nMandy Tregis",
+                    "Kelly Bruins\nPatricia Kaai",
+                    3
+                ),
+                new Zitting
+                (
+                    "10-5-2011",
+                    "13:30",
+                    "OB002",
+                    "Piet Jan \nJan Piet",
+                    "Ger Saris \nKeesjan hogenboom",
+                    "Ad Groot 2 \nAad Klein",
+                    9
+                ),
+                new Zitting
+                (
+                    "10-5-2011",
+                    "14:00",
+                    "OB002",
+                    "Ibrahim Boven\nJeroen Schipper",
+                    "Freek Hogenboom\nSjaak Lauris",
+                    "Kees Prof 2 \n Piet Hogensluiter",
+                    8
+                ),
+                new Zitting
+                (
+                    "10-5-2011",
+                    "14:30",
+                    "OB002",
+                    "Freek Netes\nMark Hos",
+                    "Bruno Marks\nMandy Tregis",
+                    "Kelly Bruins\nPatricia Kaai",
+                    8
+                )
+
+            };
+
+            Zittingen = CollectionViewSource.GetDefaultView(_master);
+            GridOverzichtList.ItemsSource = Zittingen;
+>>>>>>> 7c014160c86cd4afae85895094821690273f00b2
 
             // maak object
             _pdfExport = new PDFExport(GridOverzichtList);
+
+            genCalender();
         }
 
 
@@ -186,7 +363,74 @@ namespace PAZ
             //    };
         }
 
+        private void genCalender()
+        {
+            DateTime startDate = new DateTime(2011, 5, 11);
+            DateTime stopDate = new DateTime(2011, 6, 15);
+            int interval = 1;
 
+            // Define header stuff
+            ColumnDefinition colum = new ColumnDefinition();
+            GridLength width = new GridLength(50);
+            colum.Width = width;
+            FUCKYOUEVILBITCH.ColumnDefinitions.Add(colum);
+            FUCKYOUEVILBITCH.RowDefinitions.Add(new RowDefinition());
+
+            // Making Colums
+            int c = 0;
+            bool color = false;
+            for (DateTime dateTime = startDate; dateTime <= stopDate; dateTime += TimeSpan.FromDays(interval))
+            {
+                Label temp = new Label();
+                temp.Content = dateTime.ToShortDateString();
+                temp.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+                temp.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+                colum = new ColumnDefinition();
+                width = new GridLength(100);
+                colum.Width = width;
+                if (color)
+                {
+                    Rectangle lol = new Rectangle();
+                    lol.Fill = Brushes.AliceBlue;
+                    Grid.SetColumn(lol, c + 1);
+                    Grid.SetRow(lol, 1);
+                    Grid.SetRowSpan(lol, 18);
+                    FUCKYOUEVILBITCH.Children.Add(lol);
+                }
+                FUCKYOUEVILBITCH.ColumnDefinitions.Add(colum);
+                Grid.SetColumn(temp, c+1);
+                Grid.SetRow(temp, 0);
+                FUCKYOUEVILBITCH.Children.Add(temp);
+                c++;
+                color = !color;
+            }
+            
+            for (int r = 0; r < 17; r++)
+            {
+                Label temp = new Label();
+                temp.Content = "8:30";
+                temp.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+                temp.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+                RowDefinition row = new RowDefinition();
+                width = new GridLength(100);
+                row.Height = width;
+                FUCKYOUEVILBITCH.RowDefinitions.Add(row);
+                if (color)
+                {
+                    Rectangle lol = new Rectangle();
+                    lol.Fill = Brushes.AliceBlue;
+                    Grid.SetColumn(lol, 1);
+                    Grid.SetRow(lol, r+1);
+                    Grid.SetColumnSpan(lol, c);
+                    FUCKYOUEVILBITCH.Children.Add(lol);
+                }
+                Grid.SetColumn(temp, 0);
+                Grid.SetRow(temp, r+1);
+                FUCKYOUEVILBITCH.Children.Add(temp);
+                color = !color;
+            }
+
+        }
         /*
          * import button
          * (C) Mark de Mol

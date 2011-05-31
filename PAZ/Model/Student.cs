@@ -9,5 +9,10 @@ namespace PAZ.Model
     {
         public int Studentnumber { get; set; }
         public string Study { get; set; }
+
+        public Student()
+        {
+            this.User_type = "student";
+        }
     }
 }

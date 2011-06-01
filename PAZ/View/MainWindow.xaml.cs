@@ -28,6 +28,8 @@ namespace PAZ
         public ICollectionView Sessions { get; private set; }
         bool match;
         private PDFExport _pdfExport;
+        private UserMapper _userMapper;
+        private ClassroomMapper _classroomMapper;
 
         public MainWindow()
         {
@@ -35,6 +37,10 @@ namespace PAZ
 
             //TEST CODE:
             MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
+
+            _userMapper = new UserMapper(db);
+            _classroomMapper = new ClassroomMapper(db);
+
             SessionMapper sessionmapper = new SessionMapper(db);
 			Console.WriteLine(sessionmapper.FindAll());
 			_master = sessionmapper.FindAll();
@@ -241,17 +247,13 @@ namespace PAZ
         private void buttonVerwijderGebruikers_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Weet u zeker dat u alle gebruikers wilt verwijderen? \n\nLet op: deze actie kan niet ongedaan worden.", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                MessageBoxResult result = MessageBox.Show("Succesvol. Alle gebruikers zijn verwijderd.", "Gebruikers verwijderd");
-            }
+                MessageBox.Show(_userMapper.Delete() ? "Succesvol. Alle gebruikers zijn verwijderd." : "Mislukt, de gebruikers konden niet verwijderd worden.", "Gebruikers verwijderen");
         }
 
         private void buttonVerwijderLokalen_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Weet u zeker dat u alle lokalen wilt verwijderen? \n\nLet op: deze actie kan niet ongedaan worden.", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                MessageBoxResult result = MessageBox.Show("Succesvol. Alle lokalen zijn verwijderd.", "Lokalen verwijderd");
-            }
+                MessageBox.Show(_classroomMapper.Delete() ? "Succesvol. Alle lokalen zijn verwijderd." : "Mislukt, de lokalen konden niet verwijderd worden.", "Lokalen verwijderen");
         }
 
         private void comboBoxSelecteerType_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -58,6 +58,16 @@ namespace PAZMySQL
                 result.Add(this.ProcessRow(new Session(), Reader));
             }
             this._db.CloseConnection();
+
+			// dummy data
+			Daytime daytime = new Daytime(1, new DateTime(2011, 5, 10), 1330);
+			Classroom classroom = new Classroom(1, "OB002");
+			User student1 = new Student("Jan", "Piet");
+			User student2 = new Student("Piet", "Jan");
+			Pair pair = new Pair(1, student1, student2, 12);
+			result.Add(new Session(daytime, classroom, pair));
+			// end dummy data
+
             return result;
 		}
 

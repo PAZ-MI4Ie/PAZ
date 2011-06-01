@@ -43,10 +43,7 @@ namespace PAZ.Model
         }
         public int Number_of_guests { get; set; }
 
-        public Pair()
-        {
-
-        }
+		public Pair() { }
 
 		public Pair(int id, User student1, User student2, int number_of_guests)
 		{

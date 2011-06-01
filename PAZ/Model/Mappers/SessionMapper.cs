@@ -22,7 +22,7 @@ namespace PAZMySQL
 		public Session ProcessRow(Session session, MySqlDataReader Reader, int offset)
 		{
 			session.Id = Reader.GetInt32(0 + offset);
-			session.Daytime = 
+			
 
 			return session;
 		}

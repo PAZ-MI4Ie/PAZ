@@ -12,6 +12,8 @@ namespace PAZ.Model
         public User Student2 { get; set; }
         public int Number_of_guests { get; set; }
 
+		public Pair() { }
+
 		public Pair(int id, User student1, User student2, int number_of_guests)
 		{
 			ID = id;

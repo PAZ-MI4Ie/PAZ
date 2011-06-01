@@ -373,29 +373,21 @@ namespace PAZ
             int interval = 1;
 
             List<Classroom> classrooms = new List<Classroom>();
-            Classroom room = new Classroom();
-            room.Room_number = "OB202";
+            Classroom room = new Classroom(1,"OB202");
             classrooms.Add(room);
-            room = new Classroom();
-            room.Room_number = "OB203";
+            room = new Classroom(2,"OB203");
             classrooms.Add(room);
-            room = new Classroom();
-            room.Room_number = "OB204";
+            room = new Classroom(3,"OB204");
             classrooms.Add(room);
-            room = new Classroom();
-            room.Room_number = "OB205";
+            room = new Classroom(4,"OB205");
             classrooms.Add(room);
-            room = new Classroom();
-            room.Room_number = "OC201";
+            room = new Classroom(5,"OC201");
             classrooms.Add(room);
-            room = new Classroom();
-            room.Room_number = "OB201";
+            room = new Classroom(6,"OB201");
             classrooms.Add(room);
-            room = new Classroom();
-            room.Room_number = "OC302";
+            room = new Classroom(7,"OC302");
             classrooms.Add(room);
-            room = new Classroom();
-            room.Room_number = "OC202";
+            room = new Classroom(8,"OC202");
             classrooms.Add(room);
 
             //Making rows
@@ -403,7 +395,7 @@ namespace PAZ
             int rows = 0;
 
             Rectangle rec = new Rectangle();
-            rec.Fill = Brushes.Gray;
+            rec.Fill = Brushes.LightGray;
             Grid.SetColumn(rec, 0);
             Grid.SetRow(rec, 0);
             Grid.SetRowSpan(rec, 80);
@@ -417,7 +409,7 @@ namespace PAZ
                 if (dateTime.DayOfWeek != DayOfWeek.Sunday && dateTime.DayOfWeek != DayOfWeek.Saturday)
                 {
                     rec = new Rectangle();
-                    rec.Fill = Brushes.Gray;
+                    rec.Fill = Brushes.LightGray;
                     Grid.SetColumn(rec, 0);
                     Grid.SetRow(rec, rows);
                     Grid.SetColumnSpan(rec, classrooms.Count + 1);
@@ -425,11 +417,15 @@ namespace PAZ
                     //Add labels
                     for (int c = 0; c < classrooms.Count + 1; c++)
                     {
-                        if (calender.ColumnDefinitions.Count != classrooms.Count+1)
+                        if (calender.ColumnDefinitions.Count != classrooms.Count + 1)
                         {
                             //making columns
                             ColumnDefinition column = new ColumnDefinition();
-                            GridLength width = new GridLength(120);
+                            GridLength width;
+                            if (c == 0)
+                                width = new GridLength(75);
+                            else
+                                width = new GridLength(120);
                             column.Width = width;
                             calender.ColumnDefinitions.Add(column);
                             columns++;
@@ -452,7 +448,10 @@ namespace PAZ
                     for (int blok = 1; blok <= 4; blok++)
                     {
                         row = new RowDefinition();
-                        row.Height = height;
+                        if (blok == 1)
+                            row.Height = new GridLength(60);
+                        else
+                            row.Height = height;
                         calender.RowDefinitions.Add(row);
                         rows++;
 

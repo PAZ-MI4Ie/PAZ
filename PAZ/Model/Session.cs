@@ -17,6 +17,7 @@ namespace PAZ.Model
         public int Classroom_id { get; set; }
         public Classroom Classroom { get; set; }
         private Pair _pair;
+        
         public int Pair_id { get; set; }
         public Pair Pair {
             get
@@ -31,6 +32,10 @@ namespace PAZ.Model
             {
                 this._pair = value;
             }
+        }
+        public string Student1
+        {
+            get { return Pair.Student1.Firstname + Pair.Student1.Surname; }
         }
 
 		public Session() { }

@@ -12,6 +12,7 @@ using PAZ.Model;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Globalization;
+using Ini;
 
 namespace PAZ
 {
@@ -280,22 +281,6 @@ namespace PAZ
             groupBoxLeraarGegevens.Visibility = Visibility.Hidden;
         }
 
-        private void Agree(object sender, MouseButtonEventArgs e)
-        {
-            if (MessageBox.Show("Aanmelding goedkeuren?", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                MessageBoxResult result = MessageBox.Show("Succesvol", "Succesvol");
-            }
-        }
-
-        private void Decline(object sender, MouseButtonEventArgs e)
-        {
-            if (MessageBox.Show("Aanmelding afkeuren?", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                MessageBoxResult result = MessageBox.Show("Succesvol. Aanmelding is afgekeurt.", "Succesvol");
-            }
-        }
-
         private void buttonEmailVersturen_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Emails versturen?", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
@@ -361,6 +346,29 @@ namespace PAZ
             //        return true;
             //    };
         }
+        public IniFile readIni()
+        {
+            IniFile ini = new Ini.IniFile("sys.ini");
+            if (ini.Exists())
+                ini.Load();
+            else
+            {
+                IniSection section = new IniSection();
+                section.Add("startdate", "1-05-2011");
+                section.Add("enddate", "15-05-2011");
+                ini.Add("DATES", section);
+
+                section = new IniSection();
+                section.Add("block1", "09:00-10:30");
+                section.Add("block2", "11:00-12:30");
+                section.Add("block3", "13:00-14:30");
+                section.Add("block4", "15:00-16:30");
+                ini.Add("TIME", section);
+
+                ini.Save();
+            }
+            return ini;
+        }
 
 
         /*
@@ -368,38 +376,40 @@ namespace PAZ
          */
         private void genCalender()
         {
-            DateTime startDate = new DateTime(2011, 5, 1);
-            DateTime stopDate = new DateTime(2011, 5, 15);
+            IniFile ini = readIni();
+            DateTime startDate = DateTime.Parse(ini["DATES"]["startdate"]);
+            DateTime stopDate = DateTime.Parse(ini["DATES"]["enddate"]);
+            Brush headerColor = Brushes.LightGray;
             int interval = 1;
 
             List<Classroom> classrooms = new List<Classroom>();
-            Classroom room = new Classroom(1,"OB202");
+            Classroom room = new Classroom(1, "OB202");
             classrooms.Add(room);
-            room = new Classroom(2,"OB203");
+            room = new Classroom(2, "OB203");
             classrooms.Add(room);
-            room = new Classroom(3,"OB204");
+            room = new Classroom(3, "OB204");
             classrooms.Add(room);
-            room = new Classroom(4,"OB205");
+            room = new Classroom(4, "OB205");
             classrooms.Add(room);
-            room = new Classroom(5,"OC201");
+            room = new Classroom(5, "OC201");
             classrooms.Add(room);
-            room = new Classroom(6,"OB201");
+            room = new Classroom(6, "OB201");
             classrooms.Add(room);
-            room = new Classroom(7,"OC302");
+            room = new Classroom(7, "OC302");
             classrooms.Add(room);
-            room = new Classroom(8,"OC202");
+            room = new Classroom(8, "OC202");
             classrooms.Add(room);
 
             //Making rows
             int columns = 0;
             int rows = 0;
 
-            Rectangle rec = new Rectangle();
-            rec.Fill = Brushes.LightGray;
-            Grid.SetColumn(rec, 0);
-            Grid.SetRow(rec, 0);
-            Grid.SetRowSpan(rec, 80);
-            calender.Children.Add(rec);
+            Rectangle recC = new Rectangle();
+            recC.Fill = headerColor;
+            Grid.SetColumn(recC, 0);
+            Grid.SetRow(recC, 0);
+            //Grid.SetRowSpan(rec, Convert.ToInt32(stopDate.DayOfYear - startDate.DayOfYear) * 5);
+            calender.Children.Add(recC);
 
             RowDefinition row = new RowDefinition();
             GridLength height = new GridLength(120);
@@ -408,8 +418,8 @@ namespace PAZ
             {
                 if (dateTime.DayOfWeek != DayOfWeek.Sunday && dateTime.DayOfWeek != DayOfWeek.Saturday)
                 {
-                    rec = new Rectangle();
-                    rec.Fill = Brushes.LightGray;
+                    Rectangle rec = new Rectangle();
+                    rec.Fill = headerColor;
                     Grid.SetColumn(rec, 0);
                     Grid.SetRow(rec, rows);
                     Grid.SetColumnSpan(rec, classrooms.Count + 1);
@@ -470,11 +480,12 @@ namespace PAZ
 
                 }
 
-                
+
             }
 
-                addZitting(1, 1, "8:30", "11:00");
-            
+            Grid.SetRowSpan(recC, rows);
+            addZitting(1, 1, "8:30", "11:00");
+
         }
 
         private void addZitting(int column, int row, string starttime, string endtime)

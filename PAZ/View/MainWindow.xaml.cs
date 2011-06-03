@@ -234,14 +234,11 @@ namespace PAZ
             // dit zorgt ervoor dat er geen filters worden toegepast in de PDF uitdraai
             textboxSearch.Text = "";
 
-            // Maak en open een save dialog
-            SaveFileDialog dlg = new SaveFileDialog();
-            dlg.DefaultExt = ".pdf";
-            dlg.Filter = "PDF (.pdf)|*.pdf";
-            if (dlg.ShowDialog() == true)
+            string fileName;
+            if (OpenNewSaveDialog("Roosteroverzicht PAZ", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
             {
                 // maak en exporteer als pdf
-                _pdfExport.createPdf(dlg.FileName);
+                _pdfExport.CreatePdf(fileName, PDFExport.PdfType.PDF_Overview);
             }
         }
 
@@ -293,9 +290,14 @@ namespace PAZ
 
         private void buttonBriefPrinten_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Brief uitprinten?", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            // dit zorgt ervoor dat er geen filters worden toegepast in de PDF uitdraai
+            textboxSearch.Text = "";
+
+            string fileName;
+            if (OpenNewSaveDialog("Bevestigingsbrieven PAZ", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
             {
-                MessageBoxResult result = MessageBox.Show("Succesvol. Brief is uitgeprint.", "Succesvol");
+                // maak en exporteer als pdf
+                _pdfExport.CreatePdf(fileName, PDFExport.PdfType.PDF_Letter);
             }
         }
 
@@ -577,6 +579,39 @@ namespace PAZ
                     MessageBox.Show("Bestand niet gevonden.");
             }
 
+        }
+        
+        /**
+         * Deze functie maakt en opent een SaveFileDialog
+         * @input: defaultFileName de standaard bestandsnaam om te gebruiken
+         * @input: defaultExtension de standaard bestands extensie om te gebruiken
+         * @input: filter het filter van bestandstypen waaruit gekozen kan worden
+         * @output: outFileName het volledige pad + bestandsnaam nadat het dialoog klaar is
+         * @input: appendDate als dit true is, dan wordt er de datum van vandaag aan de bestandsnaam toegevoegd
+         * Return: De waarde teruggeven nadat de gebruiker het scherm sluit
+         * Auteur: Yorg 
+         */
+        private bool? OpenNewSaveDialog(string defaultFileName, string defaultExtension, string filter, out string outFileName, bool appendDate = true)
+        {
+            // Maak het dialoog
+            SaveFileDialog saveDialog = new SaveFileDialog();
+
+            // Vul standaard gegevens in
+            saveDialog.FileName = defaultFileName;
+            if (appendDate)
+                saveDialog.FileName += " " + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
+
+            saveDialog.FileName += defaultExtension;
+            saveDialog.Filter = filter;
+
+            // Open het dialoog en onthou de teruggekregen waarde
+            bool? returnValue = saveDialog.ShowDialog();
+
+            // Stel de output filename in
+            outFileName = saveDialog.FileName;
+
+            // Return de waarde teruggekregen op het moment dat het dialoog sloot
+            return returnValue;
         }
     }
 }

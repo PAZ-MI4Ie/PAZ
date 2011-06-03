@@ -46,5 +46,14 @@ namespace PAZ.Model
 			Classroom = classroom;
 			Pair = pair;
 		}
+
+        // TO DO: Zorgen dat deze gevuld wordt!
+        private List<Object> _dataList = new List<Object>(); // Gebruikt voor pdf export loop
+
+        // Opmerking: Dit zou een property moeten zijn, maar dan wordt het automatisch in de datagrid geduwd en dat willen we niet
+        public List<Object> GetDataList()
+        {
+            return _dataList;
+        }
     }
 }

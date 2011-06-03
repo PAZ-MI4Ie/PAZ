@@ -10,6 +10,11 @@ namespace PAZ.Model
 {
     public class PDFExport
     {
+        private const int CONTACT_INFORMATION_NUM_COLUMNS = 4;
+
+        private const string STANDARD_FONT_FAMILY = "Verdana";
+        private const int STANDARD_FONT_SIZE = 9;
+
         public enum PdfType
         {
             PDF_Overview,
@@ -73,16 +78,16 @@ namespace PAZ.Model
 
         /**
          * Dit maakt de opzet voor het overzicht PDF, het werkelijke rooster wordt gemaakt in een aparte functie.
-         * Auteur: Yorg 
+         * Auteur: Gökhan en Yorg 
          */
         private void CreateOverviewPDF(iText.Document document)
         {
-            // een paragraaf maken en aan het document toevoegen
+            // Een titel maken
             iText.Paragraph titel = new iText.Paragraph("Het PAZ-rooster", FontFactory.GetFont("Arial", 26, Font.BOLDITALIC));
             titel.Alignment = 1; // titel centeren
 
             // elementen toevoegen aan het document
-            document.Add(titel); // de titel
+            document.Add(titel); // de titel toevoegen
             document.Add(new iText.Paragraph(" ")); // leegruimte toevoegen
             document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
             document.Add(MakeRoster()); // het rooster
@@ -90,6 +95,7 @@ namespace PAZ.Model
 
         /**
          * Maakt het rooster in een tabel vorm
+         * Return: De gemaakte tabel
          * Auteur: Gökhan en Yorg
         */
         private PdfPTable MakeRoster()
@@ -149,9 +155,125 @@ namespace PAZ.Model
          */
         private void CreateLetterPDF(iText.Document document)
         {
-            // elementen toevoegen aan het document
-            document.Add(new iText.Paragraph("Geachte heer/mevrouw")); // Aanhef
-            document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
+            for (int rowNo = 0; rowNo < dataGrid.Items.Count - 1; ++rowNo)
+            {
+                Session rowSession = (Session)dataGrid.Items[rowNo];
+
+                // Een titel maken
+                iText.Paragraph titel = new iText.Paragraph("Academie voor Management en Bestuur", FontFactory.GetFont("Arial", 12, Font.BOLD));
+                titel.Alignment = 1;
+
+                // Subtitel maken
+                iText.Paragraph subTitel = new iText.Paragraph("'s-Hertogenbosch", FontFactory.GetFont(STANDARD_FONT_FAMILY, STANDARD_FONT_SIZE - 1));
+                subTitel.Alignment = 1;
+
+                // elementen toevoegen aan het document
+                document.Add(titel); // de titel toevoegen
+                document.Add(subTitel); // de subtitel toevoegen
+
+                // Leeg ruimte toevoegen
+                document.Add(new iText.Paragraph(" "));
+                document.Add(new iText.Paragraph(" "));
+
+                // Bepaal het standaard font om te gebruiken in het grootste deel van het document
+                Font standardFont = FontFactory.GetFont(STANDARD_FONT_FAMILY, STANDARD_FONT_SIZE);
+
+                // Adressering
+                document.Add(new iText.Paragraph("<bedrijf>", standardFont));
+                document.Add(new iText.Paragraph(rowSession.Pair.Student1.Firstname + " " + rowSession.Pair.Student1.Surname, standardFont));
+                document.Add(new iText.Paragraph("<adres>", standardFont));
+                document.Add(new iText.Paragraph("<pc / woonplaats>", standardFont));
+
+                // Leeg ruimte toevoegen
+                document.Add(new iText.Paragraph(" "));
+                document.Add(new iText.Paragraph(" "));
+                document.Add(new iText.Paragraph(" "));
+                document.Add(new iText.Paragraph(" "));
+
+                // Contact informatie tabel
+                document.Add(MakeContactInformationTable());
+
+                // Leeg ruimte toevoegen
+                document.Add(new iText.Paragraph(" "));
+                document.Add(new iText.Paragraph(" "));
+                document.Add(new iText.Paragraph(" "));
+
+                // Inhoud brief
+                document.Add(new iText.Paragraph("Geachte heer/mevrouw " + rowSession.Pair.Student1.Surname, standardFont)); // Aanhef(moet veranderen in expert, niet student)
+                document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
+                document.Add(new iText.Paragraph("Hierbij nodigt Avans u uit", FontFactory.GetFont("Verdana", 8)));
+            }
+        }
+
+        /**
+         * Dit maakt de contact informatie tabel zoals te zien is bovenaan de brief bij de adressering
+         * Return: De gemaakte tabel
+         * Auteur: Yorg 
+         */
+        private PdfPTable MakeContactInformationTable()
+        {
+            int aantalKolommen = CONTACT_INFORMATION_NUM_COLUMNS;
+
+            // Maak een tabel met het opgegeven aantal kolommen
+            PdfPTable rosterTable = new PdfPTable(aantalKolommen);
+
+            // Bepaal de breedte voor elke kolom
+            rosterTable.SetWidths(new float[] { 0.075f, 0.425f, 0.075f, 0.425f }); // TO DO: Fix widths
+
+            // Breedte van tabel instellen
+            rosterTable.WidthPercentage = 100;
+
+            // Bepaal het standaard font om te gebruiken bij deze tabel
+            Font standardFont = FontFactory.GetFont(STANDARD_FONT_FAMILY, STANDARD_FONT_SIZE - 2);
+
+            // Bepaal het standaard font(vet) om te gebruiken bij deze tabel
+            Font standardBoldFont = FontFactory.GetFont(STANDARD_FONT_FAMILY, STANDARD_FONT_SIZE - 2, Font.BOLD);
+
+            // START EERSTE RIJ
+
+            rosterTable.AddCell(MakeContactInformationCell("ons kenmerk", standardBoldFont, true));
+            rosterTable.AddCell(MakeContactInformationCell("Afst alg/corr/ 0809/ 10.06.09", standardFont));
+            rosterTable.AddCell(MakeContactInformationCell("contactpersonen", standardBoldFont, true));
+            rosterTable.AddCell(MakeContactInformationCell("Lilian Reuken en Regien Blom", standardFont));
+
+            // EINDE EERSTE RIJ
+
+            // START TWEEDE RIJ
+
+            rosterTable.AddCell(MakeContactInformationCell("datum", standardBoldFont, true));
+            rosterTable.AddCell(MakeContactInformationCell(DateTime.Now.Day + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year, standardFont));
+            rosterTable.AddCell(MakeContactInformationCell("telefoon", standardBoldFont, true));
+            rosterTable.AddCell(MakeContactInformationCell("(073) 629 52 56/ (073) 629 54 55", standardFont));
+
+            // EINDE TWEEDE RIJ
+
+            // START DERDE RIJ
+
+            rosterTable.AddCell(MakeContactInformationCell("onderwerp", standardBoldFont, true));
+            rosterTable.AddCell(MakeContactInformationCell("Afstudeerzitting", standardFont));
+            rosterTable.AddCell(MakeContactInformationCell("e-mail", standardBoldFont, true));
+            rosterTable.AddCell(MakeContactInformationCell("ac.reuken@avans.nl/ r.blom-depoel@avans.nl", standardFont));
+
+            // EINDE DERDE RIJ
+
+            return rosterTable;
+        }
+
+        /**
+         * Dit maakt een cell die bij de contact informatie tabel hoort
+         * @input: text de text die in de cell komt te staan
+         * @input: font het font wat gebruikt wordt in de cell
+         * @input: rightJustified waar als de text rechts gecentreerd moet staan, anders false
+         * Return: De gemaakte cell
+         * Auteur: Yorg 
+         */
+        private PdfPCell MakeContactInformationCell(string text, Font font, bool rightJustified = false)
+        {
+            PdfPCell cell = new PdfPCell(new Phrase(text, font));
+            cell.HorizontalAlignment = rightJustified ? 2 : 0;
+            cell.BorderWidth = 0;
+
+            return cell;
         }
     }
 }

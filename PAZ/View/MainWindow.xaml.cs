@@ -237,7 +237,7 @@ namespace PAZ
             if (OpenNewSaveDialog("Roosteroverzicht PAZ", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
             {
                 // maak en exporteer als pdf
-                _pdfExport.CreatePdf(fileName, PDFExport.PdfType.PDF_Overview);
+                _pdfExport.CreateOverviewPDF(fileName);
             }
         }
 
@@ -309,10 +309,10 @@ namespace PAZ
             textboxSearch.Text = "";
 
             string fileName;
-            if (OpenNewSaveDialog("Bevestigingsbrieven PAZ", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
+            if (OpenNewSaveDialog("Afstudeerscriptie Brieven", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
             {
                 // maak en exporteer als pdf
-                _pdfExport.CreatePdf(fileName, PDFExport.PdfType.PDF_Letter);
+                _pdfExport.CreateLetterPDF(fileName);
             }
         }
 

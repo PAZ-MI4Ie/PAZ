@@ -79,7 +79,6 @@
     <Compile Include="Model\Mappers\StudentMapper.cs" />
     <Compile Include="Model\Mappers\TeacherMapper.cs" />
     <Compile Include="Model\Pair.cs" />
-    <Compile Include="Model\Pair_attachment.cs" />
     <Compile Include="Model\PDFExport.cs" />
     <Compile Include="Model\Planning.cs" />
     <Compile Include="Model\Session.cs" />

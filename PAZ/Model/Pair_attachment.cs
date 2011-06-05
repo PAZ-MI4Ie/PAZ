@@ -7,7 +7,13 @@ namespace PAZ.Model
 {
     class Pair_attachment
     {
-        public User User { get; set; }
-        public Pair Pair { get; set; }
+        public User user { get; set; }
+        public Pair pair { get; set; }
+
+		public Pair_attachment(User user, Pair pair)
+		{
+			this.user = user;
+			this.pair = pair;
+		}
     }
 }

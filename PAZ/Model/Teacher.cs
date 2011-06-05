@@ -10,5 +10,10 @@ namespace PAZ.Model
         public enum session_spread {ANY,LOSE,FAR};
 
         public session_spread Session_spread { get; set; }
+
+		public Teacher() : base()
+		{
+
+		}
     }
 }

@@ -65,8 +65,6 @@ namespace PAZ.Model
 			get { return Pair.Number_of_guests; }
 		}
 
-		private List<Object> _dataList; // Gebruikt voor pdf export loop
-
 		public Session() { }
 
 		public Session(Daytime daytime, Classroom classroom, Pair pair)
@@ -77,7 +75,7 @@ namespace PAZ.Model
 		}
 
         // TO DO: Zorgen dat deze gevuld wordt!
-        private List<Object> _dataList = new List<Object>(); // Gebruikt voor pdf export loop
+        private List<Object> _dataList; // Gebruikt voor pdf export loop
 
         // Opmerking: Dit zou een property moeten zijn, maar dan wordt het automatisch in de datagrid geduwd en dat willen we niet
         public List<Object> GetDataList()

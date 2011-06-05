@@ -57,7 +57,15 @@ namespace PAZ.Model
                 document.Add(titel); // de titel toevoegen
                 document.Add(new iText.Paragraph(" ")); // leegruimte toevoegen
                 document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                document.Add(MakeRoster()); // het rooster
+
+                PdfPTable rosterTable = MakeRoster();
+                if (rosterTable == null)
+                {
+                    MessageBox.Show("Exporteren is mislukt, het overzicht bevat geen records!", "Melding");
+                    return;
+                }
+
+                document.Add(rosterTable); // het rooster
 
                 // toon bericht dat exporteren naar PDF gelukt is
                 MessageBox.Show("Exporteren gelukt! Bestand is geëxporteerd naar " + filename, "Melding");
@@ -84,7 +92,10 @@ namespace PAZ.Model
         */
         private PdfPTable MakeRoster()
         {
-            int aantalKolommen = dataGrid.Columns.Count;
+            if (dataGrid.Items.Count <= 0)
+                return null;
+
+            int aantalKolommen = ((Session)dataGrid.Items[0]).GetDataList().Count;
 
             // Maak een tabel met even veel aantal kolommen als de datagrid
             PdfPTable rosterTable = new PdfPTable(aantalKolommen);
@@ -117,16 +128,12 @@ namespace PAZ.Model
             {
                 Session rowSession = (Session)dataGrid.Items[rowNo];
 
-                // Temp oplossing, tot datalist waardes bevat
-                if (rowSession.GetDataList().Count > 0)
+                for (int columnNo = 0; columnNo < dataGrid.Columns.Count; ++columnNo)
                 {
-                    for (int columnNo = 0; columnNo < dataGrid.Columns.Count; ++columnNo)
-                    {
-                        Phrase ph = new Phrase(rowSession.GetDataList()[columnNo].ToString(), FontFactory.GetFont("Arial", 13, Font.NORMAL));
-                        PdfPCell cell = new PdfPCell(ph);
-                        cell.Padding = 5;
-                        rosterTable.AddCell(cell);
-                    }
+                    Phrase ph = new Phrase(rowSession.GetDataList()[columnNo].ToString(), FontFactory.GetFont("Arial", 13, Font.NORMAL));
+                    PdfPCell cell = new PdfPCell(ph);
+                    cell.Padding = 5;
+                    rosterTable.AddCell(cell);
                 }
             }
 
@@ -180,7 +187,7 @@ namespace PAZ.Model
 
                     // Adressering
                     document.Add(new iText.Paragraph("<bedrijf>", standardFont));
-                    document.Add(new iText.Paragraph(rowSession.Pair.Student1.Firstname + " " + rowSession.Pair.Student1.Surname, standardFont));
+                    document.Add(new iText.Paragraph(rowSession.GetPair().Student1.Firstname + " " + rowSession.GetPair().Student1.Surname, standardFont));
                     document.Add(new iText.Paragraph("<adres>", standardFont));
                     document.Add(new iText.Paragraph("<pc / woonplaats>", standardFont));
 
@@ -199,13 +206,13 @@ namespace PAZ.Model
                     document.Add(new iText.Paragraph(" "));
 
                     // Inhoud brief
-                    document.Add(new iText.Paragraph("Geachte heer/mevrouw " + rowSession.Pair.Student1.Surname + ",", standardFont)); // Aanhef(moet veranderen in expert, niet student)
+                    document.Add(new iText.Paragraph("Geachte heer/mevrouw " + rowSession.GetPair().Student1.Surname + ",", standardFont)); // Aanhef(moet veranderen in expert, niet student)
                 
                     document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                    document.Add(new iText.Paragraph("Hierbij ontvangt u de afstudeerscriptie van onze student <opleiding>, " + rowSession.Pair.Student1.Firstname + " " + rowSession.Pair.Student1.Surname + " van wie u de afstudeerbespreking zult bijwonen. Begeleidende docenten <naam docent1> en <naam docent2> zullen bij de zitting aanwezig zijn.", standardFont));
+                    document.Add(new iText.Paragraph("Hierbij ontvangt u de afstudeerscriptie van onze student <opleiding>, " + rowSession.GetPair().Student1.Firstname + " " + rowSession.GetPair().Student1.Surname + " van wie u de afstudeerbespreking zult bijwonen. Begeleidende docenten <naam docent1> en <naam docent2> zullen bij de zitting aanwezig zijn.", standardFont));
 
                     document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                    document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, <datum en tijd zitting>, in lokaal " + rowSession.Classroom.Room_number + " van Avans Hogeschool, Onderwijsboulevard 215 te `s-Hertogenbosch.", standardFont));
+                    document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, <datum en tijd zitting>, in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, Onderwijsboulevard 215 te `s-Hertogenbosch.", standardFont));
 
                     document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
                     document.Add(new iText.Paragraph("In het afstudeerlokaal wordt voor aanvang van de zitting koffie en thee geserveerd.", standardFont));

@@ -15,10 +15,8 @@ namespace PAZ.Model
 		public Daytime Daytime;
         private Classroom _classroom;
 		public int Classroom_id;
-		public Classroom Classroom;
         private Pair _pair;
 		public int Pair_id;
-		public Pair Pair;
 		public Pair_attachment attachment;
 		
 		public string Datum
@@ -36,14 +34,14 @@ namespace PAZ.Model
 		}
 		public string Lokaal
 		{
-			get { return Classroom.Room_number; }
+			get { return _classroom.Room_number; }
 		}
 		public string Studenten
 		{
 			get
 			{
-				return Pair.Student1.Firstname + " " + Pair.Student1.Surname + "\r\n"
-					+ Pair.Student2.Firstname + Pair.Student2.Surname;
+                return _pair.Student1.Firstname + " " + _pair.Student1.Surname + "\r"
+                    + _pair.Student2.Firstname + _pair.Student2.Surname;
 			}
 		}
 		public string Docenten
@@ -53,7 +51,7 @@ namespace PAZ.Model
 				return "";
 			}
 		}
-		public string Deskundige
+		public string Deskundigen
 		{
 			get
 			{
@@ -62,7 +60,7 @@ namespace PAZ.Model
 		}
 		public int AantalGasten
 		{
-			get { return Pair.Number_of_guests; }
+            get { return _pair.Number_of_guests; }
 		}
 
 		public Session() { }
@@ -70,8 +68,17 @@ namespace PAZ.Model
 		public Session(Daytime daytime, Classroom classroom, Pair pair)
 		{
 			Daytime = daytime;
-			Classroom = classroom;
-			Pair = pair;
+			_classroom = classroom;
+			_pair = pair;
+
+            _dataList = new List<Object>();
+            _dataList.Add(Datum);
+            _dataList.Add(Timeslot);
+            _dataList.Add(Lokaal);
+            _dataList.Add(Studenten);
+            _dataList.Add(Docenten); 
+            _dataList.Add(Deskundigen);
+            _dataList.Add(AantalGasten);
 		}
 
         // TO DO: Zorgen dat deze gevuld wordt!
@@ -81,6 +88,12 @@ namespace PAZ.Model
         public List<Object> GetDataList()
         {
             return _dataList;
+        }
+
+        // Idem als bovenstaande opmerking
+        public Pair GetPair()
+        {
+            return _pair;
         }
     }
 }

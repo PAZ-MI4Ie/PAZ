@@ -12,6 +12,7 @@ using PAZ.Model;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace PAZ
 {
@@ -29,7 +30,12 @@ namespace PAZ
         bool match;
         private PDFExport _pdfExport;
         private UserMapper _userMapper;
-        private ClassroomMapper _classroomMapper;
+		private ClassroomMapper _classroomMapper;
+		private StudentMapper _studentMapper;
+		private TeacherMapper _teacherMapper;
+		private ExpertMapper _expertMapper;
+		private List<Teacher> _teachers;
+		private List<Student> _students;
 
         public MainWindow()
         {
@@ -48,7 +54,12 @@ namespace PAZ
 
 			Sessions = CollectionViewSource.GetDefaultView(_master);
             GridOverzichtList.ItemsSource = Sessions;
-            StudentMapper studentmapper = new StudentMapper(MysqlDb.GetInstance());
+			_studentMapper = new StudentMapper(MysqlDb.GetInstance());
+			_teacherMapper = new TeacherMapper(MysqlDb.GetInstance());
+			this._teachers = _teacherMapper.FindAll();
+			this._students = _studentMapper.FindAll();
+
+			//Test code
             Student verlept = new Student();
             verlept.Firstname = "Henk";
             verlept.Surname = "de Vries";
@@ -57,7 +68,7 @@ namespace PAZ
             verlept.Username = "hdevries";
             verlept.Status = "accepted";
             verlept.Email = "hdevries@avans.nl";
-            //studentmapper.Save(verlept);
+            //_studentmapper.Save(verlept);
             //END OF TEST CODE
 
             /*
@@ -606,5 +617,98 @@ namespace PAZ
             // Return de waarde teruggekregen op het moment dat het dialoog sloot
             return returnValue;
         }
+
+		private void onTeacherAddClicked(object sender, RoutedEventArgs e)
+		{
+
+			//Use this for input errors
+			bool hasInputError = false;
+
+
+			//Check first name
+			if (textBoxLeraarVoornaam.Text.Equals(String.Empty))
+			{
+				textBoxLeraarVoornaam.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxLeraarVoornaam.BorderBrush = Brushes.Gray;
+			}
+
+			//Check surname
+			if (textLeraarAchternaam.Text.Equals(String.Empty))
+			{
+				textLeraarAchternaam.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textLeraarAchternaam.BorderBrush = Brushes.Gray;
+			}
+
+			//Check email adress
+			if (EmailLeraar1.Text.Equals(String.Empty))
+			{
+				EmailLeraar1.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				EmailLeraar1.BorderBrush = Brushes.Gray;
+			}
+			if (!EmailLeraar1.Text.IsValidEmailAddress())
+			{
+				EmailLeraar1.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				EmailLeraar1.BorderBrush = Brushes.Gray;
+			}
+
+
+			//Create sessionspread variable
+			Teacher.session_spread sessionSpread;
+
+			//See which session spread option was chosen
+			if(sessionVerspreid.IsChecked == true)
+			{
+				sessionSpread = Teacher.session_spread.FAR;
+			}
+			else if (sessionDichtBijElkaar.IsChecked == true)
+			{
+				sessionSpread = Teacher.session_spread.CLOSE;
+			}
+			else
+			{
+				sessionSpread = Teacher.session_spread.ANY;
+			}
+
+			if (hasInputError == false)
+			{
+				//Create teacher object and add values
+				Teacher newTeacher = new Teacher();
+				newTeacher.Firstname = textBoxLeraarVoornaam.Text;
+				newTeacher.Surname = textLeraarAchternaam.Text;
+				newTeacher.Email = EmailLeraar1.Text;
+				newTeacher.Session_spread = sessionSpread;
+				//TODO: blocked days
+				//TODO
+				//newTeacher.blockedDay = datePickerBlockedDay1;
+
+				//Send to the database
+				_teacherMapper.Save(newTeacher);
+			}
+		}
     }
+
+	public static class ValidatorExtensions
+	{
+		public static bool IsValidEmailAddress(this string s)
+		{
+			Regex regex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+			return regex.IsMatch(s);
+		}
+	}
 }

@@ -52,6 +52,8 @@ namespace PAZMySQL
 
         public void Save(Teacher teacher)
         {
+			//TODO: blocked days
+
             Boolean insert = true;
             if (teacher.Id != 0)
             {

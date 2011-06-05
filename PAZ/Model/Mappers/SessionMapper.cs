@@ -65,9 +65,8 @@ namespace PAZMySQL
 			User student1 = new Student("Jan", "Piet");
 			User student2 = new Student("Piet", "Jan");
 			Pair pair = new Pair(1, student1, student2, 12);
-			Teacher teacher1 = new Teacher();
-			Pair_attachment teacher1_attachment = new Pair_attachment(teacher1 ,pair);
-			result.Add(new Session(daytime, classroom, pair));
+
+			result.Add(new Session(daytime, classroom, pair, new Teacher(), new Teacher(), new Expert(), new Expert()));
 			// end dummy data
 
             return result;

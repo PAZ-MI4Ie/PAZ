@@ -223,6 +223,10 @@ namespace PAZ
             // maak object
             _pdfExport = new PDFExport(GridOverzichtList);
 
+            // 5/6/2011 Yorg: Bug fix betreft PDF export, het Overzicht DataGrid heeft geen kolommen als het nog niet in zicht is gekomen, 
+            // dit is vervelend want die heeft de export nodig, daarom fop ik het systeem door de overzicht tab in de XAML als de start tab te zetten, maar hier in de constructor alsnog op de calender tab te zetten. Overbodig als het overzicht eerst getoond moet worden.
+            tabCalender.Focus();
+
             genCalender();
         }
 

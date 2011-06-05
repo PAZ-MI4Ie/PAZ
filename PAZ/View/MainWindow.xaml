@@ -13,7 +13,7 @@
                 <ImageBrush ImageSource="/PAZ;component/Resources/AvansLogo.png" />
             </Label.Background>
         </Label>
-        <TabControl Height="585" HorizontalAlignment="Left" Margin="12,53,0,0" Name="tabControl" VerticalAlignment="Top" Width="779" Background="White" Grid.RowSpan="2">
+        <TabControl Height="585" SelectedIndex ="1" HorizontalAlignment="Left" Margin="12,53,0,0" Name="tabControl" VerticalAlignment="Top" Width="779" Background="White" Grid.RowSpan="2">
             <TabItem Header="Calender TEST!!!!!!" Name="tabCalender" Background="White" Padding="5" Width="100" HorizontalAlignment="Center">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
                     <Grid Name="calender">

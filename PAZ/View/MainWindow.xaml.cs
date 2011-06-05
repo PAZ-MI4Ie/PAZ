@@ -699,6 +699,23 @@ namespace PAZ
 
 				//Send to the database
 				_teacherMapper.Save(newTeacher);
+				MessageBox.Show("Leraar toegevoegd");
+			}
+		}
+
+		private void onClassroomAddClicked(object sender, RoutedEventArgs e)
+		{
+			if (textBoxLokaalGegevens.Text.Equals(string.Empty))
+			{
+				textBoxLokaalGegevens.BorderBrush = Brushes.Red;
+			}
+			else
+			{
+				textBoxLokaalGegevens.BorderBrush = Brushes.Gray;
+				Classroom newClassroom = new Classroom();
+				newClassroom.Room_number = textBoxLokaalGegevens.Text;
+				_classroomMapper.Save(newClassroom);
+				MessageBox.Show("Lokaal toegevoegd");
 			}
 		}
     }

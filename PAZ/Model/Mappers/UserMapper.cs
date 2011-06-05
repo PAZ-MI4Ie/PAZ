@@ -89,5 +89,14 @@ namespace PAZMySQL
             this._db.CloseConnection();
             user.Id = Reader.GetInt32(0);
         }
+
+        /**
+         * Dit is een functieverzoek aan Teun: Verwijder alle entries in de tabel user(die geen admin zijn) (DELETE FROM user WHERE user_type != 'admin')
+         * Return: true als geslaagd, anders false(kan dat wel? misschien false als er geen non admin users zijn om te verwijderen?)
+         */
+        public bool Delete()
+        {
+            return true;
+        }
     }
 }

@@ -65,6 +65,7 @@
     <Compile Include="Control\ControllerIO.cs" />
     <Compile Include="Control\PAZController.cs" />
     <Compile Include="Model\Mappers\PairAttachmentMapper.cs" />
+    <Compile Include="Model\Mappers\ClassroomMapper.cs" />
     <Compile Include="Model\Mappers\SessionMapper.cs" />
     <Compile Include="Model\Mappers\AdminMapper.cs" />
     <Compile Include="Model\Mappers\ExpertMapper.cs" />

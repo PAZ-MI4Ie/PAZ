@@ -28,6 +28,8 @@ namespace PAZ
         public ICollectionView Sessions { get; private set; }
         bool match;
         private PDFExport _pdfExport;
+        private UserMapper _userMapper;
+        private ClassroomMapper _classroomMapper;
 
         public MainWindow()
         {
@@ -35,6 +37,10 @@ namespace PAZ
 
             //TEST CODE:
             MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
+
+            _userMapper = new UserMapper(db);
+            _classroomMapper = new ClassroomMapper(db);
+
             SessionMapper sessionmapper = new SessionMapper(db);
 			Console.WriteLine(sessionmapper.FindAll());
 			_master = sessionmapper.FindAll();
@@ -227,31 +233,24 @@ namespace PAZ
             // dit zorgt ervoor dat er geen filters worden toegepast in de PDF uitdraai
             textboxSearch.Text = "";
 
-            // Maak en open een save dialog
-            SaveFileDialog dlg = new SaveFileDialog();
-            dlg.DefaultExt = ".pdf";
-            dlg.Filter = "PDF (.pdf)|*.pdf";
-            if (dlg.ShowDialog() == true)
+            string fileName;
+            if (OpenNewSaveDialog("Roosteroverzicht PAZ", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
             {
                 // maak en exporteer als pdf
-                _pdfExport.createPdf(dlg.FileName);
+                _pdfExport.CreateOverviewPDF(fileName);
             }
         }
 
         private void buttonVerwijderGebruikers_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Weet u zeker dat u alle gebruikers wilt verwijderen? \n\nLet op: deze actie kan niet ongedaan worden.", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                MessageBoxResult result = MessageBox.Show("Succesvol. Alle gebruikers zijn verwijderd.", "Gebruikers verwijderd");
-            }
+                MessageBox.Show(_userMapper.Delete() ? "Succesvol. Alle gebruikers zijn verwijderd." : "Mislukt, de gebruikers konden niet verwijderd worden.", "Gebruikers verwijderen");
         }
 
         private void buttonVerwijderLokalen_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Weet u zeker dat u alle lokalen wilt verwijderen? \n\nLet op: deze actie kan niet ongedaan worden.", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                MessageBoxResult result = MessageBox.Show("Succesvol. Alle lokalen zijn verwijderd.", "Lokalen verwijderd");
-            }
+                MessageBox.Show(_classroomMapper.Delete() ? "Succesvol. Alle lokalen zijn verwijderd." : "Mislukt, de lokalen konden niet verwijderd worden.", "Lokalen verwijderen");
         }
 
         private void comboBoxSelecteerType_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -306,9 +305,14 @@ namespace PAZ
 
         private void buttonBriefPrinten_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Brief uitprinten?", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            // dit zorgt ervoor dat er geen filters worden toegepast in de PDF uitdraai
+            textboxSearch.Text = "";
+
+            string fileName;
+            if (OpenNewSaveDialog("Afstudeerscriptie Brieven", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
             {
-                MessageBoxResult result = MessageBox.Show("Succesvol. Brief is uitgeprint.", "Succesvol");
+                // maak en exporteer als pdf
+                _pdfExport.CreateLetterPDF(fileName);
             }
         }
 
@@ -564,6 +568,39 @@ namespace PAZ
                     MessageBox.Show("Bestand niet gevonden.");
             }
 
+        }
+        
+        /**
+         * Deze functie maakt en opent een SaveFileDialog
+         * @input: defaultFileName de standaard bestandsnaam om te gebruiken
+         * @input: defaultExtension de standaard bestands extensie om te gebruiken
+         * @input: filter het filter van bestandstypen waaruit gekozen kan worden
+         * @output: outFileName het volledige pad + bestandsnaam nadat het dialoog klaar is
+         * @input: appendDate als dit true is, dan wordt er de datum van vandaag aan de bestandsnaam toegevoegd
+         * Return: De waarde teruggeven nadat de gebruiker het scherm sluit
+         * Auteur: Yorg 
+         */
+        private bool? OpenNewSaveDialog(string defaultFileName, string defaultExtension, string filter, out string outFileName, bool appendDate = true)
+        {
+            // Maak het dialoog
+            SaveFileDialog saveDialog = new SaveFileDialog();
+
+            // Vul standaard gegevens in
+            saveDialog.FileName = defaultFileName;
+            if (appendDate)
+                saveDialog.FileName += " " + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
+
+            saveDialog.FileName += defaultExtension;
+            saveDialog.Filter = filter;
+
+            // Open het dialoog en onthou de teruggekregen waarde
+            bool? returnValue = saveDialog.ShowDialog();
+
+            // Stel de output filename in
+            outFileName = saveDialog.FileName;
+
+            // Return de waarde teruggekregen op het moment dat het dialoog sloot
+            return returnValue;
         }
     }
 }

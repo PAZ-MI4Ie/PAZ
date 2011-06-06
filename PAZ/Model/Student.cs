@@ -15,7 +15,8 @@ namespace PAZ.Model
 			this.User_type = "student";
 		}
 
-        public Student(string surname, string firstname) : base(surname, firstname)
+        public Student(string surname, string firstname)
+			: base(surname, firstname)
         {
             this.User_type = "student";
         }

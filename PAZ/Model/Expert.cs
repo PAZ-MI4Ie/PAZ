@@ -11,9 +11,15 @@ namespace PAZ.Model
         public string Address { get; set; }
         public string Postcode { get; set; }
 
-		public Expert() : base()
+		public Expert()
 		{
+			this.User_type = "expert";
+		}
 
+		public Expert(string surname, string firstname)
+			: base(surname, firstname)
+		{
+			this.User_type = "expert";
 		}
     }
 }

@@ -48,7 +48,7 @@ namespace PAZ.Model
 			get
 			{
                 return _pair.Student1.Firstname + " " + _pair.Student1.Surname + "\r"
-                    + _pair.Student2.Firstname + _pair.Student2.Surname;
+					+ _pair.Student2.Firstname + " " + _pair.Student2.Surname;
 			}
 		}
 		public string Docenten
@@ -56,7 +56,7 @@ namespace PAZ.Model
 			get
 			{
                 return _teacher1.Firstname + " " + _teacher1.Surname + "\r"
-                    + _teacher2.Firstname + _teacher2.Surname;
+					+ _teacher2.Firstname + " " + _teacher2.Surname;
 			}
 		}
 		public string Deskundigen
@@ -64,7 +64,7 @@ namespace PAZ.Model
             get
             {
                 return _expert1.Firstname + " " + _expert1.Surname + "\r"
-                    + _expert2.Firstname + _expert2.Surname;
+					+ _expert2.Firstname + " " + _expert2.Surname;
             }
 		}
 		public int AantalGasten

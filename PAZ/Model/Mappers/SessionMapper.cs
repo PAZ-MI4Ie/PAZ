@@ -44,10 +44,10 @@ namespace PAZMySQL
             this._db.CloseConnection();
 
 			// dummy data
-			Daytime daytime = new Daytime(1, new DateTime(2011, 5, 10), 1330);
+			Daytime daytime = new Daytime(1, new DateTime(2011, 5, 10), 1);
 			Classroom classroom = new Classroom(1, "OB002");
-			User student1 = new Student("Jan", "Piet");
-			User student2 = new Student("Piet", "Jan");
+            Student student1 = new Student("Jan", "Piet", 0000000, "Management en Bestuur");
+            Student student2 = new Student("Piet", "Jan", 0000000, "Management en Bestuur");
 			Teacher teacher1 = new Teacher("Saris", "Ger");
 			Teacher teacher2 = new Teacher("Hogenboom", "Keesjan");
 			Expert expert1 = new Expert("Klein", "Aad");

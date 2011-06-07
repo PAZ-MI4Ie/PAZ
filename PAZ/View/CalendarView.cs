@@ -26,7 +26,10 @@ namespace PAZ.View
 
         void session_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            Label session = sender as Label;
             string[] newsession = SessionWindow.AddNewSession();
+            if(newsession != null)
+                addSession(GetSessionDate(session), GetColumn(session), GetRow(session), newsession[0], newsession[1], new string[] { newsession[2], newsession[3] }, new string[] { newsession[4], newsession[5] });
         }
 
         #region Drag & Drop
@@ -44,7 +47,8 @@ namespace PAZ.View
 
         void CalendarView_DragEnter(object sender, DragEventArgs e)
         {
-            //throw new NotImplementedException();
+            Label emptysession = sender as Label;
+            emptysession.Background = Brushes.LightGreen;
         }
 
         void CalendarView_DragOver(object sender, DragEventArgs e)
@@ -80,7 +84,8 @@ namespace PAZ.View
 
         void CalendarView_DragLeave(object sender, DragEventArgs e)
         {
-            //throw new NotImplementedException();
+            Label emptysession = sender as Label;
+            emptysession.Background = Brushes.White;
         }
         #endregion
         
@@ -266,6 +271,8 @@ namespace PAZ.View
             session.DragLeave -= CalendarView_DragLeave;
             session.Drop -= CalendarView_Drop;
 
+            session.Background = Brushes.White;
+
             session.ToolTip = "Studenten\n\nDocenten\n\nExperts";
         }
 
@@ -310,6 +317,7 @@ namespace PAZ.View
                 session.BorderBrush = null;
                 session.BorderThickness = new Thickness(0);
                 session.MouseMove -= session_MouseMove;
+                session.MouseDown += session_MouseDown;
                 session.AllowDrop = true;
                 session.DragEnter += new DragEventHandler(CalendarView_DragEnter);
                 session.DragOver += new DragEventHandler(CalendarView_DragOver);

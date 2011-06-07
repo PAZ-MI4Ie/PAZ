@@ -10,7 +10,7 @@
         <Label Content="Docent 2" HorizontalAlignment="Left" Margin="0,139,0,0" Name="lblteacher2" Height="28" VerticalAlignment="Top" />
         <Label Content="Expert 1" Height="28" HorizontalAlignment="Left" Margin="0,173,0,0" Name="lblexpert1" VerticalAlignment="Top" />
         <Label Content="Expert 2" Height="28" HorizontalAlignment="Right" Margin="0,207,316,0" Name="lblexpert2" VerticalAlignment="Top"/>
-        <ComboBox Height="23" HorizontalAlignment="Left" Margin="90,17,0,0" Name="cbPairs" VerticalAlignment="Top" Width="258">
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="90,17,0,0" Name="cbPairs" VerticalAlignment="Top" Width="258" SelectionChanged="cbPairs_SelectionChanged">
             <ComboBoxItem Content="Jeroen Snipper, Hidde Mees" />
             <ComboBoxItem Content="Freek Laure, Mark de Boer" />
             <ComboBoxItem Content="Ibrahim Moers, Mark Demin" />
@@ -30,8 +30,20 @@
             <ComboBoxItem Content="Marco Huysmans" />
             <ComboBoxItem Content="Bob Polis" />
         </ComboBox>
-        <ComboBox Height="23" HorizontalAlignment="Left" Margin="90,178,0,0" Name="cbExpert1" VerticalAlignment="Top" Width="258" />
-        <ComboBox Height="23" HorizontalAlignment="Left" Margin="90,212,0,0" Name="cbExpert2" VerticalAlignment="Top" Width="258" />
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="90,178,0,0" Name="cbExpert1" VerticalAlignment="Top" Width="258">
+            <ComboBoxItem Content="Piet Krammers" />
+            <ComboBoxItem Content="Mariam Hourder" />
+            <ComboBoxItem Content="Nikki Jansen" />
+            <ComboBoxItem Content="Bart Passer" />
+            <ComboBoxItem Content="Huub van Veghel" />
+        </ComboBox>
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="90,212,0,0" Name="cbExpert2" VerticalAlignment="Top" Width="258">
+            <ComboBoxItem Content="Piet Krammers" />
+            <ComboBoxItem Content="Mariam Hourder" />
+            <ComboBoxItem Content="Nikki Jansen" />
+            <ComboBoxItem Content="Bart Passer" />
+            <ComboBoxItem Content="Huub van Veghel" />
+        </ComboBox>
         <Button Content="Save" Height="23" HorizontalAlignment="Left" Margin="273,262,0,0" Name="btnSave" VerticalAlignment="Top" Width="75" Click="btnSave_Click" />
     </Grid>
 </Window>

@@ -33,7 +33,15 @@ namespace PAZ.View
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            names = new string[] { txtStudent1.Text, txtStudent2.Text, cbTeacher1.SelectedValue.ToString(), cbTeacher2.SelectedValue.ToString(), cbExpert1.SelectedValue.ToString(), cbExpert2.SelectedValue.ToString() };
+            ComboBoxItem selectedItem = (ComboBoxItem)(cbTeacher1.SelectedValue);
+            string teacher1 = selectedItem.Content.ToString();
+            selectedItem = (ComboBoxItem)(cbTeacher2.SelectedValue);
+            string teacher2 = selectedItem.Content.ToString();
+            selectedItem = (ComboBoxItem)(cbExpert1.SelectedValue);
+            string expert1 = selectedItem.Content.ToString();
+            selectedItem = (ComboBoxItem)(cbExpert2.SelectedValue);
+            string expert2 = selectedItem.Content.ToString();
+            names = new string[] { txtStudent1.Text, txtStudent2.Text, teacher1, teacher2, expert1, expert2 };
             this.Close();
         }
 
@@ -41,8 +49,15 @@ namespace PAZ.View
         {
             SessionWindow sw = new SessionWindow();
             sw.ShowDialog();
-
             return names;
+        }
+
+        private void cbPairs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem selectedItem = (ComboBoxItem)(cbPairs.SelectedValue);
+            string[] students = selectedItem.Content.ToString().Split(',');
+            txtStudent1.Text = students[0].Trim();
+            txtStudent2.Text = students[1].Trim();
         }
     }
 }

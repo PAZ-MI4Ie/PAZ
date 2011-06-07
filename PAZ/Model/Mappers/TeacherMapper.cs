@@ -79,8 +79,6 @@ namespace PAZMySQL
             command.Parameters.Add(new MySqlParameter("?session_spread", MySqlDbType.String)).Value = teacher.Session_spread.ToString();
 			this._db.ExecuteCommand(command);
 			this._db.CloseConnection();
-            
-			///SERIEUS DEZE SHIT IS ECHT FOUT. JEROEN FIX DIT
 
 			//Get daytimeslots overlapping with date
 			this._db.OpenConnection();

@@ -194,7 +194,7 @@
                             <RadioButton GroupName="teacher_sessionspread" Height="23" Content="Verspreid" Margin="93,189,0,0" Name="sessionVerspreid" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
                             <RadioButton GroupName="teacher_sessionspread" Height="23" Content="Dicht bij elkaar" Margin="390,189,0,0" Name="sessionDichtBijElkaar" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
 
-                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,229,0,0" Name="buttonLeraar" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" />
+                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,229,0,0" Name="buttonLeraar" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onTeacherAddClicked" />
                         
                         </Grid>
                     </GroupBox>

@@ -49,7 +49,7 @@ namespace PAZ
             MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
 
             _userMapper = new UserMapper(db);
-            _classroomMapper = new ClassroomMapper(db);
+			_classroomMapper = new ClassroomMapper(db);
 
             SessionMapper sessionmapper = new SessionMapper(db);
 			Console.WriteLine(sessionmapper.FindAll());
@@ -59,7 +59,8 @@ namespace PAZ
             {
                 _master.Add(new SessionRow(s));
             }
-            //END OF TEST CODE
+			//END OF TEST CODE
+			this._teacherMapper = new TeacherMapper(db);
 
 			Sessions = CollectionViewSource.GetDefaultView(_master);
             GridOverzichtList.ItemsSource = Sessions;

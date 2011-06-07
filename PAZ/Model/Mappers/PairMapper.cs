@@ -36,5 +36,28 @@ namespace PAZ.Model.Mappers
             this._db.CloseConnection();
             return this.ProcessRow(new Pair(), Reader);
         }
+
+        public Dictionary<int, string> FindAttachments(int pairId)
+        {
+            Dictionary<int, string> result = new Dictionary<int, string>();
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "SELECT user_id, user_type FROM pair_attachment LEFT JOIN user ON user.id = user_id WHERE pair_id = ?id";
+            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = pairId;
+            MySqlDataReader Reader = this._db.ExecuteCommand(command);
+            while (Reader.Read())
+            {
+                result.Add(Reader.GetInt32(0), Reader.GetString(1));
+            }
+            this._db.CloseConnection();
+            if (result.Count <= 0)
+            {
+                result.Add(21, "teacher");
+                result.Add(23, "teacher");
+                result.Add(26, "expert");
+                result.Add(27, "expert");
+            }
+            return result;
+        }
     }
 }

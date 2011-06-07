@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using PAZMySQL;
+using PAZ.Model.Mappers;
 
 namespace PAZ.Model
 {
@@ -45,7 +46,26 @@ namespace PAZ.Model
         }
         public int Number_of_guests { get; set; }
 
-        public List<User> Attachments { get; set; }
+        public List<User> Attachments
+        {
+            get
+            {
+                List<User> result = new List<User>();
+                foreach (KeyValuePair<int, string> pair in (new PairMapper(MysqlDb.GetInstance())).FindAttachments(this.ID))
+                {
+                    if (pair.Value.Equals("teacher"))
+                    {
+                        result.Add((new TeacherMapper(MysqlDb.GetInstance())).Find(pair.Key);
+                    }
+                    else if (pair.Value.Equals("expert"))
+                    {
+                        result.Add((new ExpertMapper(MysqlDb.GetInstance())).Find(pair.Key);
+                    }
+                }
+                return result;
+            }
+            set;
+        }
 
 		public Pair() { }
 

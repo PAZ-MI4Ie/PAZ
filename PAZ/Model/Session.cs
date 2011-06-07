@@ -19,6 +19,10 @@ namespace PAZ.Model
         {
             get
             {
+                if (this._daytime == null)
+                {
+                    this.Daytime = (new DaytimeMapper(MysqlDb.GetInstance())).Find(this.Daytime_id);
+                }
                 return this._daytime;
             }
             set
@@ -32,6 +36,10 @@ namespace PAZ.Model
         {
             get
             {
+                if (this._classroom == null)
+                {
+                    this.Classroom = (new ClassroomMapper(MysqlDb.GetInstance())).Find(this.Classroom_id);
+                }
                 return this._classroom;
             }
             set

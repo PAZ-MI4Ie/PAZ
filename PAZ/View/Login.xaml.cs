@@ -30,6 +30,11 @@ namespace PAZ
        
         private void labelButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            login();
+        }
+
+        public void login()
+        {
             AdminMapper adminmapper = new AdminMapper(MysqlDb.GetInstance());
             if (adminmapper.CheckLogin("admin", passwordBox1.Password))
             {
@@ -40,7 +45,12 @@ namespace PAZ
             }
             else
                 MessageBox.Show("Wachtwoord is onjuist.");
-             
+        }
+
+        private void passwordBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                login();
         }
 
     }

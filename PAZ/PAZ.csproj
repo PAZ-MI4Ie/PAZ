@@ -64,12 +64,15 @@
     </ApplicationDefinition>
     <Compile Include="Control\ControllerIO.cs" />
     <Compile Include="Control\PAZController.cs" />
+    <Compile Include="IniReader\IniFile.cs" />
+    <Compile Include="IniReader\IniSection.cs" />
     <Compile Include="Model\Emailer.cs" />
     <Compile Include="Model\Mappers\PairAttachmentMapper.cs" />
     <Compile Include="Model\Mappers\ClassroomMapper.cs" />
     <Compile Include="Model\Mappers\SessionMapper.cs" />
     <Compile Include="Model\Mappers\AdminMapper.cs" />
     <Compile Include="Model\Mappers\ExpertMapper.cs" />
+    <Compile Include="Model\Mappers\DaytimeMapper.cs" />
     <Compile Include="Model\Mappers\Mapper.cs" />
     <Compile Include="Model\Admin.cs" />
     <Compile Include="Model\Blocked_timeslot.cs" />
@@ -90,6 +93,7 @@
     <Compile Include="Model\Mappers\MysqlDb.cs" />
     <Compile Include="Model\Mappers\UserMapper.cs" />
     <Compile Include="Model\Mappers\PairMapper.cs" />
+    <Compile Include="View\CalendarView.cs" />
     <Compile Include="View\EmailWindow.xaml.cs">
       <DependentUpon>EmailWindow.xaml</DependentUpon>
     </Compile>
@@ -97,6 +101,9 @@
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\Zitting.cs" />
+    <Compile Include="View\SessionWindow.xaml.cs">
+      <DependentUpon>SessionWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="View\EmailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -117,6 +124,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\SessionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

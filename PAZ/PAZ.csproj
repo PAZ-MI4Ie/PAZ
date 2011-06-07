@@ -92,6 +92,7 @@
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\Zitting.cs" />
+    <Compile Include="View\SessionRow.cs" />
     <Page Include="View\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

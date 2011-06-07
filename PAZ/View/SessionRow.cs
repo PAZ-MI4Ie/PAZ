@@ -10,28 +10,46 @@ namespace PAZ.View
     {
         public SessionRow(Session session)
         {
-            this.Datum = session.Daytime.Date.Day.ToString()
-                + "-" + session.Daytime.Date.Month.ToString()
-                + "-" + session.Daytime.Date.Year.ToString();
-            this.Timeslot = session.Daytime.Timeslot;
-            this.Lokaal = session.Classroom.Room_number;
+            if (session.Daytime != null)
+            {
+                this.Datum = session.Daytime.Date.Day.ToString()
+                    + "-" + session.Daytime.Date.Month.ToString()
+                    + "-" + session.Daytime.Date.Year.ToString();
+                this.Timeslot = session.Daytime.Timeslot;
+            }
+            else
+            {
+                this.Datum = "Onbekend";
+                this.Timeslot = 0;
+            }
+            if (session.Classroom != null)
+            {
+                this.Lokaal = session.Classroom.Room_number;
+            }
+            else
+            {
+                this.Lokaal = "";
+            }
             this.Studenten = session.Pair.Student1.Firstname + " " + session.Pair.Student1.Surname + "\r"
                     + session.Pair.Student2.Firstname + " " + session.Pair.Student2.Surname;
 
             string returnStringTeachers = String.Empty;
             string returnStringExperts = String.Empty;
-            foreach (User user in session.Pair.Attachments)
+            if (session.Pair.Attachments != null)
             {
-                if (user is Teacher)
+                foreach (User user in session.Pair.Attachments)
                 {
-                    Teacher teacher = (Teacher)user;
-                    returnStringTeachers += teacher.Firstname + " " + teacher.Surname + "\r";
+                    if (user is Teacher)
+                    {
+                        Teacher teacher = (Teacher)user;
+                        returnStringTeachers += teacher.Firstname + " " + teacher.Surname + "\r";
+                    }
+                    else if (user is Expert)
+                    {
+                        Expert expert = (Expert)user;
+                        returnStringExperts += expert.Firstname + " " + expert.Surname + "\r";
+                    }
                 }
-                else if (user is Expert)
-                {
-                    Expert expert = (Expert)user;
-                    returnStringExperts += expert.Firstname + " " + expert.Surname + "\r";
-                }             
             }
             this.Docenten = returnStringTeachers;
             this.Deskundigen = returnStringExperts;

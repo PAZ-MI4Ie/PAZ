@@ -31,5 +31,6 @@
         </TabControl>
         <Button Content="Annuleren" Height="29" HorizontalAlignment="Right" Margin="0,459,119,0" Name="btnAnnuleren" VerticalAlignment="Top" Width="84" Click="btnAnnuleren_Click" />
         <Button Content="Verzenden" Height="29" HorizontalAlignment="Left" Margin="573,459,0,0" Name="bntVerzenden" VerticalAlignment="Top" Width="84" Click="bntVerzenden_Click" />
+        <Button Content="Button" Height="23" HorizontalAlignment="Left" Margin="18,465,0,0" Name="button1" VerticalAlignment="Top" Width="143" />
     </Grid>
 </Window>

@@ -126,7 +126,7 @@ namespace PAZ.Model
             }
 
             // Leest de rijen uit de datagrid en voegt deze toe aan roosterTable
-            for (int rowNo = 0; rowNo < dataGrid.Items.Count - 1; ++rowNo)
+            for (int rowNo = 0; rowNo < dataGrid.Items.Count; ++rowNo)
             {
                 SessionRow rowSession = (SessionRow)dataGrid.Items[rowNo];
 
@@ -167,7 +167,7 @@ namespace PAZ.Model
 
                 // het document openen
                 document.Open();
-                for (int rowNo = 0; rowNo < dataGrid.Items.Count - 1; ++rowNo)
+                for (int rowNo = 0; rowNo < dataGrid.Items.Count; ++rowNo)
                 {
                     SessionRow rowSession = (SessionRow)dataGrid.Items[rowNo];
                     Expert[] experts = rowSession.GetSessionModel().GetExperts();

@@ -62,8 +62,6 @@ namespace PAZ
 			//END OF TEST CODE
 			this._teacherMapper = new TeacherMapper(db);
 
-			Sessions = CollectionViewSource.GetDefaultView(_master);
-            GridOverzichtList.ItemsSource = Sessions;
             StudentMapper studentmapper = new StudentMapper(MysqlDb.GetInstance());
             Student verlept = new Student();
             verlept.Firstname = "Henk";
@@ -263,6 +261,8 @@ namespace PAZ
             calendar.addSession("2-5-2011", 1, 1, "Jeroen Schipper", "Hidde Jansen", teachers, experts);
             calendar.addSession("3-5-2011", 1, 1, "Freek Laurijssen", "Ibrahim Önder", teachers, experts);
             //calendar.loadAllSessions();
+
+            tabCalender.Focus();
         }
 
 
@@ -320,10 +320,8 @@ namespace PAZ
 
         private void buttonEmailVersturen_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Emails versturen?", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                MessageBoxResult result = MessageBox.Show("Succesvol. Emails zijn verzonden.", "Succesvol");
-            }
+            EmailWindow email = new EmailWindow();
+            email.ShowDialog();
         }
 
         private void buttonBriefPrinten_Click(object sender, RoutedEventArgs e)

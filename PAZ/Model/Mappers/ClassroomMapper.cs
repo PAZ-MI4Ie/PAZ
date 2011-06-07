@@ -60,38 +60,31 @@ namespace PAZMySQL
             return null;
         }
 
-        public void Save(User user)
+        public void Save(Classroom classroom)
         {
             // TO DO?
 
-            //this._db.OpenConnection();
-            //MySqlCommand command = this._db.CreateCommand();
-            //if (user.Id != 0)
-            //{
-            //    command.CommandText = "UPDATE user (username, firstname, surname, email, user_type, status) VALUES " +
-            //    "(?username, ?firstname, ?surname, ?email, ?user_type, ?status) WHERE id = ?id";
-            //    command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = user.Id;
-            //}
-            //else
-            //{
-            //    command.CommandText = "INSERT INTO user (username, firstname, surname, email, user_type, status) VALUES "+
-            //    "(?username, ?firstname, ?surname, ?email, ?user_type, ?status)";
-            //}
-            //command.Parameters.Add(new MySqlParameter("?username", MySqlDbType.String)).Value = user.Username;
-            //command.Parameters.Add(new MySqlParameter("?firstname", MySqlDbType.String)).Value = user.Firstname;
-            //command.Parameters.Add(new MySqlParameter("?surname", MySqlDbType.String)).Value = user.Surname;
-            //command.Parameters.Add(new MySqlParameter("?email", MySqlDbType.String)).Value = user.Email;
-            //command.Parameters.Add(new MySqlParameter("?user_type", MySqlDbType.String)).Value = user.User_type;
-            //command.Parameters.Add(new MySqlParameter("?status", MySqlDbType.String)).Value = user.Status;
-            //this._db.ExecuteCommand(command);
-            //this._db.CloseConnection();
-            //this._db.OpenConnection();
-            //MySqlCommand command2 = this._db.CreateCommand();
-            //command2.CommandText = "SELECT LAST_INSERT_ID()";
-            //MySqlDataReader Reader = this._db.ExecuteCommand(command2);
-            //Reader.Read();
-            //this._db.CloseConnection();
-            //user.Id = Reader.GetInt32(0);
+			Boolean insert = true;
+			if (classroom.Id != 0)
+			{
+				insert = false;
+			}
+			this._db.OpenConnection();
+			MySqlCommand command = this._db.CreateCommand();
+			if (insert)
+			{
+				command.CommandText = "INSERT INTO classroom (id, room_number) VALUES " +
+				"(?id, ?room_number)";
+			}
+			else
+			{
+				command.CommandText = "UPDATE student (room_number) VALUES " +
+				"(?id) WHERE user_id = ?id";
+			}
+			command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = classroom.Id;
+			command.Parameters.Add(new MySqlParameter("?room_number", MySqlDbType.String)).Value = classroom.Room_number.ToString();
+			this._db.ExecuteCommand(command);
+			this._db.CloseConnection();
         }
 
         /**

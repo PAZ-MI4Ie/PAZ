@@ -17,7 +17,6 @@ namespace PAZ.Model
 
 		public User()
 		{
-
 		}
 
 		public User(string surname, string firstname)

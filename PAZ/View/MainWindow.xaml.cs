@@ -429,7 +429,7 @@ namespace PAZ
                     string line; 
                     StreamReader file = null;
 
-                    try
+                    try 
                     {
                         file = new StreamReader( filename );
                         while ((line = file.ReadLine()) != null)

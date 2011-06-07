@@ -9,9 +9,10 @@ namespace PAZ.Model
     class Pair
     {
         public int ID { get; set; }
-        private User _student1;
+        private Student _student1;
         public int Student1_id { get; set; }
-        public User Student1 {
+        public Student Student1
+        {
             get
             {
                 if (this._student1 == null)
@@ -25,9 +26,10 @@ namespace PAZ.Model
                 this._student1 = value;
             }
         }
-        private User _student2;
+        private Student _student2;
         public int Student2_id { get; set; }
-        public User Student2 {
+        public Student Student2
+        {
             get
             {
                 if (this._student2 == null)
@@ -43,9 +45,11 @@ namespace PAZ.Model
         }
         public int Number_of_guests { get; set; }
 
+        public List<User> Attachments { get; set; }
+
 		public Pair() { }
 
-		public Pair(int id, User student1, User student2, int number_of_guests)
+        public Pair(int id, Student student1, Student student2, int number_of_guests)
 		{
 			ID = id;
 			Student1 = student1;

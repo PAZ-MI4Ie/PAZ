@@ -9,51 +9,77 @@ namespace PAZ.Model
 {
     class Session
     {
+        private const int MAX_TEACHERS = 2;
+        private const int MAX_EXPERTS = 2;
+
         public int Id { get; set; }
         private Daytime _daytime;
         public int Daytime_id { get; set; }
-        public Daytime Daytime { get; set; }
-        private Classroom _classroom;
-        public int Classroom_id { get; set; }
-        public Classroom Classroom { get; set; }
-        private Pair _pair;
-        
-        public int Pair_id { get; set; }
-        public Pair Pair {
+        public Daytime Daytime
+        {
             get
             {
-                if (this._pair == null)
-                {
+                return this._daytime;
+            }
+            set
+            {
+                this._daytime = value;
+            }
+        }
+        private Classroom _classroom;
+		public int Classroom_id {get; set;}
+        public Classroom Classroom
+        {
+            get
+            {
+                return this._classroom;
+            }
+            set
+            {
+                this._classroom = value;
+            }
+        }
+        private Pair _pair;
+		public int Pair_id {get; set;}
+        public Pair Pair {
+            get {
+                if (this._pair == null) {
                     this.Pair = (new PairMapper(MysqlDb.GetInstance())).Find(this.Pair_id);
                 }
                 return this._pair;
             }
-            set
-            {
+            set {
                 this._pair = value;
             }
-        }
-        public string Student1
-        {
-            get { return Pair.Student1.Firstname + Pair.Student1.Surname; }
         }
 
 		public Session() { }
 
-		public Session(Daytime daytime, Classroom classroom, Pair pair)
+		public Session(Daytime daytime, Classroom classroom, Pair pair, Teacher teacher1, Teacher teacher2, Expert expert1, Expert expert2)
 		{
-			Daytime = daytime;
-			Classroom = classroom;
-			Pair = pair;
+			_daytime = daytime;
+			_classroom = classroom;
+			_pair = pair;
+            this._temp_experts = new Expert[2];
+            this._temp_experts[0] = expert1;
+            this._temp_experts[1] = expert2;
+            this._temp_teachers = new Teacher[2];
+            this._temp_teachers[0] = teacher1;
+            this._temp_teachers[1] = teacher2;
 		}
 
-        // TO DO: Zorgen dat deze gevuld wordt!
-        private List<Object> _dataList = new List<Object>(); // Gebruikt voor pdf export loop
+        //TEMP CODE:
+        private Expert[] _temp_experts;
+        private Teacher[] _temp_teachers;
 
-        // Opmerking: Dit zou een property moeten zijn, maar dan wordt het automatisch in de datagrid geduwd en dat willen we niet
-        public List<Object> GetDataList()
+        public Expert[] GetExperts()
         {
-            return _dataList;
+            return _temp_experts;
+        }
+
+        public Teacher[] GetTeachers()
+        {
+            return _temp_teachers;
         }
     }
 }

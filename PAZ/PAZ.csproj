@@ -64,8 +64,13 @@
     </ApplicationDefinition>
     <Compile Include="Control\ControllerIO.cs" />
     <Compile Include="Control\PAZController.cs" />
+<<<<<<< HEAD
     <Compile Include="IniReader\IniFile.cs" />
     <Compile Include="IniReader\IniSection.cs" />
+=======
+    <Compile Include="Model\Emailer.cs" />
+    <Compile Include="Model\Mappers\PairAttachmentMapper.cs" />
+>>>>>>> 45e7876570afba2ded828a7dedadad8d6b20a294
     <Compile Include="Model\Mappers\ClassroomMapper.cs" />
     <Compile Include="Model\Mappers\SessionMapper.cs" />
     <Compile Include="Model\Mappers\AdminMapper.cs" />
@@ -80,24 +85,37 @@
     <Compile Include="Model\Mappers\StudentMapper.cs" />
     <Compile Include="Model\Mappers\TeacherMapper.cs" />
     <Compile Include="Model\Pair.cs" />
-    <Compile Include="Model\Pair_attachment.cs" />
     <Compile Include="Model\PDFExport.cs" />
     <Compile Include="Model\Planning.cs" />
     <Compile Include="Model\Session.cs" />
     <Compile Include="Model\Student.cs" />
     <Compile Include="Model\Teacher.cs" />
     <Compile Include="Model\User.cs" />
+    <Compile Include="View\SessionRow.cs" />
     <Compile Include="Model\Mappers\MysqlDb.cs" />
     <Compile Include="Model\Mappers\UserMapper.cs" />
     <Compile Include="Model\Mappers\PairMapper.cs" />
+<<<<<<< HEAD
     <Compile Include="View\CalendarView.cs" />
+=======
+    <Compile Include="View\EmailWindow.xaml.cs">
+      <DependentUpon>EmailWindow.xaml</DependentUpon>
+    </Compile>
+>>>>>>> 45e7876570afba2ded828a7dedadad8d6b20a294
     <Compile Include="View\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\Zitting.cs" />
+<<<<<<< HEAD
     <Compile Include="View\SessionWindow.xaml.cs">
       <DependentUpon>SessionWindow.xaml</DependentUpon>
     </Compile>
+=======
+    <Page Include="View\EmailWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+>>>>>>> 45e7876570afba2ded828a7dedadad8d6b20a294
     <Page Include="View\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

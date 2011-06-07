@@ -28,26 +28,10 @@ namespace PAZMySQL
 			return session;
 		}
 
+		// 6/6/2011 Mark Bos: Uiteindelijk zou deze functie alle sessies uit de database halen, maar voordat dat werkt, staat er nu dummy data in om te zorgen dat er iets in het overzicht staat.
+		//De ProcessRow functie hierboven moet dus uitgewerkt worden, maar ik denk dat alleen Teun weet hoe dat moet.
         public List<Session> FindAll()
 		{
-			/*
-            List<Session> result = new List<Session>();
-			
-			Daytime daytime = new Daytime(1, new DateTime(2011, 5, 10), 1330);
-			Classroom classroom = new Classroom(1, "OB002");
-			User student1 = new Student("Jan", "Piet");
-			User student2 = new Student("Piet", "Jan");
-			Pair pair = new Pair(1, student1, student2, 12);
-			result.Add(new Session(daytime, classroom, pair));
-
-			daytime = new Daytime(2, new DateTime(2011, 5, 10), 1400);
-			classroom = new Classroom(2, "OB002");
-			student1 = new Student("Boven", "Ibrahim");
-			student2 = new Student("Schipper", "Jeroen");
-			pair = new Pair(2, student1, student2, 4);
-			result.Add(new Session(daytime, classroom, pair));
-			return result;
-			 * */
             this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
             command.CommandText = "SELECT id, daytime_id, classroom_id, pair_id FROM session";
@@ -60,12 +44,17 @@ namespace PAZMySQL
             this._db.CloseConnection();
 
 			// dummy data
-			Daytime daytime = new Daytime(1, new DateTime(2011, 5, 10), 1330);
+			Daytime daytime = new Daytime(1, new DateTime(2011, 5, 10), 1);
 			Classroom classroom = new Classroom(1, "OB002");
-			User student1 = new Student("Jan", "Piet");
-			User student2 = new Student("Piet", "Jan");
+            Student student1 = new Student("Jan", "Piet", 0000000, "Management en Bestuur");
+            Student student2 = new Student("Piet", "Jan", 0000000, "Management en Bestuur");
+			Teacher teacher1 = new Teacher("Saris", "Ger");
+			Teacher teacher2 = new Teacher("Hogenboom", "Keesjan");
+			Expert expert1 = new Expert("Klein", "Aad");
+			Expert expert2 = new Expert("Groot", "Ad");
 			Pair pair = new Pair(1, student1, student2, 12);
-			result.Add(new Session(daytime, classroom, pair));
+
+			result.Add(new Session(daytime, classroom, pair, teacher1, teacher2, expert1, expert2));
 			// end dummy data
 
             return result;

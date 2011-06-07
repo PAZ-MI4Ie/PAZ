@@ -38,7 +38,7 @@ namespace PAZ
         {
             InitializeComponent();
 
-            /*TEST CODE:
+            //TEST CODE:
             MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
 
             _userMapper = new UserMapper(db);
@@ -263,7 +263,7 @@ namespace PAZ
             if (OpenNewSaveDialog("Roosteroverzicht PAZ", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
             {
                 // maak en exporteer als pdf
-                _pdfExport.CreatePdf(fileName, PDFExport.PdfType.PDF_Overview);
+                _pdfExport.CreateOverviewPDF(fileName);
             }
         }
 
@@ -322,7 +322,7 @@ namespace PAZ
             if (OpenNewSaveDialog("Bevestigingsbrieven PAZ", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
             {
                 // maak en exporteer als pdf
-                _pdfExport.CreatePdf(fileName, PDFExport.PdfType.PDF_Letter);
+                _pdfExport.CreateLetterPDF(fileName);
             }
         }
 

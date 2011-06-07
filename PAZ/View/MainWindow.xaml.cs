@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using PAZ.View;
 
 namespace PAZ
 {
@@ -25,7 +26,7 @@ namespace PAZ
 
     public partial class MainWindow : Window
     {
-        private List<Session> _master;
+        private List<SessionRow> _master;
         public ICollectionView Sessions { get; private set; }
         bool match;
         private PDFExport _pdfExport;
@@ -52,7 +53,12 @@ namespace PAZ
 
             SessionMapper sessionmapper = new SessionMapper(db);
 			Console.WriteLine(sessionmapper.FindAll());
-			_master = sessionmapper.FindAll();
+            List<Session> sessionModels = sessionmapper.FindAll();
+            _master = new List<SessionRow>();
+            foreach (Session s in sessionModels)
+            {
+                _master.Add(new SessionRow(s));
+            }
             //END OF TEST CODE
 
 			Sessions = CollectionViewSource.GetDefaultView(_master);

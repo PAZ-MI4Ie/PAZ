@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Windows.Controls;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using iTextSharp.text;
-using iText = iTextSharp.text;
 using iTextSharp.text.pdf;
+using iText = iTextSharp.text;
 
 namespace PAZ.Model
 {
@@ -160,96 +161,122 @@ namespace PAZ.Model
                 // Zet de PageEvent van de writer klasse naar de instantie van de pagina
                 writer.PageEvent = page;
 
+                // Lijst met experts die al geweest zijn of om een andere reden genegeerd moeten worden
+                List<Expert> ignoreList = new List<Expert>();
+
                 // het document openen
                 document.Open();
                 for (int rowNo = 0; rowNo < dataGrid.Items.Count - 1; ++rowNo)
                 {
                     Session rowSession = (Session)dataGrid.Items[rowNo];
+                    Expert[] experts = rowSession.GetExperts();
 
-                    // Een titel maken
-                    iText.Paragraph titel = new iText.Paragraph("Academie voor Management en Bestuur", FontFactory.GetFont("Arial", 12, Font.BOLD));
-                    titel.Alignment = 1;
+                    for (int iExpert = 0; iExpert < experts.Length; ++iExpert)
+                    {
+                        Expert expert = experts[iExpert];
 
-                    // Subtitel maken
-                    iText.Paragraph subTitel = new iText.Paragraph("`s-Hertogenbosch", FontFactory.GetFont(STANDARD_FONT_FAMILY, STANDARD_FONT_SIZE - 1));
-                    subTitel.Alignment = 1;
+                        bool bIgnore = false;
 
-                    // elementen toevoegen aan het document
-                    document.Add(titel); // de titel toevoegen
-                    document.Add(subTitel); // de subtitel toevoegen
+                        // Controleer of er een brief gemaakt moet worden voor deze expert
+                        for (int i = 0; i < ignoreList.Count; ++i)
+                        {
+                            if(expert == ignoreList[i])
+                                bIgnore = true;
+                        }
 
-                    // Leeg ruimte toevoegen
-                    document.Add(new iText.Paragraph(" "));
-                    document.Add(new iText.Paragraph(" "));
+                        if(bIgnore)
+                            continue;
+                        
+                        document.NewPage();
 
-                    // Bepaal het standaard font om te gebruiken in het grootste deel van het document
-                    Font standardFont = FontFactory.GetFont(STANDARD_FONT_FAMILY, STANDARD_FONT_SIZE);
+                        // Een titel maken
+                        iText.Paragraph titel = new iText.Paragraph("Academie voor Management en Bestuur", FontFactory.GetFont("Arial", 12, Font.BOLD));
+                        titel.Alignment = 1;
 
-                    // Adressering
-                    document.Add(new iText.Paragraph("<bedrijf>", standardFont));
-                    document.Add(new iText.Paragraph(rowSession.GetPair().Student1.Firstname + " " + rowSession.GetPair().Student1.Surname, standardFont));
-                    document.Add(new iText.Paragraph("<adres>", standardFont));
-                    document.Add(new iText.Paragraph("<pc / woonplaats>", standardFont));
+                        // Subtitel maken
+                        iText.Paragraph subTitel = new iText.Paragraph("`s-Hertogenbosch", FontFactory.GetFont(STANDARD_FONT_FAMILY, STANDARD_FONT_SIZE - 1));
+                        subTitel.Alignment = 1;
 
-                    // Leeg ruimte toevoegen
-                    document.Add(new iText.Paragraph(" "));
-                    document.Add(new iText.Paragraph(" "));
-                    document.Add(new iText.Paragraph(" "));
-                    document.Add(new iText.Paragraph(" "));
+                        // elementen toevoegen aan het document
+                        document.Add(titel); // de titel toevoegen
+                        document.Add(subTitel); // de subtitel toevoegen
 
-                    // Contact informatie tabel
-                    document.Add(MakeContactInformationTable());
+                        // Leeg ruimte toevoegen
+                        document.Add(new iText.Paragraph(" "));
+                        document.Add(new iText.Paragraph(" "));
 
-                    // Leeg ruimte toevoegen
-                    document.Add(new iText.Paragraph(" "));
-                    document.Add(new iText.Paragraph(" "));
-                    document.Add(new iText.Paragraph(" "));
+                        // Bepaal het standaard font om te gebruiken in het grootste deel van het document
+                        Font standardFont = FontFactory.GetFont(STANDARD_FONT_FAMILY, STANDARD_FONT_SIZE);
 
-                    // Inhoud brief
-                    document.Add(new iText.Paragraph("Geachte heer/mevrouw " + rowSession.GetPair().Student1.Surname + ",", standardFont)); // Aanhef(moet veranderen in expert, niet student)
-                
-                    document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                    document.Add(new iText.Paragraph("Hierbij ontvangt u de afstudeerscriptie van onze student <opleiding>, " + rowSession.GetPair().Student1.Firstname + " " + rowSession.GetPair().Student1.Surname + " van wie u de afstudeerbespreking zult bijwonen. Begeleidende docenten <naam docent1> en <naam docent2> zullen bij de zitting aanwezig zijn.", standardFont));
+                        // Adressering
+                        document.Add(new iText.Paragraph(expert.Company, standardFont));
+                        document.Add(new iText.Paragraph(expert.Firstname + " " + expert.Surname, standardFont));
+                        document.Add(new iText.Paragraph(expert.Address, standardFont));
+                        document.Add(new iText.Paragraph(expert.Postcode + " " +  expert.City, standardFont));
 
-                    document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                    document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, <datum en tijd zitting>, in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, Onderwijsboulevard 215 te `s-Hertogenbosch.", standardFont));
+                        // Leeg ruimte toevoegen
+                        document.Add(new iText.Paragraph(" "));
+                        document.Add(new iText.Paragraph(" "));
+                        document.Add(new iText.Paragraph(" "));
+                        document.Add(new iText.Paragraph(" "));
 
-                    document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                    document.Add(new iText.Paragraph("In het afstudeerlokaal wordt voor aanvang van de zitting koffie en thee geserveerd.", standardFont));
+                        // Contact informatie tabel
+                        document.Add(MakeContactInformationTable());
 
-                    document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                    document.Add(new iText.Paragraph("Wij kennen u graag een reiskostenvergoeding toe.", standardFont));
-                    document.Add(new iText.Paragraph("Mocht u daar gebruik van willen maken dan verzoeken wij u deze procedure te volgen:", standardFont));
+                        // Leeg ruimte toevoegen
+                        document.Add(new iText.Paragraph(" "));
+                        document.Add(new iText.Paragraph(" "));
+                        document.Add(new iText.Paragraph(" "));
 
-                    // Korte lijst van stappen in de procedure
-                    iText.List unorderedList = new iText.List(iText.List.UNORDERED);
-                    unorderedList.SetListSymbol("\u2022");
-                    unorderedList.Add(new iText.ListItem("vul het bijgevoegde formulier ‘Afsprakenformulier Freelancer’ zo volledig mogelijk in;", standardFont));
-                    unorderedList.Add(new iText.ListItem("vul het bijgevoegde formulier ‘Declaratieformulier Freelancer’ in;", standardFont));
-                    unorderedList.Add(new iText.ListItem("deze formulieren tezamen met een kopie van uw paspoort of identiteitskaart (een kopie van uw rijbewijs volstaat niet) ongefrankeerd terugsturen naar: Avans Hogeschool, t.a.v. Praktijkbureu AMB, Antwoordnummer 11095, 5200 VC ’s‑Hertogenbosch.", standardFont));
+                        // Inhoud brief
+                        document.Add(new iText.Paragraph("Geachte heer/mevrouw " + expert.Surname + ",", standardFont));
 
-                    document.Add(unorderedList);
+                        document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
+                        document.Add(new iText.Paragraph("Hierbij ontvangt u de afstudeerscriptie van onze student " + rowSession.GetPair().Student1.Study + ", " + rowSession.GetPair().Student1.Firstname + " " + rowSession.GetPair().Student1.Surname + " van wie u de afstudeerbespreking zult bijwonen. Begeleidende docenten " + rowSession.GetTeachers()[0].Firstname + " " + rowSession.GetTeachers()[0].Surname + " en " + rowSession.GetTeachers()[1].Firstname + " " + rowSession.GetTeachers()[1].Surname + " zullen bij de zitting aanwezig zijn.", standardFont));
 
-                    // Ga verder met de inhoud van het document
-                    document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                    document.Add(new iText.Paragraph("Bijgaand ontvangt u tevens een A4-tje met een beschrijving van de rol van de externe deskundige en een routebeschrijving. Voor eventuele vragen kunt u zich wenden tot Lilian Reuken, telefoonnummer (073) 629 52 56 of Regien Blom telefoonnummer (073) 629 54 55.", standardFont));
+                        document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
+                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + rowSession.GetDaytime().Time + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, Onderwijsboulevard 215 te `s-Hertogenbosch.", standardFont));
 
-                    document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                    document.Add(new iText.Paragraph("Wij danken u hartelijk voor uw medewerking.", standardFont));
-                    document.Add(new iText.Paragraph("Met vriendelijke groet,", standardFont));
+                        document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
+                        document.Add(new iText.Paragraph("In het afstudeerlokaal wordt voor aanvang van de zitting koffie en thee geserveerd.", standardFont));
 
-                    document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                    document.Add(new iText.Paragraph("Lilian Reuken en Regien Blom", standardFont));
+                        document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
+                        document.Add(new iText.Paragraph("Wij kennen u graag een reiskostenvergoeding toe.", standardFont));
+                        document.Add(new iText.Paragraph("Mocht u daar gebruik van willen maken dan verzoeken wij u deze procedure te volgen:", standardFont));
 
-                    // Verander de font style tijdelijk
-                    standardFont.SetStyle(Font.ITALIC);
+                        // Korte lijst van stappen in de procedure
+                        iText.List unorderedList = new iText.List(iText.List.UNORDERED);
+                        unorderedList.SetListSymbol("\u2022");
+                        unorderedList.Add(new iText.ListItem("vul het bijgevoegde formulier ‘Afsprakenformulier Freelancer’ zo volledig mogelijk in;", standardFont));
+                        unorderedList.Add(new iText.ListItem("vul het bijgevoegde formulier ‘Declaratieformulier Freelancer’ in;", standardFont));
+                        unorderedList.Add(new iText.ListItem("deze formulieren tezamen met een kopie van uw paspoort of identiteitskaart (een kopie van uw rijbewijs volstaat niet) ongefrankeerd terugsturen naar: Avans Hogeschool, t.a.v. Praktijkbureu AMB, Antwoordnummer 11095, 5200 VC ’s‑Hertogenbosch.", standardFont));
 
-                    document.Add(new iText.Paragraph("Coördinatoren stage en afstuderen", standardFont));
+                        document.Add(unorderedList);
 
-                    // Verander de font style weer terug
-                    standardFont.SetStyle(Font.NORMAL);
+                        // Ga verder met de inhoud van het document
+                        document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
+                        document.Add(new iText.Paragraph("Bijgaand ontvangt u tevens een A4-tje met een beschrijving van de rol van de externe deskundige en een routebeschrijving. Voor eventuele vragen kunt u zich wenden tot Lilian Reuken, telefoonnummer (073) 629 52 56 of Regien Blom telefoonnummer (073) 629 54 55.", standardFont));
 
-                    document.Add(new iText.Paragraph("        Bijlage(n):	scriptie afspraken, formulier freelancer, declaratieformulier freelancer, rol van externe deskundige, routebeschrijving", standardFont));    
+                        document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
+                        document.Add(new iText.Paragraph("Wij danken u hartelijk voor uw medewerking.", standardFont));
+                        document.Add(new iText.Paragraph("Met vriendelijke groet,", standardFont));
+
+                        document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
+                        document.Add(new iText.Paragraph("Lilian Reuken en Regien Blom", standardFont));
+
+                        // Verander de font style tijdelijk
+                        standardFont.SetStyle(Font.ITALIC);
+
+                        document.Add(new iText.Paragraph("Coördinatoren stage en afstuderen", standardFont));
+
+                        // Verander de font style weer terug
+                        standardFont.SetStyle(Font.NORMAL);
+
+                        document.Add(new iText.Paragraph("        Bijlage(n):	scriptie afspraken, formulier freelancer, declaratieformulier freelancer, rol van externe deskundige, routebeschrijving", standardFont));
+
+                        // We hebben nu een brief gemaakt voor deze expert, als deze meermaals in het systeem voorkomt, negeer die dan
+                        ignoreList.Add(expert);
+                    }
                 }
 
                 // toon bericht dat exporteren naar PDF gelukt is

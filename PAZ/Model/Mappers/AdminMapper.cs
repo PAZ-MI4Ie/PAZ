@@ -22,6 +22,13 @@ namespace PAZMySQL
             return admin;
         }
 
+        // Waarom fixen jullie dit niet een keer
+        // 1. Voeg override toe;
+        // 2. Markeer de functie waarvan je override als virtual.
+        // 3. Rinse n repeat tot alle warnings weg zijn
+        // 4. ???
+        // 5. Profit.
+        // Ik zou het zelf doen, maar weet niet of jullie een bepaalde reden hebben om de warnings te laten staan.
         public Admin Find(int id)
         {
             this._db.OpenConnection();

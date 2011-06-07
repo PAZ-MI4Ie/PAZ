@@ -9,6 +9,9 @@ namespace PAZ.Model
 {
     class Session
     {
+        private const int MAX_TEACHERS = 2;
+        private const int MAX_EXPERTS = 2;
+
 		public int Id;
         private Daytime _daytime;
         public int Daytime_id;
@@ -17,14 +20,8 @@ namespace PAZ.Model
         private Pair _pair;
 		public int Pair_id;
 
-        // 5/6/2011 Yorg: Dit is eigenlijk wel lelijk gedaan zo, maar leraren en experts staan eigenlijk vrij vast, 
-        // je wilt in ieder geval niet er je hoofd over breken om meer dan 2 te ondersteunen(YAGNI), maar als je een goede manier weet om dit anders in te vullen, ga er voor! :)
-        private Teacher _teacher1;
-        private Teacher _teacher2;
-
-        // Idem als bij teachers boven
-        private Expert _expert1;
-        private Expert _expert2;
+        private Teacher[] _teachers = new Teacher[MAX_TEACHERS];
+        private Expert[] _experts = new Expert[MAX_EXPERTS];
 
 		public string Datum
 		{
@@ -48,23 +45,41 @@ namespace PAZ.Model
 			get
 			{
                 return _pair.Student1.Firstname + " " + _pair.Student1.Surname + "\r"
-                    + _pair.Student2.Firstname + _pair.Student2.Surname;
+					+ _pair.Student2.Firstname + " " + _pair.Student2.Surname;
 			}
 		}
 		public string Docenten
 		{
 			get
 			{
-                return _teacher1.Firstname + " " + _teacher1.Surname + "\r"
-                    + _teacher2.Firstname + _teacher2.Surname;
+                string returnString = String.Empty;
+                for (int i = 0; i < _teachers.Length; ++i)
+                {
+                    // Mogelijk overbodig bij teachers, omdat het aantal precies vast staat op 2.
+                    if (_teachers[i] == null)
+                        break;
+
+                    returnString += _teachers[i].Firstname + " " + _teachers[i].Surname + "\r";
+                }
+
+                return returnString;
 			}
 		}
 		public string Deskundigen
 		{
             get
             {
-                return _expert1.Firstname + " " + _expert1.Surname + "\r"
-                    + _expert2.Firstname + _expert2.Surname;
+                string returnString = String.Empty;
+                for (int i = 0; i < _experts.Length; ++i)
+                {
+                    // Er kunnen 1 of 2 experts zijn(en misschien ooit wel meer dan 2) maar het kan dus zijn dat er null waardes zijn bij experts.
+                    if (_experts[i] == null)
+                        break;
+
+                    returnString += _experts[i].Firstname + " " + _experts[i].Surname + "\r";
+                }
+
+                return returnString;
             }
 		}
 		public int AantalGasten
@@ -80,11 +95,11 @@ namespace PAZ.Model
 			_classroom = classroom;
 			_pair = pair;
 
-            _teacher1 = teacher1;
-            _teacher2 = teacher2;
+            _teachers[0] = teacher1;
+            _teachers[1] = teacher2;
 
-            _expert1 = expert1;
-            _expert2 = expert2;
+            _experts[0] = expert1;
+            _experts[1] = expert2;
 
             _dataList = new List<Object>();
             _dataList.Add(Datum);
@@ -108,6 +123,24 @@ namespace PAZ.Model
         public Pair GetPair()
         {
             return _pair;
+        }
+
+        // Idem
+        public Teacher[] GetTeachers()
+        {
+            return _teachers;
+        }
+
+        // Idem
+        public Expert[] GetExperts()
+        {
+            return _experts;
+        }
+       
+        // Idem
+        public Daytime GetDaytime()
+        {
+            return _daytime;
         }
     }
 }

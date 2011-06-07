@@ -29,13 +29,16 @@ namespace PAZ
         public ICollectionView Sessions { get; private set; }
         bool match;
         private PDFExport _pdfExport;
+
         private UserMapper _userMapper;
 		private ClassroomMapper _classroomMapper;
 		private StudentMapper _studentMapper;
 		private TeacherMapper _teacherMapper;
 		private ExpertMapper _expertMapper;
-		private List<Teacher> _teachers;
+
 		private List<Student> _students;
+        private List<Teacher> _teachers;
+        private List<Expert> _experts;
 
         public MainWindow()
         {
@@ -56,8 +59,10 @@ namespace PAZ
             GridOverzichtList.ItemsSource = Sessions;
 			_studentMapper = new StudentMapper(MysqlDb.GetInstance());
 			_teacherMapper = new TeacherMapper(MysqlDb.GetInstance());
-			this._teachers = _teacherMapper.FindAll();
-			this._students = _studentMapper.FindAll();
+            _expertMapper = new ExpertMapper(MysqlDb.GetInstance());
+			_students = _studentMapper.FindAll();
+            _teachers = _teacherMapper.FindAll();
+            _experts = _expertMapper.FindAll();
 
 			//Test code
             Student verlept = new Student();

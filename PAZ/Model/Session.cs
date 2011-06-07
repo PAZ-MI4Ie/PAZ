@@ -15,10 +15,30 @@ namespace PAZ.Model
         public int Id { get; set; }
         private Daytime _daytime;
         public int Daytime_id { get; set; }
-        public Daytime Daytime { get; set; }
+        public Daytime Daytime
+        {
+            get
+            {
+                return this._daytime;
+            }
+            set
+            {
+                this._daytime = value;
+            }
+        }
         private Classroom _classroom;
 		public int Classroom_id {get; set;}
-        public Classroom Classroom { get; set; }
+        public Classroom Classroom
+        {
+            get
+            {
+                return this._classroom;
+            }
+            set
+            {
+                this._classroom = value;
+            }
+        }
         private Pair _pair;
 		public int Pair_id {get; set;}
         public Pair Pair {
@@ -40,16 +60,26 @@ namespace PAZ.Model
 			_daytime = daytime;
 			_classroom = classroom;
 			_pair = pair;
+            this._temp_experts = new Expert[2];
+            this._temp_experts[0] = expert1;
+            this._temp_experts[1] = expert2;
+            this._temp_teachers = new Teacher[2];
+            this._temp_teachers[0] = teacher1;
+            this._temp_teachers[1] = teacher2;
 		}
+
+        //TEMP CODE:
+        private Expert[] _temp_experts;
+        private Teacher[] _temp_teachers;
 
         public Expert[] GetExperts()
         {
-            return new Expert[0];
+            return _temp_experts;
         }
 
         public Teacher[] GetTeachers()
         {
-            return new Teacher[0];
+            return _temp_teachers;
         }
     }
 }

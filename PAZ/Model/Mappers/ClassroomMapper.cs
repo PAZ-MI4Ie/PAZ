@@ -28,36 +28,31 @@ namespace PAZMySQL
 
         public Classroom Find(int id)
         {
-            // TO DO?
-            //this._db.OpenConnection();
-            //MySqlCommand command = this._db.CreateCommand();
-            //command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status FROM user WHERE id = ?id";
-            //command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
-            //MySqlDataReader Reader = this._db.ExecuteCommand(command);
-            //Reader.Read();//Only 1 row
-            //this._db.CloseConnection();
-            //return this.ProcessRow(new Classroom(), Reader);
-
-            return null;
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "SELECT id, room_number FROM classroom WHERE id = ?id";
+            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
+            MySqlDataReader Reader = this._db.ExecuteCommand(command);
+            Reader.Read();//Only 1 row
+            this._db.CloseConnection();
+            return this.ProcessRow(new Classroom(), Reader);
         }
 
         public List<Classroom> FindAll()
         {
             // TO DO?
 
-            //this._db.OpenConnection();
-            //MySqlCommand command = this._db.CreateCommand();
-            //command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status FROM user";
-            //MySqlDataReader Reader = this._db.ExecuteCommand(command);
-            //List<User> result = new List<User>();
-            //while (Reader.Read())
-            //{
-            //    result.Add(this.ProcessRow(new Classroom(), Reader));
-            //}
-            //this._db.CloseConnection();
-            //return result;
-
-            return null;
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "SELECT id, room_number FROM classroom";
+            MySqlDataReader Reader = this._db.ExecuteCommand(command);
+            List<Classroom> result = new List<Classroom>();
+            while (Reader.Read())
+            {
+                result.Add(this.ProcessRow(new Classroom(), Reader));
+            }
+            this._db.CloseConnection();
+            return result;
         }
 
         public void Save(Classroom classroom)

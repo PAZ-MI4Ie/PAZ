@@ -22,44 +22,39 @@ namespace PAZMySQL
         public Daytime ProcessRow(Daytime daytime, MySqlDataReader Reader, int offset)
         {
             daytime.Id = Reader.GetInt32(0 + offset);
+            daytime.Date = Reader.GetDateTime(1 + offset);
+            daytime.Timeslot = Reader.GetInt32(2 + offset);
             return daytime;
         }
 
         public Daytime Find(int id)
         {
-            // TO DO?
-            //this._db.OpenConnection();
-            //MySqlCommand command = this._db.CreateCommand();
-            //command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status FROM user WHERE id = ?id";
-            //command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
-            //MySqlDataReader Reader = this._db.ExecuteCommand(command);
-            //Reader.Read();//Only 1 row
-            //this._db.CloseConnection();
-            //return this.ProcessRow(new Classroom(), Reader);
-
-            return null;
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "SELECT id, date, timeslot FROM daytime WHERE id = ?id";
+            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
+            MySqlDataReader Reader = this._db.ExecuteCommand(command);
+            Reader.Read();//Only 1 row
+            this._db.CloseConnection();
+            return this.ProcessRow(new Daytime(), Reader);
         }
 
-        public List<Classroom> FindAll()
+        public List<Daytime> FindAll()
         {
-            // TO DO?
-
-            //this._db.OpenConnection();
-            //MySqlCommand command = this._db.CreateCommand();
-            //command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status FROM user";
-            //MySqlDataReader Reader = this._db.ExecuteCommand(command);
-            //List<User> result = new List<User>();
-            //while (Reader.Read())
-            //{
-            //    result.Add(this.ProcessRow(new Classroom(), Reader));
-            //}
-            //this._db.CloseConnection();
-            //return result;
-
-            return null;
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "SELECT id, date, timeslot FROM daytime";
+            MySqlDataReader Reader = this._db.ExecuteCommand(command);
+            List<Daytime> result = new List<Daytime>();
+            while (Reader.Read())
+            {
+                result.Add(this.ProcessRow(new Daytime(), Reader));
+            }
+            this._db.CloseConnection();
+            return result;
         }
 
-        public void Save(Classroom classroom)
+        public void Save(Daytime daytime)
         {
             // TO DO?
         }

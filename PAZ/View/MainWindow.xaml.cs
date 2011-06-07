@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -320,10 +320,8 @@ namespace PAZ
 
         private void buttonEmailVersturen_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Emails versturen?", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                MessageBoxResult result = MessageBox.Show("Succesvol. Emails zijn verzonden.", "Succesvol");
-            }
+            EmailWindow email = new EmailWindow();
+            email.ShowDialog();
         }
 
         private void buttonBriefPrinten_Click(object sender, RoutedEventArgs e)

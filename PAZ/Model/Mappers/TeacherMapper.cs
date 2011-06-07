@@ -80,94 +80,75 @@ namespace PAZMySQL
             this._db.ExecuteCommand(command);
             
 			///SERIEUS DEZE SHIT IS ECHT FOUT. JEROEN FIX DIT
-			//Add daytime - timeslot 1
+			
+			//Get daytimeslots overlapping with date
 			command = this._db.CreateCommand();
-			command.CommandText = "INSERT INTO daytime (date, timeslot) VALUES " +
-				"(?date, ?timeslot)";
-			command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Int32)).Value = teacher.blockedTimeslot;
-			command.Parameters.Add(new MySqlParameter("?timeslot", MySqlDbType.String)).Value = 1;
-			this._db.ExecuteCommand(command);
+			command.CommandText = "SELECT id FROM daytime WHERE date = ?date";
+			command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Date)).Value = teacher.blockedTimeslot;
+			MySqlDataReader Reader = this._db.ExecuteCommand(command);
+			List<int> daytimeslotlist = new List<int>();
+			while (Reader.Read())
+			{
+				daytimeslotlist.Add(Convert.ToInt32(Reader.GetString(0)));
+			}
 
-			MySqlCommand command2 = this._db.CreateCommand();
-			command2.CommandText = "SELECT LAST_INSERT_ID()";
-			MySqlDataReader Reader = this._db.ExecuteCommand(command2);
-			Reader.Read();
+			if (daytimeslotlist.Count < 1)
+			{
+				//Add daytime - timeslot 1
+				command = this._db.CreateCommand();
+				command.CommandText = "INSERT INTO daytime (date, timeslot) VALUES " +
+					"(?date, ?timeslot)";
+				command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Date)).Value = teacher.blockedTimeslot;
+				command.Parameters.Add(new MySqlParameter("?timeslot", MySqlDbType.String)).Value = 1;
+				this._db.ExecuteCommand(command);
+
+
+				//Add daytime - timeslot 2
+				command = this._db.CreateCommand();
+				command.CommandText = "INSERT INTO daytime (date, timeslot) VALUES " +
+					"(?date, ?timeslot)";
+				command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Date)).Value = teacher.blockedTimeslot;
+				command.Parameters.Add(new MySqlParameter("?timeslot", MySqlDbType.String)).Value = 2;
+				this._db.ExecuteCommand(command);
+
+				//Add daytime - timeslot 3
+				command = this._db.CreateCommand();
+				command.CommandText = "INSERT INTO daytime (date, timeslot) VALUES " +
+					"(?date, ?timeslot)";
+				command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Date)).Value = teacher.blockedTimeslot;
+				command.Parameters.Add(new MySqlParameter("?timeslot", MySqlDbType.String)).Value = 3;
+				this._db.ExecuteCommand(command);
+				
+				//Add daytime - timeslot 4
+				command = this._db.CreateCommand();
+				command.CommandText = "INSERT INTO daytime (date, timeslot) VALUES " +
+					"(?date, ?timeslot)";
+				command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Date)).Value = teacher.blockedTimeslot;
+				command.Parameters.Add(new MySqlParameter("?timeslot", MySqlDbType.String)).Value = 4;
+				this._db.ExecuteCommand(command);
+
+				command = this._db.CreateCommand();
+				command.CommandText = "SELECT id FROM daytime WHERE date = ?date";
+				command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Date)).Value = teacher.blockedTimeslot;
+				Reader = this._db.ExecuteCommand(command);
+				daytimeslotlist = new List<int>();
+				while (Reader.Read())
+				{
+					daytimeslotlist.Add(Convert.ToInt32(Reader.GetString(0)));
+				}
+			}
 
 			//Add blocked timeslot
-			command = this._db.CreateCommand();
-			command.CommandText = "INSERT INTO blocked_timeslot (daytime_id, user_id, hardblock) VALUES " +
-				"(?daytime_id, ?user_id, ?hardblock)";
-			command.Parameters.Add(new MySqlParameter("?daytime_id", MySqlDbType.Int32)).Value = Reader.GetInt32(0); ;
-			command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.String)).Value = teacher.Id;
-			command.Parameters.Add(new MySqlParameter("?hardblock", MySqlDbType.String)).Value = true;
-			this._db.ExecuteCommand(command);
-
-			//Add daytime - timeslot 2
-			command = this._db.CreateCommand();
-			command.CommandText = "INSERT INTO daytime (date, timeslot) VALUES " +
-				"(?date, ?timeslot)";
-			command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Int32)).Value = teacher.blockedTimeslot;
-			command.Parameters.Add(new MySqlParameter("?timeslot", MySqlDbType.String)).Value = 2;
-			this._db.ExecuteCommand(command);
-
-			command2 = this._db.CreateCommand();
-			command2.CommandText = "SELECT LAST_INSERT_ID()";
-			Reader = this._db.ExecuteCommand(command2);
-			Reader.Read();
-
-			//Add blocked timeslot
-			command = this._db.CreateCommand();
-			command.CommandText = "INSERT INTO blocked_timeslot (daytime_id, user_id, hardblock) VALUES " +
-				"(?daytime_id, ?user_id, ?hardblock)";
-			command.Parameters.Add(new MySqlParameter("?daytime_id", MySqlDbType.Int32)).Value = Reader.GetInt32(0); ;
-			command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.String)).Value = teacher.Id;
-			command.Parameters.Add(new MySqlParameter("?hardblock", MySqlDbType.String)).Value = true;
-			this._db.ExecuteCommand(command);
-
-			//Add daytime ALL TIMESLOTS
-			command = this._db.CreateCommand();
-			command.CommandText = "INSERT INTO daytime (date, timeslot) VALUES " +
-				"(?date, ?timeslot)";
-			command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Int32)).Value = teacher.blockedTimeslot;
-			command.Parameters.Add(new MySqlParameter("?timeslot", MySqlDbType.String)).Value = 3;
-			this._db.ExecuteCommand(command);
-
-			command2 = this._db.CreateCommand();
-			command2.CommandText = "SELECT LAST_INSERT_ID()";
-			Reader = this._db.ExecuteCommand(command2);
-			Reader.Read();
-
-			//Add blocked timeslot
-			command = this._db.CreateCommand();
-			command.CommandText = "INSERT INTO blocked_timeslot (daytime_id, user_id, hardblock) VALUES " +
-				"(?daytime_id, ?user_id, ?hardblock)";
-			command.Parameters.Add(new MySqlParameter("?daytime_id", MySqlDbType.Int32)).Value = Reader.GetInt32(0); ;
-			command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.String)).Value = teacher.Id;
-			command.Parameters.Add(new MySqlParameter("?hardblock", MySqlDbType.String)).Value = true;
-			this._db.ExecuteCommand(command);
-
-			//Add daytime ALL TIMESLOTS
-			command = this._db.CreateCommand();
-			command.CommandText = "INSERT INTO daytime (date, timeslot) VALUES " +
-				"(?date, ?timeslot)";
-			command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Int32)).Value = teacher.blockedTimeslot;
-			command.Parameters.Add(new MySqlParameter("?timeslot", MySqlDbType.String)).Value = 4;
-			this._db.ExecuteCommand(command);
-
-			command2 = this._db.CreateCommand();
-			command2.CommandText = "SELECT LAST_INSERT_ID()";
-			Reader = this._db.ExecuteCommand(command2);
-			Reader.Read();
-
-			//Add blocked timeslot
-			command = this._db.CreateCommand();
-			command.CommandText = "INSERT INTO blocked_timeslot (daytime_id, user_id, hardblock) VALUES " +
-				"(?daytime_id, ?user_id, ?hardblock)";
-			command.Parameters.Add(new MySqlParameter("?daytime_id", MySqlDbType.Int32)).Value = Reader.GetInt32(0); ;
-			command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.String)).Value = teacher.Id;
-			command.Parameters.Add(new MySqlParameter("?hardblock", MySqlDbType.String)).Value = true;
-			this._db.ExecuteCommand(command);
-
+			foreach (int timeslot in daytimeslotlist)
+			{
+				command = this._db.CreateCommand();
+				command.CommandText = "INSERT INTO blocked_timeslot (daytime_id, user_id, hardblock) VALUES " +
+					"(?daytime_id, ?user_id, ?hardblock)";
+				command.Parameters.Add(new MySqlParameter("?daytime_id", MySqlDbType.Int32)).Value = timeslot;
+				command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.String)).Value = teacher.Id;
+				command.Parameters.Add(new MySqlParameter("?hardblock", MySqlDbType.String)).Value = true;
+				this._db.ExecuteCommand(command);
+			}
 			this._db.CloseConnection();
         }
     }

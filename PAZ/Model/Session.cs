@@ -15,10 +15,30 @@ namespace PAZ.Model
         public int Id { get; set; }
         private Daytime _daytime;
         public int Daytime_id { get; set; }
-        public Daytime Daytime { get; set; }
+        public Daytime Daytime
+        {
+            get
+            {
+                return this._daytime;
+            }
+            set
+            {
+                this._daytime = value;
+            }
+        }
         private Classroom _classroom;
 		public int Classroom_id {get; set;}
-        public Classroom Classroom { get; set; }
+        public Classroom Classroom
+        {
+            get
+            {
+                return this._classroom;
+            }
+            set
+            {
+                this._classroom = value;
+            }
+        }
         private Pair _pair;
 		public int Pair_id {get; set;}
         public Pair Pair {

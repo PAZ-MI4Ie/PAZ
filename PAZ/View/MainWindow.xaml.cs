@@ -263,6 +263,8 @@ namespace PAZ
             calendar.addSession("2-5-2011", 1, 1, "Jeroen Schipper", "Hidde Jansen", teachers, experts);
             calendar.addSession("3-5-2011", 1, 1, "Freek Laurijssen", "Ibrahim Önder", teachers, experts);
             //calendar.loadAllSessions();
+
+            tabCalender.Focus();
         }
 
 

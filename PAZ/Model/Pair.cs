@@ -55,16 +55,19 @@ namespace PAZ.Model
                 {
                     if (pair.Value.Equals("teacher"))
                     {
-                        result.Add((new TeacherMapper(MysqlDb.GetInstance())).Find(pair.Key);
+                        result.Add((new TeacherMapper(MysqlDb.GetInstance())).Find(pair.Key));
                     }
                     else if (pair.Value.Equals("expert"))
                     {
-                        result.Add((new ExpertMapper(MysqlDb.GetInstance())).Find(pair.Key);
+                        result.Add((new ExpertMapper(MysqlDb.GetInstance())).Find(pair.Key));
                     }
                 }
                 return result;
             }
-            set;
+            set
+            {
+
+            }
         }
 
 		public Pair() { }

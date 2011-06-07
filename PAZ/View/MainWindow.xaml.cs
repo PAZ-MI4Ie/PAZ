@@ -312,10 +312,8 @@ namespace PAZ
 
         private void buttonEmailVersturen_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Emails versturen?", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                MessageBoxResult result = MessageBox.Show("Succesvol. Emails zijn verzonden.", "Succesvol");
-            }
+            EmailWindow emailWindow = new EmailWindow();
+            emailWindow.ShowDialog();
         }
 
         private void buttonBriefPrinten_Click(object sender, RoutedEventArgs e)

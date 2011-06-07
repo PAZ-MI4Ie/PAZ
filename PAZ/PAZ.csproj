@@ -64,6 +64,7 @@
     </ApplicationDefinition>
     <Compile Include="Control\ControllerIO.cs" />
     <Compile Include="Control\PAZController.cs" />
+    <Compile Include="Model\Emailer.cs" />
     <Compile Include="Model\Mappers\PairAttachmentMapper.cs" />
     <Compile Include="Model\Mappers\ClassroomMapper.cs" />
     <Compile Include="Model\Mappers\SessionMapper.cs" />
@@ -88,10 +89,17 @@
     <Compile Include="Model\Mappers\MysqlDb.cs" />
     <Compile Include="Model\Mappers\UserMapper.cs" />
     <Compile Include="Model\Mappers\PairMapper.cs" />
+    <Compile Include="View\EmailWindow.xaml.cs">
+      <DependentUpon>EmailWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\Zitting.cs" />
+    <Page Include="View\EmailWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

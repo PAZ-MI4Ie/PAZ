@@ -62,8 +62,6 @@ namespace PAZ
 			//END OF TEST CODE
 			this._teacherMapper = new TeacherMapper(db);
 
-			Sessions = CollectionViewSource.GetDefaultView(_master);
-            GridOverzichtList.ItemsSource = Sessions;
             StudentMapper studentmapper = new StudentMapper(MysqlDb.GetInstance());
             Student verlept = new Student();
             verlept.Firstname = "Henk";

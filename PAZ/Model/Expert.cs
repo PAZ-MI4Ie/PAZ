@@ -23,6 +23,7 @@ namespace PAZ.Model
 			this.User_type = "expert";
 
             // Placeholders voor brief aan experts
+            // TO DO: Regel dit een keer plz
             this.Company = "<bedrijf>";
             this.Address = "<adres>";
             this.Postcode = "<pc / ";

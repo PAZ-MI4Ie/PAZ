@@ -35,6 +35,7 @@ namespace PAZ.View
 
             string returnStringTeachers = String.Empty;
             string returnStringExperts = String.Empty;
+            /* TEMP DISABLED:
             if (session.Pair.Attachments != null)
             {
                 foreach (User user in session.Pair.Attachments)
@@ -50,7 +51,11 @@ namespace PAZ.View
                         returnStringExperts += expert.Firstname + " " + expert.Surname + "\r";
                     }
                 }
-            }
+            }*/
+            //TEMP CODE:
+            returnStringTeachers = session.GetTeachers()[0].Firstname + "  " + session.GetTeachers()[0].Surname + "\r" + session.GetTeachers()[1].Firstname + "  " + session.GetTeachers()[1].Surname;
+            returnStringExperts = session.GetExperts()[0].Firstname + "  " + session.GetExperts()[0].Surname + "\r" + session.GetExperts()[1].Firstname + "  " + session.GetExperts()[1].Surname;
+
             this.Docenten = returnStringTeachers;
             this.Deskundigen = returnStringExperts;
             this.AantalGasten = session.Pair.Number_of_guests;

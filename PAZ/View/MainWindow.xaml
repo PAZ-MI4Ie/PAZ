@@ -1,9 +1,9 @@
-﻿<Window x:Class="PAZ.MainWindow"
+﻿<Window xmlns:my="clr-namespace:PAZ.View"  x:Class="PAZ.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
         Title="Avans PAZ" Height="696" Width="819" Icon="/PAZ;component/Resources/paz.ico">
-    <Grid Background="#FFD51D53" DataContext="{Binding}" Height="650" ShowGridLines="False" ClipToBounds="True">
+    <Grid Background="#FFD51D53" DataContext="{Binding}" ShowGridLines="False" ClipToBounds="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="612*" />
             <RowDefinition Height="38*" />
@@ -13,11 +13,10 @@
                 <ImageBrush ImageSource="/PAZ;component/Resources/AvansLogo.png" />
             </Label.Background>
         </Label>
-        <TabControl Height="585" HorizontalAlignment="Left" Margin="12,53,0,0" Name="tabControl" VerticalAlignment="Top" Width="779" Background="White" Grid.RowSpan="2">
+        <TabControl Margin="12,53,6,12" Name="tabControl" Background="White" Grid.RowSpan="2"><!-- MaxWidth="1035" HorizontalAlignment="Left">-->
             <TabItem Header="Calender" Name="tabCalender" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
-                    <Grid Name="calender">
-                    </Grid>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <my:CalendarView x:Name="calendar"/>
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Overzicht" Name="tabItemOverzicht" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">
@@ -271,7 +270,7 @@
                             <TextBlock Height="27" HorizontalAlignment="Left" Margin="24,105,0,0" Name="textBlockDeadlineEind" Text="Eind datum" VerticalAlignment="Top" Width="172" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,105,0,0" Name="textBoxDeadlineEind" VerticalAlignment="Top" Width="252" />
 
-                            <Button Content="Opslaan" Height="23" HorizontalAlignment="Left" Margin="447,148,0,0" Name="buttonOptiesOpslaan" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" />
+                            <Button Content="Opslaan" Height="23" HorizontalAlignment="Left" Margin="447,148,0,0" Name="buttonOptiesOpslaan" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonOptiesOpslaan_Click" />
                             </Grid>
                     </GroupBox>
 
@@ -291,9 +290,6 @@
 
                 </Grid>
             </TabItem>
-
-
         </TabControl>
-        <GridSplitter Height="100" HorizontalAlignment="Left" Margin="-116,404,0,0" Name="gridSplitter1" VerticalAlignment="Top" Width="10" />
     </Grid>
 </Window>

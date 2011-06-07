@@ -35,16 +35,16 @@ namespace PAZ
 
         public void login()
         {
-            AdminMapper adminmapper = new AdminMapper(MysqlDb.GetInstance());
-            if (adminmapper.CheckLogin("admin", passwordBox1.Password))
-            {
+            //AdminMapper adminmapper = new AdminMapper(MysqlDb.GetInstance());
+            //if (adminmapper.CheckLogin("admin", passwordBox1.Password))
+            //{
                 MainWindow tt = new MainWindow();
                 tt.Show();
                 Application.Current.Windows[0].Close();
                 this.Close();
-            }
-            else
-                MessageBox.Show("Wachtwoord is onjuist.");
+            //}
+            //else
+               // MessageBox.Show("Wachtwoord is onjuist.");
         }
 
         private void passwordBox1_KeyDown(object sender, KeyEventArgs e)

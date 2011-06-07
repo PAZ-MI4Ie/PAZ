@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Globalization;
 using Ini;
+using PAZ.View;
 
 namespace PAZ
 {
@@ -31,12 +32,13 @@ namespace PAZ
         private PDFExport _pdfExport;
         private UserMapper _userMapper;
         private ClassroomMapper _classroomMapper;
+        private IniFile ini;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            //TEST CODE:
+            /*TEST CODE:
             MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
 
             _userMapper = new UserMapper(db);
@@ -224,7 +226,30 @@ namespace PAZ
             // maak object
             _pdfExport = new PDFExport(GridOverzichtList);
 
-            genCalender();
+            ini = readIni();
+            List<Classroom> classrooms = new List<Classroom>();
+            Classroom room = new Classroom(1, "OB202");
+            classrooms.Add(room);
+            room = new Classroom(2, "OB203");
+            classrooms.Add(room);
+            room = new Classroom(3, "OB204");
+            classrooms.Add(room);
+            room = new Classroom(4, "OB205");
+            classrooms.Add(room);
+            room = new Classroom(5, "OC201");
+            classrooms.Add(room);
+            room = new Classroom(6, "OB201");
+            classrooms.Add(room);
+            room = new Classroom(7, "OC302");
+            classrooms.Add(room);
+            room = new Classroom(8, "OC202");
+            classrooms.Add(room);
+            calendar.createCalendar(ini, classrooms);
+            string[] teachers = new string[] { "Marco Huysmans", "Ger Saris" };
+            string[] experts = new string[] { "Piet Janssen", "Karel Lessers" };
+            calendar.addSession("2-5-2011", 1, 1, "Jeroen Schipper", "Hidde Jansen", teachers, experts);
+            calendar.addSession("3-5-2011", 1, 1, "Freek Laurijssen", "Ibrahim Önder", teachers, experts);
+            //calendar.loadAllSessions();
         }
 
 
@@ -371,137 +396,11 @@ namespace PAZ
 
                 ini.Save();
             }
+
+            textBoxDeadlineStart.Text = ini["DATES"]["startdate"];
+            textBoxDeadlineEind.Text = ini["DATES"]["enddate"];
+
             return ini;
-        }
-
-
-        /*
-         * CALENDER
-         */
-        private void genCalender()
-        {
-            IniFile ini = readIni();
-            DateTime startDate = DateTime.Parse(ini["DATES"]["startdate"]);
-            DateTime stopDate = DateTime.Parse(ini["DATES"]["enddate"]);
-            Brush headerColor = Brushes.LightGray;
-            int interval = 1;
-
-            List<Classroom> classrooms = new List<Classroom>();
-            Classroom room = new Classroom(1, "OB202");
-            classrooms.Add(room);
-            room = new Classroom(2, "OB203");
-            classrooms.Add(room);
-            room = new Classroom(3, "OB204");
-            classrooms.Add(room);
-            room = new Classroom(4, "OB205");
-            classrooms.Add(room);
-            room = new Classroom(5, "OC201");
-            classrooms.Add(room);
-            room = new Classroom(6, "OB201");
-            classrooms.Add(room);
-            room = new Classroom(7, "OC302");
-            classrooms.Add(room);
-            room = new Classroom(8, "OC202");
-            classrooms.Add(room);
-
-            //Making rows
-            int columns = 0;
-            int rows = 0;
-
-            Rectangle recC = new Rectangle();
-            recC.Fill = headerColor;
-            Grid.SetColumn(recC, 0);
-            Grid.SetRow(recC, 0);
-            //Grid.SetRowSpan(rec, Convert.ToInt32(stopDate.DayOfYear - startDate.DayOfYear) * 5);
-            calender.Children.Add(recC);
-
-            RowDefinition row = new RowDefinition();
-            GridLength height = new GridLength(120);
-
-            for (DateTime dateTime = startDate; dateTime <= stopDate; dateTime += TimeSpan.FromDays(interval))
-            {
-                if (dateTime.DayOfWeek != DayOfWeek.Sunday && dateTime.DayOfWeek != DayOfWeek.Saturday)
-                {
-                    Rectangle rec = new Rectangle();
-                    rec.Fill = headerColor;
-                    Grid.SetColumn(rec, 0);
-                    Grid.SetRow(rec, rows);
-                    Grid.SetColumnSpan(rec, classrooms.Count + 1);
-                    calender.Children.Add(rec);
-                    //Add labels
-                    for (int c = 0; c < classrooms.Count + 1; c++)
-                    {
-                        if (calender.ColumnDefinitions.Count != classrooms.Count + 1)
-                        {
-                            //making columns
-                            ColumnDefinition column = new ColumnDefinition();
-                            GridLength width;
-                            if (c == 0)
-                                width = new GridLength(75);
-                            else
-                                width = new GridLength(120);
-                            column.Width = width;
-                            calender.ColumnDefinitions.Add(column);
-                            columns++;
-                        }
-                        //making labels
-                        Label header = new Label();
-                        if (c == 0)
-                            header.Content = dateTime.ToString("dddd",
-                      new CultureInfo("nl-NL")) + "\n" + dateTime.ToShortDateString();
-                        else
-                            header.Content = classrooms[c - 1].Room_number;
-                        header.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
-                        header.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
-                        Grid.SetColumn(header, c);
-                        Grid.SetRow(header, rows);
-                        calender.Children.Add(header);
-
-
-                    }
-                    for (int blok = 1; blok <= 4; blok++)
-                    {
-                        row = new RowDefinition();
-                        if (blok == 1)
-                            row.Height = new GridLength(60);
-                        else
-                            row.Height = height;
-                        calender.RowDefinitions.Add(row);
-                        rows++;
-
-                        Label blk = new Label();
-                        blk.Content = "Blok " + blok;
-                        blk.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
-                        blk.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
-                        Grid.SetColumn(blk, 0);
-                        Grid.SetRow(blk, rows);
-                        calender.Children.Add(blk);
-                    }
-                    row = new RowDefinition();
-                    row.Height = height;
-                    calender.RowDefinitions.Add(row);
-                    rows++;
-
-                }
-
-
-            }
-
-            Grid.SetRowSpan(recC, rows);
-            addZitting(1, 1, "8:30", "11:00");
-
-        }
-
-        private void addZitting(int column, int row, string starttime, string endtime)
-        {
-            Label session = new Label();
-            session.Content = "Mark de Mol\nFreek Laurijssen\n\nGer Saris\nMarco Huysmans";
-            session.BorderBrush = Brushes.LightGray;
-            session.BorderThickness = new Thickness(1);
-            Grid.SetColumn(session, column);
-            Grid.SetRow(session, row);
-            session.ToolTip = "lol";
-            calender.Children.Add(session);
         }
 
         /*
@@ -612,6 +511,18 @@ namespace PAZ
 
             // Return de waarde teruggekregen op het moment dat het dialoog sloot
             return returnValue;
+        }
+
+        private void buttonOptiesOpslaan_Click(object sender, RoutedEventArgs e)
+        {
+            ini["DATES"]["startdate"] = textBoxDeadlineStart.Text;
+            ini["DATES"]["enddate"] = textBoxDeadlineEind.Text;
+
+            bool isSaved = ini.Save();
+            if(isSaved)
+                MessageBox.Show("Uw instellingen zijn opgeslagen.");
+            else
+                MessageBox.Show("Er is iets mis gegaan met het opslaan.");
         }
     }
 }

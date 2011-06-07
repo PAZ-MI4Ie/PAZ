@@ -77,11 +77,13 @@ namespace PAZMySQL
             }
             command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.Int32)).Value = teacher.Id;
             command.Parameters.Add(new MySqlParameter("?session_spread", MySqlDbType.String)).Value = teacher.Session_spread.ToString();
-            this._db.ExecuteCommand(command);
+			this._db.ExecuteCommand(command);
+			this._db.CloseConnection();
             
 			///SERIEUS DEZE SHIT IS ECHT FOUT. JEROEN FIX DIT
-			
+
 			//Get daytimeslots overlapping with date
+			this._db.OpenConnection();
 			command = this._db.CreateCommand();
 			command.CommandText = "SELECT id FROM daytime WHERE date = ?date";
 			command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Date)).Value = teacher.blockedTimeslot;
@@ -91,42 +93,52 @@ namespace PAZMySQL
 			{
 				daytimeslotlist.Add(Convert.ToInt32(Reader.GetString(0)));
 			}
+			this._db.CloseConnection();
 
 			if (daytimeslotlist.Count < 1)
 			{
 				//Add daytime - timeslot 1
+				this._db.OpenConnection();
 				command = this._db.CreateCommand();
 				command.CommandText = "INSERT INTO daytime (date, timeslot) VALUES " +
 					"(?date, ?timeslot)";
 				command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Date)).Value = teacher.blockedTimeslot;
 				command.Parameters.Add(new MySqlParameter("?timeslot", MySqlDbType.String)).Value = 1;
 				this._db.ExecuteCommand(command);
+				this._db.CloseConnection();
 
 
 				//Add daytime - timeslot 2
+				this._db.OpenConnection();
 				command = this._db.CreateCommand();
 				command.CommandText = "INSERT INTO daytime (date, timeslot) VALUES " +
 					"(?date, ?timeslot)";
 				command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Date)).Value = teacher.blockedTimeslot;
 				command.Parameters.Add(new MySqlParameter("?timeslot", MySqlDbType.String)).Value = 2;
 				this._db.ExecuteCommand(command);
+				this._db.CloseConnection();
 
 				//Add daytime - timeslot 3
+				this._db.OpenConnection();
 				command = this._db.CreateCommand();
 				command.CommandText = "INSERT INTO daytime (date, timeslot) VALUES " +
 					"(?date, ?timeslot)";
 				command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Date)).Value = teacher.blockedTimeslot;
 				command.Parameters.Add(new MySqlParameter("?timeslot", MySqlDbType.String)).Value = 3;
 				this._db.ExecuteCommand(command);
-				
+				this._db.CloseConnection();
+
 				//Add daytime - timeslot 4
+				this._db.OpenConnection();
 				command = this._db.CreateCommand();
 				command.CommandText = "INSERT INTO daytime (date, timeslot) VALUES " +
 					"(?date, ?timeslot)";
 				command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Date)).Value = teacher.blockedTimeslot;
 				command.Parameters.Add(new MySqlParameter("?timeslot", MySqlDbType.String)).Value = 4;
 				this._db.ExecuteCommand(command);
+				this._db.CloseConnection();
 
+				this._db.OpenConnection();
 				command = this._db.CreateCommand();
 				command.CommandText = "SELECT id FROM daytime WHERE date = ?date";
 				command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Date)).Value = teacher.blockedTimeslot;
@@ -136,20 +148,22 @@ namespace PAZMySQL
 				{
 					daytimeslotlist.Add(Convert.ToInt32(Reader.GetString(0)));
 				}
+				this._db.CloseConnection();
 			}
 
 			//Add blocked timeslot
 			foreach (int timeslot in daytimeslotlist)
 			{
+				this._db.OpenConnection();
 				command = this._db.CreateCommand();
 				command.CommandText = "INSERT INTO blocked_timeslot (daytime_id, user_id, hardblock) VALUES " +
 					"(?daytime_id, ?user_id, ?hardblock)";
 				command.Parameters.Add(new MySqlParameter("?daytime_id", MySqlDbType.Int32)).Value = timeslot;
 				command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.String)).Value = teacher.Id;
-				command.Parameters.Add(new MySqlParameter("?hardblock", MySqlDbType.String)).Value = true;
+				command.Parameters.Add(new MySqlParameter("?hardblock", MySqlDbType.Int32)).Value = 1;
 				this._db.ExecuteCommand(command);
+				this._db.CloseConnection();
 			}
-			this._db.CloseConnection();
         }
     }
 }

@@ -723,7 +723,7 @@ namespace PAZ
 				newTeacher.Surname = textLeraarAchternaam.Text;
 				newTeacher.Email = EmailLeraar1.Text;
 				newTeacher.Session_spread = sessionSpread;
-				newTeacher.blockedTimeslot = DateTime.ParseExact(datePickerBlockedDay1.Text, "yyyy-MM-dd hh:mm", null);
+				newTeacher.blockedTimeslot = datePickerBlockedDay1.SelectedDate.Value;
 
 				//Send to the database
 				_teacherMapper.Save(newTeacher);

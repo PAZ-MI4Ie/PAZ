@@ -86,6 +86,7 @@
     <Compile Include="Model\Student.cs" />
     <Compile Include="Model\Teacher.cs" />
     <Compile Include="Model\User.cs" />
+    <Compile Include="View\SessionRow.cs" />
     <Compile Include="Model\Mappers\MysqlDb.cs" />
     <Compile Include="Model\Mappers\UserMapper.cs" />
     <Compile Include="Model\Mappers\PairMapper.cs" />

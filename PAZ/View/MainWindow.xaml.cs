@@ -677,6 +677,27 @@ namespace PAZ
 			}
 
 
+			//Used for date validation
+			DateTime dateValue;
+
+			//Check blocked timeslot
+			if (datePickerBlockedDay1.Text.Equals(String.Empty))
+			{
+				datePickerBlockedDay1.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else if (!DateTime.TryParse(datePickerBlockedDay1.Text, out dateValue))
+			{
+				datePickerBlockedDay1.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				datePickerBlockedDay1.BorderBrush = Brushes.Gray;
+				hasInputError = false;
+			}
+
+
 			//Create sessionspread variable
 			Teacher.session_spread sessionSpread;
 
@@ -702,9 +723,7 @@ namespace PAZ
 				newTeacher.Surname = textLeraarAchternaam.Text;
 				newTeacher.Email = EmailLeraar1.Text;
 				newTeacher.Session_spread = sessionSpread;
-				//TODO: blocked days
-				//TODO
-				//newTeacher.blockedDay = datePickerBlockedDay1;
+				newTeacher.blockedTimeslot = DateTime.ParseExact(datePickerBlockedDay1.Text, "yyyy-MM-dd hh:mm", null);
 
 				//Send to the database
 				_teacherMapper.Save(newTeacher);

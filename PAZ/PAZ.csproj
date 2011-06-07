@@ -75,6 +75,7 @@
     <Compile Include="Model\Mappers\SessionMapper.cs" />
     <Compile Include="Model\Mappers\AdminMapper.cs" />
     <Compile Include="Model\Mappers\ExpertMapper.cs" />
+    <Compile Include="Model\Mappers\DaytimeMapper.cs" />
     <Compile Include="Model\Mappers\Mapper.cs" />
     <Compile Include="Model\Admin.cs" />
     <Compile Include="Model\Blocked_timeslot.cs" />

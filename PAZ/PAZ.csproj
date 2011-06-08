@@ -152,6 +152,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Resources\wii-loading-ring.ani" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\AvansLogo.png" />

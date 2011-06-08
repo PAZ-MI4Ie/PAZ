@@ -70,6 +70,17 @@ namespace PAZ.Model
             }
         }
 
+        public List<User> Participants
+        {
+            get
+            {
+                List<User> result = this.Attachments;
+                result.Add(this.Student1);
+                result.Add(this.Student2);
+                return result;
+            }
+        }
+
 		public Pair() { }
 
         public Pair(int id, Student student1, Student student2, int number_of_guests)

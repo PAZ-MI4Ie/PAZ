@@ -67,6 +67,7 @@
     <Compile Include="IniReader\IniFile.cs" />
     <Compile Include="IniReader\IniSection.cs" />
     <Compile Include="Model\Emailer.cs" />
+    <Compile Include="Model\Mappers\BlockedTimeslotMapper.cs" />
     <Compile Include="Model\Mappers\PairAttachmentMapper.cs" />
     <Compile Include="Model\Mappers\ClassroomMapper.cs" />
     <Compile Include="Model\Mappers\SessionMapper.cs" />
@@ -104,6 +105,9 @@
     <Compile Include="View\SessionWindow.xaml.cs">
       <DependentUpon>SessionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\UnPlannedPairs.xaml.cs">
+      <DependentUpon>UnPlannedPairs.xaml</DependentUpon>
+    </Compile>
     <Page Include="View\EmailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -125,6 +129,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\SessionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UnPlannedPairs.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

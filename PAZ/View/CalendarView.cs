@@ -14,7 +14,8 @@ namespace PAZ.View
 {
     public class CalendarView : Grid
     {
-        Point startpoint;
+        //TODO: database data ophalen
+        //TODO: customLabel gebruiken voor sessions
         public Dictionary<string, Grid> dateGrids;
         public CalendarView()
             : base()
@@ -25,7 +26,7 @@ namespace PAZ.View
         #region Drag & Drop
         public void session_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            Label session = sender as Label;
+            CustomLabel session = sender as CustomLabel;
             if (session != null && e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
             {
                 string date = GetSessionDate(session);
@@ -38,23 +39,11 @@ namespace PAZ.View
             }
         }
 
-        
-
-        void CalendarView_DragEnter(object sender, DragEventArgs e)
-        {
-
-        }
-
-        void CalendarView_DragOver(object sender, DragEventArgs e)
-        {
-            //set effect to none is draging over header
-        }
-
         void Session_Drop(object sender, DragEventArgs e)
         {
             //check dates
-            Label ellipse = sender as Label;
-            if (ellipse != null)
+            CustomLabel session = sender as CustomLabel;
+            if (session != null)
             {
                 // If the DataObject contains string data, extract it.
                 if (e.Data.GetDataPresent(DataFormats.StringFormat))
@@ -65,16 +54,11 @@ namespace PAZ.View
                         string[] other = dataString.Split(';');
                         string[] users = dataString.Split('\n');
                         if(removeSession(other[0],Convert.ToInt32(other[1]),Convert.ToInt32(other[2])))
-                            addSession(GetSessionDate(ellipse), GetColumn(ellipse), GetRow(ellipse), users[1], users[2], new string[] { users[4], users[5] }, new string[] { users[7], users[8] });
+                            addSession(GetSessionDate(session), GetColumn(session), GetRow(session), users[1], users[2], new string[] { users[4], users[5] }, new string[] { users[7], users[8] });
                     }
                 }
                 CheckAvailability(null, true);
             }
-        }
-
-        void CalendarView_DragLeave(object sender, DragEventArgs e)
-        {
-            
         }
 
         private void CheckAvailability(Label currentSession, bool dropped)
@@ -219,15 +203,12 @@ namespace PAZ.View
                     {
                         for (int i = 0; i < dateGrid.ColumnDefinitions.Count; i++)
                         {
-                            Label test = new Label();
-                            Grid.SetColumn(test, i);
-                            Grid.SetRow(test, j);
-                            test.AllowDrop = true;
-                            test.DragEnter += new DragEventHandler(CalendarView_DragEnter);
-                            test.DragOver += new DragEventHandler(CalendarView_DragOver);
-                            test.DragLeave += new DragEventHandler(CalendarView_DragLeave);
-                            test.Drop += new DragEventHandler(Session_Drop);
-                            dateGrid.Children.Add(test);
+                            CustomLabel emptySession = new CustomLabel();
+                            Grid.SetColumn(emptySession, i);
+                            Grid.SetRow(emptySession, j);
+                            emptySession.AllowDrop = true;
+                            emptySession.Drop += new DragEventHandler(Session_Drop);
+                            dateGrid.Children.Add(emptySession);
                         }
                     }
                     Grid.SetColumn(dateGrid, 1);
@@ -283,24 +264,19 @@ namespace PAZ.View
 
         public void addSession(string date, int classroomId, int timeslot, string student1, string student2, string[] teachers, string[] experts)
         {
-            Label session = new Label();
-            session = dateGrids[date].Children[(classroomId) + ((timeslot) * 8)] as Label;
+            CustomLabel session = new CustomLabel();
+            session = dateGrids[date].Children[(classroomId) + ((timeslot) * 8)] as CustomLabel;
             session.Content = student1 + "\n" + student2 + "\n\n" + teachers[0] + "\n" + teachers[1] +"\n\n"+ experts[0] + "\n" + experts[1];
             session.BorderBrush = Brushes.LightGray;
             session.BorderThickness = new Thickness(2);
             session.MouseMove += new System.Windows.Input.MouseEventHandler(session_MouseMove);
             session.AllowDrop = false;
-            //session.DragEnter -= CalendarView_DragEnter;
-            //session.DragOver -= CalendarView_DragOver;
-            //session.DragLeave -= CalendarView_DragLeave;
             session.Drop -= Session_Drop;
-
             session.Background = Brushes.White;
-
             session.ToolTip = "Studenten\n\nDocenten\n\nExperts";
         }
 
-        public Grid HasSession(Label session)
+        public Grid HasSession(CustomLabel session)
         {
             foreach (KeyValuePair<string, Grid> pair in dateGrids)
             {
@@ -310,7 +286,7 @@ namespace PAZ.View
             return null;
         }
 
-        public string GetSessionDate(Label session)
+        public string GetSessionDate(CustomLabel session)
         {
             foreach (KeyValuePair<string, Grid> pair in dateGrids)
             {
@@ -320,7 +296,7 @@ namespace PAZ.View
             return null;
         }
 
-        public bool removeSession(Label session)
+        public bool removeSession(CustomLabel session)
         {
             Grid parent = HasSession(session);
             if (parent != null)
@@ -333,7 +309,7 @@ namespace PAZ.View
 
         public bool removeSession(string date, int column, int row)
         {
-            Label session = dateGrids[date].Children[(column) + ((row) * 8)] as Label;
+            CustomLabel session = dateGrids[date].Children[(column) + ((row) * 8)] as CustomLabel;
             if (session != null)
             {
                 session.Content = null;
@@ -342,9 +318,6 @@ namespace PAZ.View
                 session.BorderThickness = new Thickness(0);
                 session.MouseMove -= session_MouseMove;
                 session.AllowDrop = true;
-                //session.DragEnter += new DragEventHandler(CalendarView_DragEnter);
-                //session.DragOver += new DragEventHandler(CalendarView_DragOver);
-                //session.DragLeave += new DragEventHandler(CalendarView_DragLeave);
                 session.Drop += new DragEventHandler(Session_Drop);
                 return true;
             }

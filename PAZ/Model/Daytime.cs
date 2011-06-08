@@ -35,6 +35,10 @@ namespace PAZ.Model
             }
         }
 
+        public Daytime()
+        {
+        }
+
 		public Daytime(int id, DateTime date, int timeslot)
 		{
 			Id = id;

@@ -12,80 +12,54 @@ namespace PAZ.Model
         private const int MAX_TEACHERS = 2;
         private const int MAX_EXPERTS = 2;
 
-		public int Id;
+        public int Id { get; set; }
         private Daytime _daytime;
-        public int Daytime_id;
-        private Classroom _classroom;
-		public int Classroom_id;
-        private Pair _pair;
-		public int Pair_id;
-
-        private Teacher[] _teachers = new Teacher[MAX_TEACHERS];
-        private Expert[] _experts = new Expert[MAX_EXPERTS];
-
-		public string Datum
-		{
-			get
-			{
-				return _daytime.Date.Day.ToString()
-                + "-" + _daytime.Date.Month.ToString()
-                + "-" + _daytime.Date.Year.ToString();
-			}
-		}
-		public int Timeslot
-		{
-            get { return _daytime.Timeslot; }
-		}
-		public string Lokaal
-		{
-			get { return _classroom.Room_number; }
-		}
-		public string Studenten
-		{
-			get
-			{
-                return _pair.Student1.Firstname + " " + _pair.Student1.Surname + "\r"
-					+ _pair.Student2.Firstname + " " + _pair.Student2.Surname;
-			}
-		}
-		public string Docenten
-		{
-			get
-			{
-                string returnString = String.Empty;
-                for (int i = 0; i < _teachers.Length; ++i)
-                {
-                    // Mogelijk overbodig bij teachers, omdat het aantal precies vast staat op 2.
-                    if (_teachers[i] == null)
-                        break;
-
-                    returnString += _teachers[i].Firstname + " " + _teachers[i].Surname + "\r";
-                }
-
-                return returnString;
-			}
-		}
-		public string Deskundigen
-		{
+        public int Daytime_id { get; set; }
+        public Daytime Daytime
+        {
             get
             {
-                string returnString = String.Empty;
-                for (int i = 0; i < _experts.Length; ++i)
+                if (this._daytime == null)
                 {
-                    // Er kunnen 1 of 2 experts zijn(en misschien ooit wel meer dan 2) maar het kan dus zijn dat er null waardes zijn bij experts.
-                    if (_experts[i] == null)
-                        break;
-
-                    returnString += _experts[i].Firstname + " " + _experts[i].Surname + "\r";
+                    this.Daytime = (new DaytimeMapper(MysqlDb.GetInstance())).Find(this.Daytime_id);
                 }
-
-                return returnString;
+                return this._daytime;
             }
-		}
-		public int AantalGasten
-		{
-            get { return _pair.Number_of_guests; }
-		}
+            set
+            {
+                this._daytime = value;
+            }
+        }
+        private Classroom _classroom;
+		public int Classroom_id {get; set;}
+        public Classroom Classroom
+        {
+            get
+            {
+                if (this._classroom == null)
+                {
+                    this.Classroom = (new ClassroomMapper(MysqlDb.GetInstance())).Find(this.Classroom_id);
+                }
+                return this._classroom;
+            }
+            set
+            {
+                this._classroom = value;
+            }
+        }
+        private Pair _pair;
+		public int Pair_id {get; set;}
+        public Pair Pair {
+            get {
+                if (this._pair == null) {
+                    this.Pair = (new PairMapper(MysqlDb.GetInstance())).Find(this.Pair_id);
+                }
+                return this._pair;
+            }
+            set {
+                this._pair = value;
+            }
+        }
 
 		public Session() { }
 
@@ -94,53 +68,26 @@ namespace PAZ.Model
 			_daytime = daytime;
 			_classroom = classroom;
 			_pair = pair;
-
-            _teachers[0] = teacher1;
-            _teachers[1] = teacher2;
-
-            _experts[0] = expert1;
-            _experts[1] = expert2;
-
-            _dataList = new List<Object>();
-            _dataList.Add(Datum);
-            _dataList.Add(Timeslot);
-            _dataList.Add(Lokaal);
-            _dataList.Add(Studenten);
-            _dataList.Add(Docenten); 
-            _dataList.Add(Deskundigen);
-            _dataList.Add(AantalGasten);
+            this._temp_experts = new Expert[2];
+            this._temp_experts[0] = expert1;
+            this._temp_experts[1] = expert2;
+            this._temp_teachers = new Teacher[2];
+            this._temp_teachers[0] = teacher1;
+            this._temp_teachers[1] = teacher2;
 		}
 
-        private List<Object> _dataList; // Gebruikt voor pdf export loop
+        //TEMP CODE:
+        private Expert[] _temp_experts;
+        private Teacher[] _temp_teachers;
 
-        // Opmerking: Dit zou een property moeten zijn, maar dan wordt het automatisch in de datagrid geduwd en dat willen we niet
-        public List<Object> GetDataList()
-        {
-            return _dataList;
-        }
-
-        // Idem als bovenstaande opmerking
-        public Pair GetPair()
-        {
-            return _pair;
-        }
-
-        // Idem
-        public Teacher[] GetTeachers()
-        {
-            return _teachers;
-        }
-
-        // Idem
         public Expert[] GetExperts()
         {
-            return _experts;
+            return _temp_experts;
         }
-       
-        // Idem
-        public Daytime GetDaytime()
+
+        public Teacher[] GetTeachers()
         {
-            return _daytime;
+            return _temp_teachers;
         }
     }
 }

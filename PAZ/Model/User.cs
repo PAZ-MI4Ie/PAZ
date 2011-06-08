@@ -17,12 +17,16 @@ namespace PAZ.Model
 
 		public User()
 		{
+			Status = "accepted";
+			Username = " ";
 		}
 
 		public User(string surname, string firstname)
 		{
 			Surname = surname;
 			Firstname = firstname;
+			Status = "accepted";
+			Username = surname;
 		}
     }
 }

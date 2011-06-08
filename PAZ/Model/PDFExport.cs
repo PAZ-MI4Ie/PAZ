@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iText = iTextSharp.text;
+using PAZ.View;
 
 namespace PAZ.Model
 {
@@ -96,7 +97,7 @@ namespace PAZ.Model
             if (dataGrid.Items.Count <= 0)
                 return null;
 
-            int aantalKolommen = ((Session)dataGrid.Items[0]).GetDataList().Count;
+            int aantalKolommen = ((SessionRow)dataGrid.Items[0]).GetDataList().Count;
 
             // Maak een tabel met even veel aantal kolommen als de datagrid
             PdfPTable rosterTable = new PdfPTable(aantalKolommen);
@@ -125,9 +126,9 @@ namespace PAZ.Model
             }
 
             // Leest de rijen uit de datagrid en voegt deze toe aan roosterTable
-            for (int rowNo = 0; rowNo < dataGrid.Items.Count - 1; ++rowNo)
+            for (int rowNo = 0; rowNo < dataGrid.Items.Count; ++rowNo)
             {
-                Session rowSession = (Session)dataGrid.Items[rowNo];
+                SessionRow rowSession = (SessionRow)dataGrid.Items[rowNo];
 
                 for (int columnNo = 0; columnNo < dataGrid.Columns.Count; ++columnNo)
                 {
@@ -166,10 +167,10 @@ namespace PAZ.Model
 
                 // het document openen
                 document.Open();
-                for (int rowNo = 0; rowNo < dataGrid.Items.Count - 1; ++rowNo)
+                for (int rowNo = 0; rowNo < dataGrid.Items.Count; ++rowNo)
                 {
-                    Session rowSession = (Session)dataGrid.Items[rowNo];
-                    Expert[] experts = rowSession.GetExperts();
+                    SessionRow rowSession = (SessionRow)dataGrid.Items[rowNo];
+                    Expert[] experts = rowSession.GetSessionModel().GetExperts();
 
                     for (int iExpert = 0; iExpert < experts.Length; ++iExpert)
                     {
@@ -232,10 +233,10 @@ namespace PAZ.Model
                         document.Add(new iText.Paragraph("Geachte heer/mevrouw " + expert.Surname + ",", standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph("Hierbij ontvangt u de afstudeerscriptie van onze student " + rowSession.GetPair().Student1.Study + ", " + rowSession.GetPair().Student1.Firstname + " " + rowSession.GetPair().Student1.Surname + " van wie u de afstudeerbespreking zult bijwonen. Begeleidende docenten " + rowSession.GetTeachers()[0].Firstname + " " + rowSession.GetTeachers()[0].Surname + " en " + rowSession.GetTeachers()[1].Firstname + " " + rowSession.GetTeachers()[1].Surname + " zullen bij de zitting aanwezig zijn.", standardFont));
+                        document.Add(new iText.Paragraph("Hierbij ontvangt u de afstudeerscriptie van onze student " + rowSession.GetSessionModel().Pair.Student1.Study + ", " + rowSession.GetSessionModel().Pair.Student1.Firstname + " " + rowSession.GetSessionModel().Pair.Student1.Surname + " van wie u de afstudeerbespreking zult bijwonen. Begeleidende docenten " + rowSession.GetSessionModel().GetTeachers()[0].Firstname + " " + rowSession.GetSessionModel().GetTeachers()[0].Surname + " en " + rowSession.GetSessionModel().GetTeachers()[1].Firstname + " " + rowSession.GetSessionModel().GetTeachers()[1].Surname + " zullen bij de zitting aanwezig zijn.", standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + rowSession.GetDaytime().Time + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, Onderwijsboulevard 215 te `s-Hertogenbosch.", standardFont));
+                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + rowSession.GetSessionModel().Daytime.Time + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, Onderwijsboulevard 215 te `s-Hertogenbosch.", standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
                         document.Add(new iText.Paragraph("In het afstudeerlokaal wordt voor aanvang van de zitting koffie en thee geserveerd.", standardFont));

@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using PAZ.View;
 
 namespace PAZ
 {
@@ -317,10 +318,10 @@ namespace PAZ
 
         private void buttonEmailVersturen_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Emails versturen?", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                MessageBoxResult result = MessageBox.Show("Succesvol. Emails zijn verzonden.", "Succesvol");
-            }
+
+            EmailDialog OpenEmailWindow = new EmailDialog();
+            OpenEmailWindow.Show();
+
         }
 
         private void buttonBriefPrinten_Click(object sender, RoutedEventArgs e)

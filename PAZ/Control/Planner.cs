@@ -17,11 +17,12 @@ namespace PAZ.Control
                 {
                     foreach (Blocked_timeslot blockedTimeSlot in user.BlockedTimeslots)
                     {
-                        if (session.Daytime.Equals(blockedTimeSlot.Daytime))
+                        if (session.Daytime_id == blockedTimeSlot.Daytime_id)
                         {
                             if (!blockedTimeSlot.Hardblock)
                             {
                                 ++score;
+                                break;
                             }
                             else
                             {
@@ -31,6 +32,7 @@ namespace PAZ.Control
                         else
                         {
                             score += 2;
+                            break;
                         }
                     }
                 }

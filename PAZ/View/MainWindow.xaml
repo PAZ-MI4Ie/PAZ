@@ -1,4 +1,4 @@
-﻿<Window xmlns:my="clr-namespace:PAZ.View"  x:Class="PAZ.MainWindow"
+﻿<Window xmlns:my="clr-namespace:PAZ.View" x:Class="PAZ.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
@@ -257,7 +257,7 @@
             
 
             <!-- OPTIES-->
-            <TabItem Header="Opties" Name="tabItemOpties" Padding="5"  Background="White" Width="80" HorizontalAlignment="Center">
+            <TabItem Header="Opties" Name="tabItemOpties" Padding="5" Background="White" Width="80" HorizontalAlignment="Center">
                 <Grid Name="GridOpties">
 
 

@@ -28,6 +28,7 @@ namespace PAZ.Model
             set
             {
                 this._daytime = value;
+                this.Daytime_id = this._daytime.Id;
             }
         }
         private Classroom _classroom;
@@ -45,6 +46,7 @@ namespace PAZ.Model
             set
             {
                 this._classroom = value;
+                this.Classroom_id = this._classroom.Id;
             }
         }
         private Pair _pair;
@@ -58,6 +60,7 @@ namespace PAZ.Model
             }
             set {
                 this._pair = value;
+                this.Pair_id = this._pair.ID;
             }
         }
 

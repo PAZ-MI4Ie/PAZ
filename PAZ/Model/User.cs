@@ -1,7 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using PAZ.Model.Mappers;
+using PAZMySQL;
 
 namespace PAZ.Model
 {
@@ -14,6 +16,22 @@ namespace PAZ.Model
         public string Email { get; set; }
         public string User_type { get; set; }
         public string Status { get; set; }
+        private List<Blocked_timeslot> _blockedTimeslots;
+        public List<Blocked_timeslot> BlockedTimeslots
+        {
+            get
+            {
+                if (this._blockedTimeslots == null)
+                {
+                    this.BlockedTimeslots = new BlockedTimeslotMapper(MysqlDb.GetInstance()).FindByUserId(this.Id);
+                }
+                return this._blockedTimeslots;
+            }
+            set
+            {
+                this._blockedTimeslots = value;
+            }
+        }
 
 		public User()
 		{

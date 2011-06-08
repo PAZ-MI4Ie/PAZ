@@ -1,4 +1,4 @@
-﻿<Window xmlns:my="clr-namespace:PAZ.View"  x:Class="PAZ.MainWindow"
+﻿<Window xmlns:my="clr-namespace:PAZ.View" x:Class="PAZ.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
@@ -56,6 +56,7 @@
                                 <ComboBoxItem Content="Bedrijfsbegeleider" />
                                 <ComboBoxItem Content="Externe Deskundige" />
                                 <ComboBoxItem Content="Leraren" />
+                                <ComboBoxItem Content="Hidde" />
                             </ComboBox>
                             <TextBlock Height="23" HorizontalAlignment="Left" Margin="24,15,0,0" Name="textBlockSelecteerType" Text="Wat wilt u toevoegen?" Foreground="#FF5E5353" FontStyle="Italic" VerticalAlignment="Top" Width="152" TextWrapping="Wrap" />
                         </Grid>
@@ -257,7 +258,7 @@
             
 
             <!-- OPTIES-->
-            <TabItem Header="Opties" Name="tabItemOpties" Padding="5"  Background="White" Width="80" HorizontalAlignment="Center">
+            <TabItem Header="Opties" Name="tabItemOpties" Padding="5" Background="White" Width="80" HorizontalAlignment="Center">
                 <Grid Name="GridOpties">
 
 

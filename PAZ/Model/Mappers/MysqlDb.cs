@@ -7,7 +7,7 @@ using MySql.Data.MySqlClient;
 
 namespace PAZMySQL
 {
-    class MysqlDb
+    public class MysqlDb
     {
         private String _host;
         private String _username;

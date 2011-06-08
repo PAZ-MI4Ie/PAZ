@@ -40,18 +40,19 @@ namespace PAZ
 		private List<Teacher> _teachers;
 		private List<Student> _students;
 
+        private MysqlDb _db;
 
         public MainWindow()
         {
             InitializeComponent();
 
             //TEST CODE:
-            MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
+            _db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
 
-            _userMapper = new UserMapper(db);
-			_classroomMapper = new ClassroomMapper(db);
+            _userMapper = new UserMapper(_db);
+            _classroomMapper = new ClassroomMapper(_db);
 
-            SessionMapper sessionmapper = new SessionMapper(db);
+            SessionMapper sessionmapper = new SessionMapper(_db);
 			Console.WriteLine(sessionmapper.FindAll());
             List<Session> tempSessions = sessionmapper.FindAll();
             _master = new List<SessionRow>();
@@ -60,7 +61,7 @@ namespace PAZ
                 _master.Add(new SessionRow(s));
             }
 			//END OF TEST CODE
-			this._teacherMapper = new TeacherMapper(db);
+            this._teacherMapper = new TeacherMapper(_db);
 
             StudentMapper studentmapper = new StudentMapper(MysqlDb.GetInstance());
             Student verlept = new Student();
@@ -320,7 +321,7 @@ namespace PAZ
 
         private void buttonEmailVersturen_Click(object sender, RoutedEventArgs e)
         {
-            EmailWindow email = new EmailWindow();
+            EmailWindow email = new EmailWindow(_db);
             email.ShowDialog();
         }
 

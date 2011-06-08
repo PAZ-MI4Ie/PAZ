@@ -8,7 +8,7 @@
             <RowDefinition Height="612*" />
             <RowDefinition Height="38*" />
         </Grid.RowDefinitions>
-        <Label Height="34" HorizontalAlignment="Left" Margin="675,12,0,0" Name="label4" VerticalAlignment="Top" Width="116">
+        <Label Height="34" Margin="0,12,6,0" Name="label4" VerticalAlignment="Top" HorizontalAlignment="Right" Width="116">
             <Label.Background>
                 <ImageBrush ImageSource="/PAZ;component/Resources/AvansLogo.png" />
             </Label.Background>

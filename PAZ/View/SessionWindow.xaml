@@ -1,49 +1,53 @@
 ﻿<Window x:Class="PAZ.View.SessionWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Zitting toevoegen" Height="336" Width="391">
-    <Grid>
-        <Label Content="Paar" Height="28" HorizontalAlignment="Left" Margin="0,12,0,0" Name="lblPair" VerticalAlignment="Top" />
-        <Label Content="Student 1" Height="28" HorizontalAlignment="Left" Margin="12,46,0,0" Name="lblstudent1" VerticalAlignment="Top" />
-        <Label Content="Student 2" Height="28" HorizontalAlignment="Left" Margin="12,71,0,0" Name="lblstudent2" VerticalAlignment="Top" />
-        <Label Content="Docent 1" Height="28" HorizontalAlignment="Left" Margin="0,105,0,0" Name="lblteacher1" VerticalAlignment="Top" />
-        <Label Content="Docent 2" HorizontalAlignment="Left" Margin="0,139,0,0" Name="lblteacher2" Height="28" VerticalAlignment="Top" />
-        <Label Content="Expert 1" Height="28" HorizontalAlignment="Left" Margin="0,173,0,0" Name="lblexpert1" VerticalAlignment="Top" />
-        <Label Content="Expert 2" Height="28" HorizontalAlignment="Right" Margin="0,207,316,0" Name="lblexpert2" VerticalAlignment="Top"/>
-        <ComboBox Height="23" HorizontalAlignment="Left" Margin="90,17,0,0" Name="cbPairs" VerticalAlignment="Top" Width="258" SelectionChanged="cbPairs_SelectionChanged">
+        Title="Zitting toevoegen" Background="#FFD51D53" Height="365" Width="424">
+    <Grid Background="White" Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40*" />
+            <ColumnDefinition Width="329*" />
+        </Grid.ColumnDefinitions>
+        <Label Content="Paar" Height="28" HorizontalAlignment="Left" Margin="14,12,0,0" Name="lblPair" VerticalAlignment="Top" Foreground="#FF5E5353" FontStyle="Italic" Grid.ColumnSpan="2" />
+        <Label Content="Student 1"  Foreground="#FF5E5353" FontStyle="Italic" Height="28" HorizontalAlignment="Left" Margin="14,46,0,0" Name="lblstudent1" VerticalAlignment="Top" Grid.ColumnSpan="2" />
+        <Label Content="Student 2" Foreground="#FF5E5353" FontStyle="Italic" Height="28" HorizontalAlignment="Left" Margin="12,71,0,0" Name="lblstudent2" VerticalAlignment="Top" Grid.ColumnSpan="2" />
+        <Label Content="Docent 1" Foreground="#FF5E5353" FontStyle="Italic" Height="28" HorizontalAlignment="Left" Margin="10,105,0,0" Name="lblteacher1" VerticalAlignment="Top" Grid.ColumnSpan="2" />
+        <Label Content="Docent 2" Foreground="#FF5E5353" FontStyle="Italic" HorizontalAlignment="Left" Margin="12,139,0,0" Name="lblteacher2" Height="28" VerticalAlignment="Top" Grid.ColumnSpan="2" />
+        <Label Content="Expert 1" Foreground="#FF5E5353" FontStyle="Italic" Height="28" HorizontalAlignment="Left" Margin="10,173,0,0" Name="lblexpert1" VerticalAlignment="Top" Grid.ColumnSpan="2" />
+        <Label Content="Expert 2" Foreground="#FF5E5353" FontStyle="Italic" Height="28" HorizontalAlignment="Right" Margin="0,207,320,0" Name="lblexpert2" VerticalAlignment="Top" Grid.ColumnSpan="2" />
+        <ComboBox Height="23" Background="#FFEFEFEF" Foreground="#FF595959" HorizontalAlignment="Left" Margin="50,17,0,0" Name="cbPairs" VerticalAlignment="Top" Width="258" SelectionChanged="cbPairs_SelectionChanged" Grid.Column="1">
             <ComboBoxItem Content="Jeroen Snipper, Hidde Mees" />
             <ComboBoxItem Content="Freek Laure, Mark de Boer" />
             <ComboBoxItem Content="Ibrahim Moers, Mark Demin" />
             <ComboBoxItem Content="Teun hoeder, Yorg Klever" />
         </ComboBox>
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="90,51,0,0" Name="txtStudent1" Text="" VerticalAlignment="Top" Width="258" />
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="90,76,0,0" Name="txtStudent2" Text="" VerticalAlignment="Top" Width="258" />
-        <ComboBox Height="23" HorizontalAlignment="Left" Margin="90,110,0,0" Name="cbTeacher1" VerticalAlignment="Top" Width="258">
+        <TextBlock Height="23" HorizontalAlignment="Left" Foreground="#FF595959" Margin="50,51,0,0" Name="txtStudent1" Text="" VerticalAlignment="Top" Width="258" Grid.Column="1" />
+        <TextBlock Height="23" HorizontalAlignment="Left" Foreground="#FF595959" Margin="50,84,0,0" Name="txtStudent2" Text="" VerticalAlignment="Top" Width="258" Grid.Column="1" />
+        <ComboBox Height="23" Background="#FFEFEFEF" Foreground="#FF595959" HorizontalAlignment="Left" Margin="50,115,0,0" Name="cbTeacher1" VerticalAlignment="Top" Width="258" Grid.Column="1">
             <ComboBoxItem Content="Gers Saris" />
             <ComboBoxItem Content="Bob Bus" />
             <ComboBoxItem Content="Marco Huysmans" />
             <ComboBoxItem Content="Bob Polis" />
         </ComboBox>
-        <ComboBox Height="23" HorizontalAlignment="Left" Margin="90,144,0,0" Name="cbTeacher2" VerticalAlignment="Top" Width="258">
+        <ComboBox Height="23" Background="#FFEFEFEF" Foreground="#FF595959" HorizontalAlignment="Left" Margin="50,150,0,0" Name="cbTeacher2" VerticalAlignment="Top" Width="258" Grid.Column="1">
             <ComboBoxItem Content="Gers Saris" />
             <ComboBoxItem Content="Bob Bus" />
             <ComboBoxItem Content="Marco Huysmans" />
             <ComboBoxItem Content="Bob Polis" />
         </ComboBox>
-        <ComboBox Height="23" HorizontalAlignment="Left" Margin="90,178,0,0" Name="cbExpert1" VerticalAlignment="Top" Width="258">
+        <ComboBox Height="23" Background="#FFEFEFEF" Foreground="#FF595959" HorizontalAlignment="Left" Margin="50,184,0,0" Name="cbExpert1" VerticalAlignment="Top" Width="258" Grid.Column="1">
             <ComboBoxItem Content="Piet Krammers" />
             <ComboBoxItem Content="Mariam Hourder" />
             <ComboBoxItem Content="Nikki Jansen" />
             <ComboBoxItem Content="Bart Passer" />
             <ComboBoxItem Content="Huub van Veghel" />
         </ComboBox>
-        <ComboBox Height="23" HorizontalAlignment="Left" Margin="90,212,0,0" Name="cbExpert2" VerticalAlignment="Top" Width="258">
+        <ComboBox Height="23" Background="#FFEFEFEF" Foreground="#FF595959" HorizontalAlignment="Left" Margin="50,219,0,0" Name="cbExpert2" VerticalAlignment="Top" Width="258" Grid.Column="1">
             <ComboBoxItem Content="Piet Krammers" />
             <ComboBoxItem Content="Mariam Hourder" />
             <ComboBoxItem Content="Nikki Jansen" />
             <ComboBoxItem Content="Bart Passer" />
             <ComboBoxItem Content="Huub van Veghel" />
         </ComboBox>
-        <Button Content="Save" Height="23" HorizontalAlignment="Left" Margin="273,262,0,0" Name="btnSave" VerticalAlignment="Top" Width="75" Click="btnSave_Click" />
+        <Button Content="Save" Height="23" HorizontalAlignment="Left" Background="#FFEFEFEF" Foreground="#FF595959" Margin="233,262,0,0" Name="btnSave" VerticalAlignment="Top" Width="75" Click="btnSave_Click" Grid.Column="1" />
     </Grid>
 </Window>

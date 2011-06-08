@@ -355,13 +355,13 @@ namespace PAZ
 
                     switch (comboBoxSearch.SelectedIndex)
                     {
-                        case 1: match = ((Zitting)(item)).Datum.ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 2: match = ((Zitting)(item)).Tijd.ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 3: match = ((Zitting)(item)).Lokaal.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 4: match = ((Zitting)(item)).Leerlingen.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 5: match = ((Zitting)(item)).Docenten.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 6: match = ((Zitting)(item)).Deskundige.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 7: match = ((Zitting)(item)).AantalGasten.ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 1: match = ((SessionRow)(item)).Datum.ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 2: match = ((SessionRow)(item)).Timeslot.ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 3: match = ((SessionRow)(item)).Lokaal.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 4: match = ((SessionRow)(item)).Studenten.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 5: match = ((SessionRow)(item)).Docenten.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 6: match = ((SessionRow)(item)).Deskundigen.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 7: match = ((SessionRow)(item)).AantalGasten.ToString().Contains(textboxSearch.Text.ToLower()); break;
 
                     }
 

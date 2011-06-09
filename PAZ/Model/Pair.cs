@@ -7,7 +7,7 @@ using PAZ.Model.Mappers;
 
 namespace PAZ.Model
 {
-    class Pair
+    public class Pair
     {
         public int ID { get; set; }
         private Student _student1;

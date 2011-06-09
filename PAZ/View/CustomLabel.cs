@@ -6,7 +6,7 @@ using System.Windows.Controls;
 
 namespace PAZ.View
 {
-    class CustomLabel :Label
+    public class CustomLabel :Label
     {
         public int Id { get; set; }
         public CustomLabel()

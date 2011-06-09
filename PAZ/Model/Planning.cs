@@ -8,7 +8,7 @@ namespace PAZ.Model
     /* 
      * TODO: alles
      */
-    class Planning
+    public class Planning
     {
         private List<Session> _sessions;
         public List<Session> Sessions

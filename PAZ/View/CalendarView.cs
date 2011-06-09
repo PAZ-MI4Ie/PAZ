@@ -15,7 +15,6 @@ namespace PAZ.View
     public class CalendarView : Grid
     {
         //TODO: database data ophalen
-        //TODO: customLabel gebruiken voor sessions
         public Dictionary<string, Grid> dateGrids;
         public CalendarView()
             : base()
@@ -54,7 +53,7 @@ namespace PAZ.View
                         string[] other = dataString.Split(';');
                         string[] users = dataString.Split('\n');
                         if(removeSession(other[0],Convert.ToInt32(other[1]),Convert.ToInt32(other[2])))
-                            addSession(GetSessionDate(session), GetColumn(session), GetRow(session), users[1], users[2], new string[] { users[4], users[5] }, new string[] { users[7], users[8] });
+                            addSession(session.Id, GetSessionDate(session), GetColumn(session), GetRow(session), users[1], users[2], new string[] { users[4], users[5] }, new string[] { users[7], users[8] });
                     }
                 }
                 CheckAvailability(null, true);
@@ -230,39 +229,30 @@ namespace PAZ.View
             Grid.SetRowSpan(recC, rows);
         }
 
-        public void loadAllSessions()//List<Session> sessions)
-        {/*
+        public void loadAllSessions(List<Session> sessions)
+        {
             foreach (Session session in sessions)
             {
                 int classroom = session.Classroom.Id;
                 string student1 = session.Pair.Student1.Firstname + " " + session.Pair.Student1.Surname;
                 string student2 = session.Pair.Student2.Firstname + " " + session.Pair.Student2.Surname;
-                string[,] otherPeople = new string[4, 2];
-                int i = 0;
-                foreach(User user in session.Pair.Attachment)
+                string[] teachers = new string[1];
+                string[] experts = new string[1];
+                foreach (User user in session.Pair.Attachments)
                 {
-                    otherPeople[i,0] = user.Firstname + " " + user.Surname;
-                    otherPeople[i,1] = user.Status;
-                    i++;
-                }
-                string[] teachers = new string[2];
-                string[] experts = new string[2];
-                int numberOfExpert = 0;
-                for (i = 0; i < 4; i++)
-                {
-                    if (otherPeople[i, 1] == "teacher")
-                        teachers[i] = otherPeople[i, 0];
+                    if (user.User_type == "teacher")
+                        teachers[0] += user.Firstname + " " + user.Surname + ",";
                     else
-                    {
-                        experts[numberOfExpert] = otherPeople[i, 0];
-                    }
+                        experts[0] += user.Firstname + " " + user.Surname + ",";
                 }
-
-                addSession(0, session.Daytime.Timeslot, student1, student2, teachers, experts);
-            }*/
+                teachers = teachers[0].Split(',');
+                experts = experts[0].Split(',');
+                addSession(session.Id, session.Daytime.Date.ToShortDateString(), session.Classroom_id, session.Daytime.Timeslot,
+                            student1, student2, teachers, experts);
+            }
         }
 
-        public void addSession(string date, int classroomId, int timeslot, string student1, string student2, string[] teachers, string[] experts)
+        public void addSession(int id,string date, int classroomId, int timeslot, string student1, string student2, string[] teachers, string[] experts)
         {
             CustomLabel session = new CustomLabel();
             session = dateGrids[date].Children[(classroomId) + ((timeslot) * 8)] as CustomLabel;
@@ -274,6 +264,11 @@ namespace PAZ.View
             session.Drop -= Session_Drop;
             session.Background = Brushes.White;
             session.ToolTip = "Studenten\n\nDocenten\n\nExperts";
+        }
+
+        public void addSession(Session session)
+        {
+
         }
 
         public Grid HasSession(CustomLabel session)
@@ -312,6 +307,7 @@ namespace PAZ.View
             CustomLabel session = dateGrids[date].Children[(column) + ((row) * 8)] as CustomLabel;
             if (session != null)
             {
+                session.Id = 0;
                 session.Content = null;
                 session.ToolTip = null;
                 session.BorderBrush = null;

@@ -15,6 +15,7 @@ using System.Globalization;
 using Ini;
 using PAZ.View;
 using System.Text.RegularExpressions;
+using PAZ.Model.Mappers;
 
 namespace PAZ
 {
@@ -37,8 +38,11 @@ namespace PAZ
 		private StudentMapper _studentMapper;	
 		private TeacherMapper _teacherMapper;
 		private ExpertMapper _expertMapper;
+        private PairMapper _pairMapper;
 		private List<Teacher> _teachers;
 		private List<Student> _students;
+        private List<Classroom> _classrooms;
+        private List<Pair> _pairs;
 
 
         public MainWindow()
@@ -50,6 +54,7 @@ namespace PAZ
 
             _userMapper = new UserMapper(db);
 			_classroomMapper = new ClassroomMapper(db);
+            _pairMapper = new PairMapper(db);
 
             SessionMapper sessionmapper = new SessionMapper(db);
 			Console.WriteLine(sessionmapper.FindAll());
@@ -74,6 +79,7 @@ namespace PAZ
             //studentmapper.Save(verlept);
             //END OF TEST CODE
 
+            #region test shit
             /*
             _master = new List<Zitting>
             {
@@ -230,6 +236,7 @@ namespace PAZ
 
             };
 			 */
+            #endregion
 
             Sessions = CollectionViewSource.GetDefaultView(_master);
             GridOverzichtList.ItemsSource = Sessions;
@@ -238,30 +245,37 @@ namespace PAZ
             _pdfExport = new PDFExport(GridOverzichtList);
 
             ini = readIni();
-            List<Classroom> classrooms = new List<Classroom>();
+
+            _classrooms = _classroomMapper.FindAll();
+            _pairs = _pairMapper.FindAll();
+            //Test CODE
+            _classrooms = new List<Classroom>();
             Classroom room = new Classroom(1, "OB202");
-            classrooms.Add(room);
+            _classrooms.Add(room);
             room = new Classroom(2, "OB203");
-            classrooms.Add(room);
+            _classrooms.Add(room);
             room = new Classroom(3, "OB204");
-            classrooms.Add(room);
+            _classrooms.Add(room);
             room = new Classroom(4, "OB205");
-            classrooms.Add(room);
+            _classrooms.Add(room);
             room = new Classroom(5, "OC201");
-            classrooms.Add(room);
+            _classrooms.Add(room);
             room = new Classroom(6, "OB201");
-            classrooms.Add(room);
+            _classrooms.Add(room);
             room = new Classroom(7, "OC302");
-            classrooms.Add(room);
+            _classrooms.Add(room);
             room = new Classroom(8, "OC202");
-            classrooms.Add(room);
-            calendar.createCalendar(ini, classrooms);
+            _classrooms.Add(room);
+            //END TEST CODE
+
+            calendar.createCalendar(ini, _classrooms);
             string[] teachers = new string[] { "Marco Huysmans", "Ger Saris" };
             string[] experts = new string[] { "Piet Janssen", "Karel Lessers" };
-            calendar.addSession("2-5-2011", 1, 1, "Jeroen Schipper", "Hidde Jansen", teachers, experts);
-            calendar.addSession("3-5-2011", 1, 1, "Freek Laurijssen", "Ibrahim Önder", teachers, experts);
-            //calendar.loadAllSessions();
-
+            //calendar.addSession("2-5-2011", 1, 1, "Jeroen Schipper", "Hidde Jansen", teachers, experts);
+            //calendar.addSession("3-5-2011", 1, 1, "Freek Laurijssen", "Ibrahim Önder", teachers, experts);
+            calendar.loadAllSessions(tempSessions);
+            //UnPlannedPairs unPlannedPairs = new UnPlannedPairs(new Model.Mappers.PairMapper(db));
+            //unPlannedPairs.Show();
             tabCalender.Focus();
         }
 

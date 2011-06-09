@@ -7,7 +7,7 @@ using PAZMySQL;
 
 namespace PAZ.Model
 {
-    class Session
+    public class Session
     {
         private const int MAX_TEACHERS = 2;
         private const int MAX_EXPERTS = 2;

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PAZ.Model
 {
-    class Teacher : User
+    public class Teacher : User
     {
         public enum session_spread {ANY,CLOSE,FAR};
 

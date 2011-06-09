@@ -7,7 +7,7 @@ using MySql.Data.MySqlClient;
 
 namespace PAZ.Model.Mappers
 {
-    class PairMapper : Mapper
+    public class PairMapper : Mapper
     {
         public PairMapper(MysqlDb db)
             : base(db)

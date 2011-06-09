@@ -7,7 +7,7 @@ using PAZ.Model;
 
 namespace PAZMySQL
 {
-    class TeacherMapper : UserMapper
+    public class TeacherMapper : UserMapper
     {
         public TeacherMapper(MysqlDb db)
             : base(db)

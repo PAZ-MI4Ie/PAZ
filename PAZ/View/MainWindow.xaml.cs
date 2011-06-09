@@ -53,9 +53,9 @@ namespace PAZ
             //TEST CODE:
             _db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
 
-            _userMapper = new UserMapper(db);
-            _classroomMapper = new ClassroomMapper(db);
-            _pairMapper = new PairMapper(db);
+            _userMapper = new UserMapper(_db);
+            _classroomMapper = new ClassroomMapper(_db);
+            _pairMapper = new PairMapper(_db);
             _userMapper = new UserMapper(_db);
             _classroomMapper = new ClassroomMapper(_db);
 

@@ -16,6 +16,7 @@ namespace PAZ.Control
             {
                 foreach (User user in session.Pair.Participants)
                 {
+                    bool countedScore = false;
                     foreach (Blocked_timeslot blockedTimeSlot in user.BlockedTimeslots)
                     {
                         if (session.Daytime_id == blockedTimeSlot.Daytime_id)
@@ -23,6 +24,7 @@ namespace PAZ.Control
                             if (!blockedTimeSlot.Hardblock)
                             {
                                 ++score;
+                                countedScore = true;
                                 break;
                             }
                             else
@@ -30,11 +32,10 @@ namespace PAZ.Control
                                 return -1;
                             }
                         }
-                        else
-                        {
-                            score += 2;
-                            break;
-                        }
+                    }
+                    if (!countedScore)
+                    {
+                        score += 2;
                     }
                 }
             }
@@ -56,6 +57,7 @@ namespace PAZ.Control
                 session.Daytime = daytimes[daytimeI];
                 session.Pair = pair;
                 result.Sessions.Add(session);
+                Console.WriteLine(pair.Student1.Firstname + " en " + pair.Student2.Firstname + " at " + session.Daytime.Date + " slot " + session.Daytime.Timeslot + " in " + session.Classroom.Room_number);
                 ++classroomI;
                 if (classroomI == classrooms.Count)
                 {

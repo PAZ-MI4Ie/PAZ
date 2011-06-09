@@ -44,19 +44,22 @@ namespace PAZ
         private List<Classroom> _classrooms;
         private List<Pair> _pairs;
 
+        private MysqlDb _db;
 
         public MainWindow()
         {
             InitializeComponent();
 
             //TEST CODE:
-            MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
+            _db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
 
             _userMapper = new UserMapper(db);
-			_classroomMapper = new ClassroomMapper(db);
+            _classroomMapper = new ClassroomMapper(db);
             _pairMapper = new PairMapper(db);
+            _userMapper = new UserMapper(_db);
+            _classroomMapper = new ClassroomMapper(_db);
 
-            SessionMapper sessionmapper = new SessionMapper(db);
+            SessionMapper sessionmapper = new SessionMapper(_db);
 			Console.WriteLine(sessionmapper.FindAll());
             List<Session> tempSessions = sessionmapper.FindAll();
             _master = new List<SessionRow>();
@@ -65,9 +68,12 @@ namespace PAZ
                 _master.Add(new SessionRow(s));
             }
 			//END OF TEST CODE
-			this._teacherMapper = new TeacherMapper(db);
+            _teacherMapper = new TeacherMapper(_db);
+            _teachers = _teacherMapper.FindAll();
 
             StudentMapper studentmapper = new StudentMapper(MysqlDb.GetInstance());
+            _students = studentmapper.FindAll();
+
             Student verlept = new Student();
             verlept.Firstname = "Henk";
             verlept.Surname = "de Vries";
@@ -334,7 +340,7 @@ namespace PAZ
 
         private void buttonEmailVersturen_Click(object sender, RoutedEventArgs e)
         {
-            EmailWindow email = new EmailWindow();
+            EmailWindow email = new EmailWindow(_master);
             email.ShowDialog();
         }
 

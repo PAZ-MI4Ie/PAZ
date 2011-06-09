@@ -61,9 +61,12 @@ namespace PAZ
                 _master.Add(new SessionRow(s));
             }
 			//END OF TEST CODE
-            this._teacherMapper = new TeacherMapper(_db);
+            _teacherMapper = new TeacherMapper(_db);
+            _teachers = _teacherMapper.FindAll();
 
             StudentMapper studentmapper = new StudentMapper(MysqlDb.GetInstance());
+            _students = studentmapper.FindAll();
+
             Student verlept = new Student();
             verlept.Firstname = "Henk";
             verlept.Surname = "de Vries";
@@ -321,7 +324,7 @@ namespace PAZ
 
         private void buttonEmailVersturen_Click(object sender, RoutedEventArgs e)
         {
-            EmailWindow email = new EmailWindow(_db);
+            EmailWindow email = new EmailWindow(_master);
             email.ShowDialog();
         }
 

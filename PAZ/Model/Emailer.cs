@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Net;
 using System.Net.Mail;
+using System.Threading;
 
 namespace PAZ.Model
 {
@@ -28,21 +26,26 @@ namespace PAZ.Model
         public bool IsHtml = true;
         public int SendUsing = 0; //0 = Network, 1 = PickupDirectory, 2 = SpecifiedPickupDirectory
         public bool UseSSL = true;
-        public int AuthenticationMode = 1; //0 = No authentication, 1 = Plain Text, 2 = NTLM authenticatio
-        
+        public int AuthenticationMode = 1; //0 = No authentication, 1 = Plain Text, 2 = NTLM authentication
+
+        private Queue<Email> _emailQueue;
+
         public Emailer()
         {
-
+            _emailQueue = new Queue<Email>();
         }
 
 
         /**
         * Voert de opdracht in de achtergrond uit. Anders kan de applicatie overbelast worden!
         * 
-        * Auteur: Gökhan 
+        * Auteur: Gökhan en Yorg
         */
         public void SendEmail()
         {
+            _emailQueue.Enqueue(new Email(To, Subject, Body));
+            Body = string.Empty;
+
             new Thread(new ThreadStart(SendMessage)).Start();
         }
 
@@ -50,7 +53,7 @@ namespace PAZ.Model
         /**
         * Verstuurt het e-mailbericht
         * 
-        * Auteur: Gökhan 
+        * Auteur: Gökhan en Yorg
         */
         private void SendMessage()
         {
@@ -60,12 +63,13 @@ namespace PAZ.Model
                 SmtpClient smtpClient = new SmtpClient(Host);
                 smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
 
-                msg.From = new MailAddress(From);
-                msg.To.Add(To);
-                msg.Subject = Subject;
-                msg.IsBodyHtml = IsHtml;
-                msg.Body = Body;
+                Email emailMessage = _emailQueue.Dequeue();
 
+                msg.From = new MailAddress(From);
+                msg.To.Add(emailMessage.To);
+                msg.Subject = emailMessage.Subject;
+                msg.IsBodyHtml = IsHtml;
+                msg.Body = emailMessage.Body;
 
                 if (AuthenticationMode > 0)
                 {

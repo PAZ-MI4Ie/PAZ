@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PAZ.Model
 {
-    class Daytime
+    public class Daytime
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }

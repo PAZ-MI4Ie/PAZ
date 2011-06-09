@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PAZ.Model
 {
-    class Student : User
+    public class Student : User
     {
         public int Studentnumber { get; set; }
         public string Study { get; set; }

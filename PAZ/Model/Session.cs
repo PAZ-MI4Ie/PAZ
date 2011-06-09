@@ -7,7 +7,7 @@ using PAZMySQL;
 
 namespace PAZ.Model
 {
-    class Session
+    public class Session
     {
         private const int MAX_TEACHERS = 2;
         private const int MAX_EXPERTS = 2;
@@ -64,9 +64,10 @@ namespace PAZ.Model
             }
         }
 
-                  // Dit is de reden dat de PDF brief export niet meer werkte tijdens de presentatie, er wordt dan geen
-                  // array aangemaakt waardoor de export een null array kreeg, Teun wil je het regelen dat deze
-                  // constructor niet meer nodig is.
+        // Dit is de reden dat de PDF brief export niet meer werkte tijdens de presentatie, er wordt dan geen
+        // array aangemaakt waardoor de export een null array kreeg, Teun wil je het regelen dat deze
+        // constructor niet meer nodig is.
+        // Correctie: Eigenlijk moet ervoor gezorgd worden dat de teacher array(en experts array ook denk ik) gevuld worden, lege constructor mag blijven. Dit is nu ook van belang voor de emails en niet alleen de brieven.
 		public Session() { }
 
 		public Session(Daytime daytime, Classroom classroom, Pair pair, Teacher teacher1, Teacher teacher2, Expert expert1, Expert expert2)

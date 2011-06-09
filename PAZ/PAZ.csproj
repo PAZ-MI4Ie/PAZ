@@ -66,6 +66,7 @@
     <Compile Include="Control\PAZController.cs" />
     <Compile Include="IniReader\IniFile.cs" />
     <Compile Include="IniReader\IniSection.cs" />
+    <Compile Include="Model\Email.cs" />
     <Compile Include="Model\Emailer.cs" />
     <Compile Include="Model\Mappers\BlockedTimeslotMapper.cs" />
     <Compile Include="Model\Mappers\PairAttachmentMapper.cs" />

@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using PAZMySQL;
 using PAZ.Model;
+using PAZ.View;
 
 namespace PAZ
 {
@@ -24,28 +25,37 @@ namespace PAZ
     {
         private List<Teacher> _teachers;
         private List<Student> _students;
-        private List<User> _receivers; 
-        private StudentMapper _studentMapper;
-        private TeacherMapper _teacherMapper;
+        private List<User> _receivers;
+        private List<SessionRow> _sessions;
 
         private List<CheckBox> _studentBoxes;
         private List<CheckBox> _teacherBoxes;
 
-        public EmailWindow(MysqlDb db)
+        public EmailWindow(List<SessionRow> sessions)
         {
             InitializeComponent();
+
+            tbInleiding.Text += "Hierbij ontvangt u de tijd(en) waarop u aanwezig moet zijn voor de afstudeerzitting(en)";
+            tbInformatie.Text += "In het afstudeerlokaal wordt voor aanvang van de zitting koffie en thee geserveerd.";
+            tbAfsluiting.Text += "Voor eventuele vragen kunt u zich wenden tot Lilian Reuken, telefoonnummer (073) 629 5256 of Regien Blom telefoonnummer (073) 629 54 55.";
+            tbAfzenders.Text += "Lilian Reuken en Regien Blom";
 
             _teachers = new List<Teacher>();
             _students = new List<Student>();
             _receivers = new List<User>();
+            _sessions = sessions;
 
-            //db = new MysqlDb("localhost", "root", "", "mi4ie_db");
+            foreach (SessionRow session in sessions)
+            {
+                Session sessionModel = session.GetSessionModel();
 
-            _studentMapper = new StudentMapper(db);
-            _teacherMapper = new TeacherMapper(db);
+                Teacher[] teachers = sessionModel.GetTeachers();
+                for (int i = 0; i < teachers.Length; ++i)
+                    _teachers.Add(teachers[i]);
 
-            _teachers = _teacherMapper.FindAll();
-            _students = _studentMapper.FindAll();
+                _students.Add(sessionModel.Pair.Student1);
+                _students.Add(sessionModel.Pair.Student2);
+            }
 
             StudentenToevoegen();
             DocentenToevoegen();          
@@ -180,7 +190,7 @@ namespace PAZ
         /**
         * Stuurt de e-mailberichten via de Gmail-server
         * 
-        * Auteur: Gökhan 
+        * Auteur: Gökhan en Yorg
         */
         private void bntVerzenden_Click(object sender, RoutedEventArgs e)
         {
@@ -208,11 +218,55 @@ namespace PAZ
                     emailer.To = "ymja.kuijs@student.avans.nl";   //(alleen bedoelt voor testdoeleinden)
 
                     // inhoud van e-mail
-                    emailer.Body = "<p>Beste " + user.Firstname + " " + user.Surname + ",</p>";
-                    emailer.Body += tbBody.Text;
-                    emailer.Body += "<p>Met vriendelijke groeten, </p>";
-                    emailer.Body += "Het PAZ-team";
-   
+                    emailer.Body += "<p>Beste " + user.Firstname + " " + user.Surname + ",</p>";
+
+                    emailer.Body += "<p>";
+                    emailer.Body += tbInleiding.Text;
+                    emailer.Body += "</p>";
+
+                    emailer.Body += "<p>De zittingen vinden plaats op: <br />";
+
+                    for(int i = 0; i < _sessions.Count; ++i)
+                    {
+                        Session sessionModel = _sessions[i].GetSessionModel();
+
+                        List<User> users = new List<User>();
+                        Teacher[] teachers = sessionModel.GetTeachers();
+                        for (int j = 0; j < teachers.Length; ++j)
+                            users.Add(teachers[j]);
+
+                        users.Add(sessionModel.Pair.Student1);
+                        users.Add(sessionModel.Pair.Student2);
+
+                        foreach (User sessionUser in users)
+                        {
+                            if (sessionUser == user)
+                            {
+                                emailer.Body += "Afstudeerzitting";
+                                if (user is Teacher)
+                                    emailer.Body += " " + (i + 1);
+
+                                emailer.Body += " is gepland op, " + _sessions[i].Datum + " om " + sessionModel.Daytime.Time + ", in lokaal " + sessionModel.Classroom.Room_number + "<br />";
+                            }
+                        }
+                    }
+
+                    emailer.Body += "</p>";
+
+                    emailer.Body += "<p>";
+                    emailer.Body += tbInformatie.Text;
+                    emailer.Body += "</p>";
+
+                    emailer.Body += "<p>";
+                    emailer.Body += tbAfsluiting.Text;
+                    emailer.Body += "</p>";
+
+                    emailer.Body += "<p>Met vriendelijke groet, </p>";
+
+                    emailer.Body += "<p>";
+                    emailer.Body += tbAfzenders.Text;
+                    emailer.Body += "<br /><i>Coördinatoren stage en afstuderen</i></p>";
+
                     try
                     {
                         emailer.SendEmail();

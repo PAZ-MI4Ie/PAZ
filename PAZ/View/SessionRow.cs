@@ -6,7 +6,7 @@ using PAZ.Model;
 
 namespace PAZ.View
 {
-    class SessionRow
+    public class SessionRow
     {
         public SessionRow(Session session)
         {

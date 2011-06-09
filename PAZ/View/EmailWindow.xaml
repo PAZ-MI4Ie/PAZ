@@ -6,7 +6,14 @@
         <TabControl HorizontalAlignment="Left" Name="tcGeadresseerden" VerticalAlignment="Top" Width="662" UseLayoutRounding="False" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Height="441" Margin="12,12,0,0">
             <TabItem Header="Bericht aanpassen" Name="tiBericht">
                 <Grid>
-                    <TextBox Height="270" HorizontalAlignment="Left" Margin="108,66.723,0,0" Name="tbBody" VerticalAlignment="Top" Width="385" Text="&lt;p&gt;Blah blah secret base&lt;/p&gt;" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" />
+                    <TextBox HorizontalAlignment="Left" Margin="108,109.723,0,209.277" Name="tbInformatie" Width="385" Text="" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" />
+                    <TextBox AcceptsReturn="True" AcceptsTab="True" Height="68.723" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="108,35,0,0" Name="tbInleiding" Text="" TextWrapping="Wrap" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto" Width="385" />
+                    <TextBox AcceptsReturn="True" AcceptsTab="True" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="108,204.446,0,126.277" Name="tbAfsluiting" Text="" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Width="385" />
+                    <Label Content="Inleiding:" Height="28" HorizontalAlignment="Left" Margin="16.25,35,0,0" Name="lblInleiding" VerticalAlignment="Top" FlowDirection="LeftToRight" HorizontalContentAlignment="Right" Width="85.75" />
+                    <Label Content="Informatie:" FlowDirection="LeftToRight" Height="28" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="16.25,109.723,0,0" Name="lblInformatie" VerticalAlignment="Top" Width="85.75" />
+                    <Label Content="Afsluiting:" FlowDirection="LeftToRight" Height="28" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="16.25,204.446,0,0" Name="lblAfsluiting" VerticalAlignment="Top" Width="85.75" />
+                    <TextBox AcceptsReturn="True" AcceptsTab="True" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="108,287.446,0,67.999" Name="tbAfzenders" Text="" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Width="385" />
+                    <Label Content="Afzenders:" FlowDirection="LeftToRight" Height="28" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="16.25,287.446,0,0" Name="lblAfzenders" VerticalAlignment="Top" Width="85.75" />
                 </Grid>
             </TabItem>
             <TabItem Header="Geadresseerden selecteren " Name="tiGeadresseerden">

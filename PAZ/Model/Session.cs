@@ -64,6 +64,9 @@ namespace PAZ.Model
             }
         }
 
+                  // Dit is de reden dat de PDF brief export niet meer werkte tijdens de presentatie, er wordt dan geen
+                  // array aangemaakt waardoor de export een null array kreeg, Teun wil je het regelen dat deze
+                  // constructor niet meer nodig is.
 		public Session() { }
 
 		public Session(Daytime daytime, Classroom classroom, Pair pair, Teacher teacher1, Teacher teacher2, Expert expert1, Expert expert2)

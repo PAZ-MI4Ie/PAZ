@@ -51,7 +51,8 @@ namespace PAZ
 
                 Teacher[] teachers = sessionModel.GetTeachers();
                 for (int i = 0; i < teachers.Length; ++i)
-                    _teachers.Add(teachers[i]);
+                    if(teachers[i] != null)
+                        _teachers.Add(teachers[i]);
 
                 _students.Add(sessionModel.Pair.Student1);
                 _students.Add(sessionModel.Pair.Student2);

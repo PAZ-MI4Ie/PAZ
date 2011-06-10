@@ -51,5 +51,35 @@ namespace PAZMySQL
             this._db.CloseConnection();
             return result;
         }
+
+		public void Save(Expert expert)
+		{
+			Boolean insert = true;
+			if (expert.Id != 0)
+			{
+				insert = false;
+			}
+			base.Save(expert);
+			this._db.OpenConnection();
+			MySqlCommand command = this._db.CreateCommand();
+			if (insert)
+			{
+				command.CommandText = "INSERT INTO expert (user_id, company, address, postcode, telephone, city) VALUES " +
+				"(?user_id, ?company, ?address, ?postcode, ?telephone, ?city)";
+			}
+			else
+			{
+				command.CommandText = "UPDATE student (company, address, postcode, telephone, city) VALUES " +
+				"(?company, ?address, ?postcode, ?telephone, ?city) WHERE user_id = ?user_id";
+			}
+			command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.Int32)).Value = expert.Id;
+			command.Parameters.Add(new MySqlParameter("?company", MySqlDbType.String)).Value = expert.Company;
+			command.Parameters.Add(new MySqlParameter("?address", MySqlDbType.String)).Value = expert.Address;
+			command.Parameters.Add(new MySqlParameter("?postcode", MySqlDbType.String)).Value = expert.Postcode;
+			command.Parameters.Add(new MySqlParameter("?telephone", MySqlDbType.String)).Value = expert.Telephone;
+			command.Parameters.Add(new MySqlParameter("?city", MySqlDbType.String)).Value = expert.City;
+			this._db.ExecuteCommand(command);
+			this._db.CloseConnection();
+		}
     }
 }

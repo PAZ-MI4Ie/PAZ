@@ -57,7 +57,7 @@ namespace PAZ
             _classroomMapper = new ClassroomMapper(_db);
             _pairMapper = new PairMapper(_db);
             _userMapper = new UserMapper(_db);
-            _classroomMapper = new ClassroomMapper(_db);
+			_expertMapper = new ExpertMapper(_db);
 
             SessionMapper sessionmapper = new SessionMapper(_db);
 			Console.WriteLine(sessionmapper.FindAll());
@@ -702,6 +702,265 @@ namespace PAZ
             else
                 MessageBox.Show("Er is iets mis gegaan met het opslaan.");
         }
+
+		private void onBegeleiderAddClicked(object sender, RoutedEventArgs e)
+		{
+			//Use this for input errors
+			bool hasInputError = false;
+
+
+			//Check first name
+			if (textBoxBegeleiderVoornaam.Text.Equals(String.Empty))
+			{
+				textBoxBegeleiderVoornaam.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderVoornaam.BorderBrush = Brushes.Gray;
+			}
+
+			//Check surname
+			if (textBoxBegeleiderAchternaam.Text.Equals(String.Empty))
+			{
+				textBoxBegeleiderAchternaam.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderAchternaam.BorderBrush = Brushes.Gray;
+			}
+
+			//Check email adress
+			if (textBoxBegeleiderEmail.Text.Equals(String.Empty))
+			{
+				textBoxBegeleiderEmail.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderEmail.BorderBrush = Brushes.Gray;
+			}
+			if (!textBoxBegeleiderEmail.Text.IsValidEmailAddress())
+			{
+				textBoxBegeleiderEmail.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderEmail.BorderBrush = Brushes.Gray;
+			}
+
+			//Check company
+			if (textBoxBegeleiderBedrijf.Text.Equals(String.Empty))
+			{
+				textBoxBegeleiderBedrijf.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderBedrijf.BorderBrush = Brushes.Gray;
+			}
+
+			//Check Adres
+			if (textBoxBegeleiderAdres.Text.Equals(String.Empty))
+			{
+				textBoxBegeleiderAdres.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderAdres.BorderBrush = Brushes.Gray;
+			}
+
+			//Check Postcode
+			if (textBoxBegeleiderPostcode.Text.Equals(String.Empty))
+			{
+				textBoxBegeleiderPostcode.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderPostcode.BorderBrush = Brushes.Gray;
+			}
+
+			//Check telephone
+			if (textBoxBegeleiderTelefoonnummer.Text.Equals(String.Empty))
+			{
+				textBoxBegeleiderTelefoonnummer.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderTelefoonnummer.BorderBrush = Brushes.Gray;
+			}
+
+			//Check city
+			if (textBoxBegeleiderCity.Text.Equals(String.Empty))
+			{
+				textBoxBegeleiderCity.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderCity.BorderBrush = Brushes.Gray;
+			}
+
+			if (hasInputError == false)
+			{
+				//Create expert object and add values
+				Expert newExpert = new Expert();
+				newExpert.Firstname = textBoxBegeleiderVoornaam.Text;
+				newExpert.Surname = textBoxBegeleiderAchternaam.Text;
+				newExpert.Email = textBoxBegeleiderBedrijf.Text;
+				newExpert.Company = textBoxBegeleiderBedrijf.Text;
+				newExpert.Address = textBoxBegeleiderAdres.Text;
+				newExpert.Postcode = textBoxBegeleiderPostcode.Text;
+				newExpert.Telephone = textBoxBegeleiderTelefoonnummer.Text;
+				newExpert.City = textBoxBegeleiderCity.Text;
+
+				//Send to the database
+				_expertMapper.Save(newExpert);
+				MessageBox.Show("Begeleider toegevoegd");
+				textBoxBegeleiderVoornaam.Text = "";
+				textBoxBegeleiderAchternaam.Text = "";
+				textBoxBegeleiderEmail.Text = "";
+				textBoxBegeleiderBedrijf.Text = "";
+				textBoxBegeleiderAdres.Text = "";
+				textBoxBegeleiderPostcode.Text = "";
+				textBoxBegeleiderTelefoonnummer.Text = "";
+				textBoxBegeleiderCity.Text = "";
+			}
+		}
+
+		private void onExpertAddClicked(object sender, RoutedEventArgs e)
+		{
+			//Use this for input errors
+			bool hasInputError = false;
+
+			//Check first name
+			if (textBoxExternVoornaam.Text.Equals(String.Empty))
+			{
+				textBoxExternVoornaam.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternVoornaam.BorderBrush = Brushes.Gray;
+			}
+
+			//Check surname
+			if (textBoxExternAchternaam.Text.Equals(String.Empty))
+			{
+				textBoxExternAchternaam.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternAchternaam.BorderBrush = Brushes.Gray;
+			}
+
+			//Check email adress
+			if (textBoxExternEmail.Text.Equals(String.Empty))
+			{
+				textBoxExternEmail.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternEmail.BorderBrush = Brushes.Gray;
+			}
+			if (!textBoxExternEmail.Text.IsValidEmailAddress())
+			{
+				textBoxExternEmail.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternEmail.BorderBrush = Brushes.Gray;
+			}
+
+			//Check company
+			if (textBoxExternBedrijf.Text.Equals(String.Empty))
+			{
+				textBoxExternBedrijf.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternBedrijf.BorderBrush = Brushes.Gray;
+			}
+
+			//Check Adres
+			if (textBoxExternAdres.Text.Equals(String.Empty))
+			{
+				textBoxExternAdres.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternAdres.BorderBrush = Brushes.Gray;
+			}
+
+			//Check Postcode
+			if (textBoxExternPostcode.Text.Equals(String.Empty))
+			{
+				textBoxExternPostcode.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternPostcode.BorderBrush = Brushes.Gray;
+			}
+
+			//Check telephone
+			if (textBoxExternTelefoonnummer.Text.Equals(String.Empty))
+			{
+				textBoxExternTelefoonnummer.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternTelefoonnummer.BorderBrush = Brushes.Gray;
+			}
+
+			//Check city
+			if (textBoxExpertCity.Text.Equals(String.Empty))
+			{
+				textBoxExpertCity.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExpertCity.BorderBrush = Brushes.Gray;
+			}
+
+			if (hasInputError == false)
+			{
+				//Create expert object and add values
+				Expert newExpert = new Expert();
+				newExpert.Firstname = textBoxExternVoornaam.Text;
+				newExpert.Surname = textBoxExternAchternaam.Text;
+				newExpert.Email = textBoxExternEmail.Text;
+				newExpert.Company = textBoxExternBedrijf.Text;
+				newExpert.Address = textBoxExternAdres.Text;
+				newExpert.Postcode = textBoxExternPostcode.Text;
+				newExpert.Telephone = textBoxExternTelefoonnummer.Text;
+				newExpert.City = textBoxExpertCity.Text;
+
+				//Send to the database
+				_expertMapper.Save(newExpert);
+				MessageBox.Show("Expert toegevoegd");
+				textBoxExternVoornaam.Text = "";
+				textBoxExternAchternaam.Text = "";
+				textBoxExternEmail.Text = "";
+				textBoxExternBedrijf.Text = "";
+				textBoxExternAdres.Text = "";
+				textBoxExternPostcode.Text = "";
+				textBoxExternTelefoonnummer.Text = "";
+				textBoxExpertCity.Text = "";
+			}
+		}
     }
 
 	public static class ValidatorExtensions

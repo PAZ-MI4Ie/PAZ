@@ -76,9 +76,9 @@
                             <Label Content="Geblokkeerde dag" Height="28" HorizontalAlignment="Left" Margin="24,139,0,0" Name="labelBlockedDay" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <DatePicker Height="23" HorizontalAlignment="Left" Margin="293,141,0,0" Name="datePickerBlockedDay" VerticalAlignment="Top" Width="246" Foreground="#FF595959" SelectedDateFormat="Short" />
 
-                            <Label Content="Leraar #1" Height="28" HorizontalAlignment="Left" Margin="24,179,0,0" Name="labelLeraar1" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <Label Content="Docent" Height="28" HorizontalAlignment="Left" Margin="24,179,0,0" Name="labelLeraar1" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <ComboBox Height="23" HorizontalAlignment="Left" Margin="293,181,0,0" Name="comboBoxSelecteerLeraar1" Background="#FFEFEFEF" Foreground="#FF595959" VerticalAlignment="Top" Width="246" SelectedIndex="0">
-                                <ComboBoxItem Content="Selecteer een leraar" />
+                                <ComboBoxItem Content="Selecteer een docent" />
                                 <ComboBoxItem Content="Jan Jansen" />
                                 <ComboBoxItem Content="Piet groothuizen" />
                                 <ComboBoxItem Content="Abraham Groot" />
@@ -136,8 +136,11 @@
                             <Label Content="Email" Height="28" HorizontalAlignment="Left" Margin="24,259,0,0" Name="labelBegeleiderEmail" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,261,0,0" Name="textBoxBegeleiderEmail" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
+                            <Label Content="Stad" Height="28" HorizontalAlignment="Left" Margin="24,301,0,0" Name="labelBegeleiderCity" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,301,0,0" Name="textBoxBegeleiderCity" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
-                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,301,0,0" Name="buttonBegeleider" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" />
+
+                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,351,0,0" Name="buttonBegeleider" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onBegeleiderAddClicked" />
                         </Grid>
                     </GroupBox>
 
@@ -150,7 +153,7 @@
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,21,0,0" Name="textBoxExternVoornaam" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
                             <Label Content="Achternaam" Height="28" HorizontalAlignment="Left" Margin="24,59,0,0" Name="labelExternAchternaam" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
-                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,61,0,0" Name="textBoxExternrAchternaam" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,61,0,0" Name="textBoxExternAchternaam" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
                             <Label Content="Bedrijf" Height="28" HorizontalAlignment="Left" Margin="24,99,0,0" Name="labelExternBedrijf" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,101,0,0" Name="textBoxExternBedrijf" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
@@ -166,16 +169,20 @@
 
                             <Label Content="Email" Height="28" HorizontalAlignment="Left" Margin="24,259,0,0" Name="labelExternEmail" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,261,0,0" Name="textBoxExternEmail" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+                            
+                            <Label Content="Stad" Height="28" HorizontalAlignment="Left" Margin="24,301,0,0" Name="labelExpertCity" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,301,0,0" Name="textBoxExpertCity" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
 
-                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,301,0,0" Name="buttonExtern" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" />
+
+                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,341,0,0" Name="buttonExtern" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onExpertAddClicked" />
                         </Grid>
                     </GroupBox>
 
 
-                    <!-- LERAAR -->
+                    <!-- DOCENT -->
                     <!-- groupboxes, bij default hidden-->
-                    <GroupBox Header="Leraar gegevens" Height="397" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxLeraarGegevens" VerticalAlignment="Top" Width="757" Visibility="Hidden">
+                    <GroupBox Header="Docent gegevens" Height="397" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxLeraarGegevens" VerticalAlignment="Top" Width="757" Visibility="Hidden">
                         <Grid Height="376" Visibility="Visible">
                             <Label Content="Voornaam" Height="28" HorizontalAlignment="Left" Margin="24,19,0,0" Name="labelLeraarVoornaam" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,21,0,0" Name="textBoxLeraarVoornaam" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>

@@ -632,6 +632,17 @@ namespace PAZ
 				sessionSpread = Teacher.session_spread.ANY;
 			}
 
+			int teacher_blocktype_selected = 1;
+
+			if (teacher_blocktype_soft.IsChecked == true)
+			{
+				teacher_blocktype_selected = 0;
+			}
+			else if (teacher_blocktype_hard.IsChecked == true)
+			{
+				teacher_blocktype_selected = 1;
+			}
+
 			if (hasInputError == false)
 			{
 				//Create teacher object and add values
@@ -641,10 +652,19 @@ namespace PAZ
 				newTeacher.Email = EmailLeraar1.Text;
 				newTeacher.Session_spread = sessionSpread;
 				newTeacher.blockedTimeslot = datePickerBlockedDay1.SelectedDate.Value;
+				newTeacher.BlockType = teacher_blocktype_selected;
 
 				//Send to the database
 				_teacherMapper.Save(newTeacher);
 				MessageBox.Show("Leraar toegevoegd");
+				textBoxLeraarVoornaam.Text = "";
+				textLeraarAchternaam.Text = "";
+				EmailLeraar1.Text = "";
+				datePickerBlockedDay1.Text = "";
+				sessionVerspreid.IsChecked = false;
+				sessionDichtBijElkaar.IsChecked = false;
+				teacher_blocktype_soft.IsChecked = false;
+				teacher_blocktype_hard.IsChecked = false;
 			}
 		}
 

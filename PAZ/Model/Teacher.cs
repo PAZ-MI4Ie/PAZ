@@ -7,10 +7,11 @@ namespace PAZ.Model
 {
     public class Teacher : User
     {
-        public enum session_spread {ANY,CLOSE,FAR};
+		public enum session_spread { ANY, CLOSE, FAR };
 
 		public session_spread Session_spread { get; set; }
 		public DateTime blockedTimeslot { get; set; }
+		public int BlockType { get; set; }
 
 		public Teacher()
 		{

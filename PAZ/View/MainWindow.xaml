@@ -56,7 +56,6 @@
                                 <ComboBoxItem Content="Bedrijfsbegeleider" />
                                 <ComboBoxItem Content="Externe Deskundige" />
                                 <ComboBoxItem Content="Leraren" />
-                                <ComboBoxItem Content="Hidde" />
                             </ComboBox>
                             <TextBlock Height="23" HorizontalAlignment="Left" Margin="24,15,0,0" Name="textBlockSelecteerType" Text="Wat wilt u toevoegen?" Foreground="#FF5E5353" FontStyle="Italic" VerticalAlignment="Top" Width="152" TextWrapping="Wrap" />
                         </Grid>
@@ -86,8 +85,8 @@
                                 <ComboBoxItem Content="Chris Hansen" />
                             </ComboBox>
 
-                            <Label Content="Leraar #2" Height="28" HorizontalAlignment="Left" Margin="24,219,0,0" Name="labelLeraar2" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
-                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="293,221,0,0" Name="comboBoxSelecteerLeraar2" Background="#FFEFEFEF" Foreground="#FF595959" VerticalAlignment="Top" Width="246" SelectedIndex="0">
+                            <Label Content="Stage Begeleider" Height="28" HorizontalAlignment="Left" Margin="24,219,0,0" Name="labelLeraar2" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="293,221,0,0" Name="comboBoxSelecteerstageBegeleider" Background="#FFEFEFEF" Foreground="#FF595959" VerticalAlignment="Top" Width="246" SelectedIndex="0">
                                 <ComboBoxItem Content="Selecteer een leraar" />
                                 <ComboBoxItem Content="Jan Jansen" />
                                 <ComboBoxItem Content="Piet groothuizen" />
@@ -194,8 +193,12 @@
                             <Label Content="Spreiding" Height="28" HorizontalAlignment="Left" Margin="24,189,0,0" Name="Spreiding" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <RadioButton GroupName="teacher_sessionspread" Height="23" Content="Verspreid" Margin="93,189,0,0" Name="sessionVerspreid" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
                             <RadioButton GroupName="teacher_sessionspread" Height="23" Content="Dicht bij elkaar" Margin="390,189,0,0" Name="sessionDichtBijElkaar" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
+                            
+                            <Label Content="Type Blokkade" Height="28" HorizontalAlignment="Left" Margin="24,240,0,0" Name="TypeBlock" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <RadioButton GroupName="teacher_blocktype" Height="23" Content="Zacht" Margin="93,240,0,0" Name="teacher_blocktype_soft" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
+                            <RadioButton GroupName="teacher_blocktype" Height="23" Content="Hard" Margin="390,240,0,0" Name="teacher_blocktype_hard" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
 
-                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,229,0,0" Name="buttonLeraar" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onTeacherAddClicked" />
+                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,301,0,0" Name="buttonLeraar" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onTeacherAddClicked" />
                         
                         </Grid>
                     </GroupBox>

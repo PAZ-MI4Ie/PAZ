@@ -1002,6 +1002,109 @@ namespace PAZ
 				comboBoxSelecteerLeraar1.Items.Add(comboboxItem);
 			}
 		}
+
+		private void onStudentAddClicked(object sender, RoutedEventArgs e)
+		{
+			//Use this for input errors
+			bool hasInputError = false;
+			
+			//Check student number
+			if (textBoxStudentennummer.Text.Equals(String.Empty))
+			{
+				textBoxStudentennummer.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxStudentennummer.BorderBrush = Brushes.Gray;
+			}
+
+			//Check first name
+			if (textBoxExternVoornaam.Text.Equals(String.Empty))
+			{
+				textBoxExternVoornaam.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternVoornaam.BorderBrush = Brushes.Gray;
+			}
+
+			//Check surname
+			if (textBoxExternAchternaam.Text.Equals(String.Empty))
+			{
+				textBoxExternAchternaam.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternAchternaam.BorderBrush = Brushes.Gray;
+			}
+
+			//Check email adress
+			if (textBoxExternEmail.Text.Equals(String.Empty))
+			{
+				textBoxExternEmail.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternEmail.BorderBrush = Brushes.Gray;
+			}
+			if (!textBoxExternEmail.Text.IsValidEmailAddress())
+			{
+				textBoxExternEmail.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternEmail.BorderBrush = Brushes.Gray;
+			}
+
+
+			//Used for date validation
+			DateTime dateValue;
+
+			//Check blocked timeslot
+			if (datePickerBlockedDay.Text.Equals(String.Empty))
+			{
+				datePickerBlockedDay.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else if (!DateTime.TryParse(datePickerBlockedDay.Text, out dateValue))
+			{
+				datePickerBlockedDay.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				datePickerBlockedDay.BorderBrush = Brushes.Gray;
+				hasInputError = false;
+			}
+
+			if (hasInputError == false)
+			{
+				//Create expert object and add values
+				Student newStudent = new Student();
+				newStudent.Firstname = textBoxVoornaam.Text;
+				newStudent.Surname = textBoxAchternaam.Text;
+				newStudent.Email = EmailLeering1.Text;
+				newStudent.Studentnumber = Convert.ToInt32(textBoxStudentennummer.Text);
+				//TODO: Blocked Timeslots
+				//TODO: Teachers
+				//TODO: Experts
+				//TODO: Study
+				//TODO: Pairing?
+
+				//Send to the database
+				_studentMapper.Save(newStudent);
+				MessageBox.Show("Student toegevoegd");
+				textBoxVoornaam.Text = "";
+				textBoxAchternaam.Text = "";
+				EmailLeering1.Text = "";
+				textBoxStudentennummer.Text = "";
+			}
+		}
     }
 
 	public static class ValidatorExtensions

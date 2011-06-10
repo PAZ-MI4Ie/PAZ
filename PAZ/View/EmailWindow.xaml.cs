@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using PAZMySQL;
+using Ini;
 using PAZ.Model;
 using PAZ.View;
 
@@ -19,7 +13,7 @@ namespace PAZ
     /**
     * In deze klassen kun je de geadresseerden bepalen(docenten en studenten).
     * 
-    * Auteur: Gökhan 
+    * Auteur: Gökhan en Yorg 
     */
     public partial class EmailWindow : Window
     {
@@ -31,14 +25,19 @@ namespace PAZ
         private List<CheckBox> _studentBoxes;
         private List<CheckBox> _teacherBoxes;
 
-        public EmailWindow(List<SessionRow> sessions)
+        private string _selectedReceiverEmail = string.Empty;
+
+        private IniFile _ini;
+
+        public EmailWindow(List<SessionRow> sessions, IniFile ini)
         {
             InitializeComponent();
 
-            tbInleiding.Text += "Hierbij ontvangt u de tijd(en) waarop u aanwezig moet zijn voor de afstudeerzitting(en)";
-            tbInformatie.Text += "In het afstudeerlokaal wordt voor aanvang van de zitting koffie en thee geserveerd.";
-            tbAfsluiting.Text += "Voor eventuele vragen kunt u zich wenden tot Lilian Reuken, telefoonnummer (073) 629 5256 of Regien Blom telefoonnummer (073) 629 54 55.";
-            tbAfzenders.Text += "Lilian Reuken en Regien Blom";
+            tbAfzender.Text = ini["EMAILBERICHT"]["afzender"];
+            tbInleiding.Text += ini["EMAILBERICHT"]["inleiding"];
+            tbInformatie.Text += ini["EMAILBERICHT"]["informatie"];
+            tbAfsluiting.Text += ini["EMAILBERICHT"]["afsluiting"];
+            tbAfzenders.Text += ini["EMAILBERICHT"]["afzenders"];
 
             _teachers = new List<Teacher>();
             _students = new List<Student>();
@@ -59,7 +58,9 @@ namespace PAZ
             }
 
             StudentenToevoegen();
-            DocentenToevoegen();          
+            DocentenToevoegen();
+
+            _ini = ini;
         }
 
 
@@ -207,10 +208,11 @@ namespace PAZ
 
                 emailer.User = "paz.planner@gmail.com";     // het gmail-adres
                 emailer.Password = "Paz.planner01";         // het gmail-wachtwoord            
-                emailer.From = "paz.planner@gmail.com";     // de afzender = gmail-adres
+                emailer.From = emailer.User;                // de afzender
+                emailer.DisplayName = tbAfzender.Text;      // de naam van de afzender zoals die getoond wordt
                 emailer.Host = "smtp.gmail.com";            // de gmail-server
                 emailer.Port = 587;                         // het gmail-server poortnummer
-                emailer.Subject = "PAZ";                    // het onderwerp van e-mailbericht
+                emailer.Subject = "Afstudeerzitting(en)";                    // het onderwerp van e-mailbericht
                 
                 foreach (User user in _receivers)
                 {
@@ -218,55 +220,7 @@ namespace PAZ
                     //emailer.To = user.Email;  // let op: e-mailadressen in db zijn fake!
                     emailer.To = "ymja.kuijs@student.avans.nl";   //(alleen bedoelt voor testdoeleinden)
 
-                    // inhoud van e-mail
-                    emailer.Body += "<p>Beste " + user.Firstname + " " + user.Surname + ",</p>";
-
-                    emailer.Body += "<p>";
-                    emailer.Body += tbInleiding.Text;
-                    emailer.Body += "</p>";
-
-                    emailer.Body += "<p>De zittingen vinden plaats op: <br />";
-
-                    for(int i = 0; i < _sessions.Count; ++i)
-                    {
-                        Session sessionModel = _sessions[i].GetSessionModel();
-
-                        List<User> users = new List<User>();
-                        Teacher[] teachers = sessionModel.GetTeachers();
-                        for (int j = 0; j < teachers.Length; ++j)
-                            users.Add(teachers[j]);
-
-                        users.Add(sessionModel.Pair.Student1);
-                        users.Add(sessionModel.Pair.Student2);
-
-                        foreach (User sessionUser in users)
-                        {
-                            if (sessionUser == user)
-                            {
-                                emailer.Body += "Afstudeerzitting";
-                                if (user is Teacher)
-                                    emailer.Body += " " + (i + 1);
-
-                                emailer.Body += " is gepland op, " + _sessions[i].Datum + " om " + sessionModel.Daytime.Time + ", in lokaal " + sessionModel.Classroom.Room_number + "<br />";
-                            }
-                        }
-                    }
-
-                    emailer.Body += "</p>";
-
-                    emailer.Body += "<p>";
-                    emailer.Body += tbInformatie.Text;
-                    emailer.Body += "</p>";
-
-                    emailer.Body += "<p>";
-                    emailer.Body += tbAfsluiting.Text;
-                    emailer.Body += "</p>";
-
-                    emailer.Body += "<p>Met vriendelijke groet, </p>";
-
-                    emailer.Body += "<p>";
-                    emailer.Body += tbAfzenders.Text;
-                    emailer.Body += "<br /><i>Coördinatoren stage en afstuderen</i></p>";
+                    emailer.Body = CreateEmailBody(user);
 
                     try
                     {
@@ -283,6 +237,73 @@ namespace PAZ
         }
 
         /**
+         * Het doel van deze functie is om een email body te maken aan de hand van een receiver
+         * Input: receiver de ontvanger waarvoor de email gemaakt wordt
+         * Return: de gehele body
+         * Auteur: Gökhan en Yorg 
+         */
+        private string CreateEmailBody(User receiver)
+        {
+            string emailBody = "<html> \n <head> \n <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'> \n </head> \n <body> \n";
+                
+            // Inhoud van de brief
+            emailBody += "<p>Beste " + receiver.Firstname + " " + receiver.Surname + ",</p>"; ;
+
+            int zittingNummer = 0;
+            for (int i = 0; i < _sessions.Count; ++i)
+            {
+                Session sessionModel = _sessions[i].GetSessionModel();
+
+                List<User> users = new List<User>();
+                Teacher[] teachers = sessionModel.GetTeachers();
+                for (int j = 0; j < teachers.Length; ++j)
+                    users.Add(teachers[j]);
+
+                users.Add(sessionModel.Pair.Student1);
+                users.Add(sessionModel.Pair.Student2);
+
+                foreach (User sessionUser in users)
+                {
+                    if (sessionUser == receiver)
+                    {
+                        if(receiver is Student)
+                            emailBody += "Je Afstudeerzitting";
+                        else if (receiver is Teacher)
+                        {
+                            emailBody += "<p>";
+                            emailBody += tbInleiding.Text;
+                            emailBody += "</p>";
+
+                            emailBody += "<p>U neemt deel aan de volgende zittingen: <br /> Zitting " + (++zittingNummer);
+                        }
+
+                        emailBody += " is gepland op, " + _sessions[i].Datum + " om " + sessionModel.Daytime.Time + ", in lokaal " + sessionModel.Classroom.Room_number + "<br />";
+                    }
+                }
+            }
+
+            emailBody += "</p>";
+
+            emailBody += "<p>";
+            emailBody += tbInformatie.Text;
+            emailBody += "</p>";
+
+            emailBody += "<p>";
+            emailBody += tbAfsluiting.Text;
+            emailBody += "</p>";
+
+            emailBody += "<p>Met vriendelijke groet, </p>";
+
+            emailBody += "<p>";
+            emailBody += tbAfzenders.Text;
+            emailBody += "<br /><i>Coördinatoren stage en afstuderen</i></p>";
+
+            emailBody += "</body> \n </html>";
+
+            return emailBody;
+        }
+
+        /**
         * Sluit het huidige scherm
         * 
         * Auteur: Gökhan 
@@ -292,25 +313,68 @@ namespace PAZ
             this.Close();
         }
 
-        /**
-        * Update de verzendlijst wanneer er op de tabitem 'verzendlijst' gefocused wordt
-        * 
-        * Auteur: Gökhan 
-        */
-        private void TabItem_GotFocus(object sender, RoutedEventArgs e)
+        private void tiPreview_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            listBoxReceivers.Items.Clear();
-            lblAantalReceivers.Content = "Aantal: " + _receivers.Count;
-
-            if (_receivers.Count == 0)
-            {
-                listBoxReceivers.Items.Add("Lijst is leeg");
+            if (!(e.Source is TabItem))
                 return;
-            }
-     
+
+            HandleLists();
+        }
+
+        private void tiPreview_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (!(e.Source is TabItem))
+                return;
+
+            HandleLists();
+        }
+
+        /**
+        * Update de verzendlijsten wanneer er op de tabitem 'E-mail voorbeeld' geklikt wordt 
+        * Auteur: Gökhan en Yorg
+        */
+        private void HandleLists()
+        {
+            listBoxStudentReceivers.Items.Clear();
+            listBoxTeacherReceivers.Items.Clear();
+            lblAantalReceivers.Content = "Totaal aantal geadresseerden: " + _receivers.Count;
+
+            bool studentsEmpty = true;
+            bool teachersEmpty = true;
+
+            // Controleer of er students of teachers in de receivers lijst zitten, afhankelijk hiervan moeten de apparte geadresseerden lijsten hun status aangeven.
             foreach (User user in _receivers)
             {
-                listBoxReceivers.Items.Add(user.Firstname + " " + user.Surname + "<" + user.Email + "> type: " + user.User_type);
+                if (user is Student)
+                    studentsEmpty = false;
+                else
+                    teachersEmpty = false;
+            }
+
+            if (studentsEmpty)
+            {
+                listBoxStudentReceivers.Items.Add("Lijst is leeg");
+                listBoxTeacherReceivers.SelectedIndex = 0;
+            }
+            else
+                listBoxStudentReceivers.SelectedIndex = 0;
+
+            if (teachersEmpty)
+                listBoxTeacherReceivers.Items.Add("Lijst is leeg");
+
+            // Als de gehele receivers lijst leeg is dan hier stoppen
+            if (studentsEmpty && teachersEmpty)
+                return;
+
+            ListBox listBox = null;
+            foreach (User user in _receivers)
+            {
+                if (user is Student)
+                    listBox = listBoxStudentReceivers;
+                else
+                    listBox = listBoxTeacherReceivers;
+
+                listBox.Items.Add(user.Email);
             }
         }
 
@@ -355,6 +419,65 @@ namespace PAZ
         {
             foreach (CheckBox cb in checkBoxes)
                 cb.IsChecked = false;
+        }
+
+        private void listBoxStudentReceivers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int index = listBoxStudentReceivers.SelectedIndex;
+
+            if (index < 0)
+                return;
+
+            // Deselecteer de docenten als er een student geselecteerd wordt
+            listBoxTeacherReceivers.SelectedIndex = -1;
+
+            _selectedReceiverEmail = listBoxStudentReceivers.Items[index].ToString();
+            UpdatePreview();
+        }
+
+        private void listBoxTeacherReceivers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int index = listBoxTeacherReceivers.SelectedIndex;
+
+            if (index < 0)
+                return;
+
+            // Deselecteer de studenten als er een docent geselecteerd wordt
+            listBoxStudentReceivers.SelectedIndex = -1;
+
+            _selectedReceiverEmail = listBoxTeacherReceivers.Items[index].ToString();
+            UpdatePreview();
+        }
+
+        /** Update het preview scherm om het voorbeeld te laten zien voor de gekozen persoon
+         * Auteur: Gökhan en Yorg 
+         */
+        private void UpdatePreview()
+        {
+            if (_receivers.Count == 0)
+                return;
+
+            User selectedReceiver = _receivers[0];
+            foreach (User user in _receivers)
+            {
+                if (user.Email == _selectedReceiverEmail)
+                {
+                    selectedReceiver = user;
+                    break;
+                }
+            }
+
+            wbPreview.NavigateToString(CreateEmailBody(selectedReceiver));
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            _ini["EMAILBERICHT"]["afzender"] = tbAfzender.Text;
+            _ini["EMAILBERICHT"]["inleiding"] = tbInleiding.Text;
+            _ini["EMAILBERICHT"]["informatie"] = tbInformatie.Text;
+            _ini["EMAILBERICHT"]["afsluiting"] = tbAfsluiting.Text;
+            _ini["EMAILBERICHT"]["afzenders"] = tbAfzenders.Text;
+            _ini.Save();
         }
     }
 }

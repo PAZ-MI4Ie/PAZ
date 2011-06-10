@@ -33,7 +33,7 @@ namespace PAZ
         bool match;
         private PDFExport _pdfExport;
         private UserMapper _userMapper;
-        private IniFile ini;
+        private IniFile _ini;
 		private ClassroomMapper _classroomMapper;
 		private StudentMapper _studentMapper;	
 		private TeacherMapper _teacherMapper;
@@ -250,7 +250,7 @@ namespace PAZ
             // maak object
             _pdfExport = new PDFExport(GridOverzichtList);
 
-            ini = readIni();
+            _ini = readIni();
 
             _classrooms = _classroomMapper.FindAll();
             _pairs = _pairMapper.FindAll();
@@ -274,7 +274,7 @@ namespace PAZ
             _classrooms.Add(room);
             //END TEST CODE
 
-            calendar.createCalendar(ini, _classrooms);
+            calendar.createCalendar(_ini, _classrooms);
             string[] teachers = new string[] { "Marco Huysmans", "Ger Saris" };
             string[] experts = new string[] { "Piet Janssen", "Karel Lessers" };
             //calendar.addSession("2-5-2011", 1, 1, "Jeroen Schipper", "Hidde Jansen", teachers, experts);
@@ -340,7 +340,7 @@ namespace PAZ
 
         private void buttonEmailVersturen_Click(object sender, RoutedEventArgs e)
         {
-            EmailWindow email = new EmailWindow(_master);
+            EmailWindow email = new EmailWindow(_master, _ini);
             email.ShowDialog();
         }
 
@@ -424,6 +424,14 @@ namespace PAZ
                 section.Add("block3", "13:00-14:30");
                 section.Add("block4", "15:00-16:30");
                 ini.Add("TIME", section);
+
+                section = new IniSection();
+                section.Add("afzender", "Avans Planner Systeem");
+                section.Add("inleiding", "Hierbij ontvangt u de tijd(en) waarop u aanwezig moet zijn voor de afstudeerzitting(en)");
+                section.Add("informatie", "In het afstudeerlokaal wordt voor aanvang van de zitting koffie en thee geserveerd.");
+                section.Add("afsluiting", "Voor eventuele vragen kunt u zich wenden tot Lilian Reuken, telefoonnummer (073) 629 5256 of Regien Blom telefoonnummer (073) 629 54 55.");
+                section.Add("afzenders", "Lilian Reuken en Regien Blom");
+                ini.Add("EMAILBERICHT", section);
 
                 ini.Save();
             }
@@ -685,10 +693,10 @@ namespace PAZ
 		}
         private void buttonOptiesOpslaan_Click(object sender, RoutedEventArgs e)
         {
-            ini["DATES"]["startdate"] = textBoxDeadlineStart.Text;
-            ini["DATES"]["enddate"] = textBoxDeadlineEind.Text;
+            _ini["DATES"]["startdate"] = textBoxDeadlineStart.Text;
+            _ini["DATES"]["enddate"] = textBoxDeadlineEind.Text;
 
-            bool isSaved = ini.Save();
+            bool isSaved = _ini.Save();
             if(isSaved)
                 MessageBox.Show("Uw instellingen zijn opgeslagen.");
             else

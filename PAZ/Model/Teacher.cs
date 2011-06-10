@@ -13,6 +13,8 @@ namespace PAZ.Model
 		public DateTime blockedTimeslot { get; set; }
 		public int BlockType { get; set; }
 
+        private static int tempHack = 0;
+
 		public Teacher()
 		{
 			this.User_type = "teacher";
@@ -22,6 +24,7 @@ namespace PAZ.Model
 			: base(surname, firstname)
 		{
 			this.User_type = "teacher";
+            this.Email = "teacher" + (++tempHack) + "@avans.nl";
 		}
     }
 }

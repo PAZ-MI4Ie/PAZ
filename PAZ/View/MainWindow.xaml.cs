@@ -58,6 +58,7 @@ namespace PAZ
             _pairMapper = new PairMapper(_db);
             _userMapper = new UserMapper(_db);
 			_expertMapper = new ExpertMapper(_db);
+			_studentMapper = new StudentMapper(_db);
 
             SessionMapper sessionmapper = new SessionMapper(_db);
 			Console.WriteLine(sessionmapper.FindAll());
@@ -959,6 +960,46 @@ namespace PAZ
 				textBoxExternPostcode.Text = "";
 				textBoxExternTelefoonnummer.Text = "";
 				textBoxExpertCity.Text = "";
+			}
+		}
+
+		private void stageBegeleiderComboBoxMouseDown(object sender, MouseButtonEventArgs e)
+		{
+
+		}
+
+		private void docentComboBoxMouseDown(object sender, MouseButtonEventArgs e)
+		{
+
+		}
+
+		private void stageBegeleiderVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+		{
+			comboBoxSelecteerstageBegeleider.Items.Clear();
+			List<Expert> experts = _expertMapper.FindAll();
+			ComboBoxItem comboboxItem;
+
+			foreach (Expert expert in experts)
+			{
+				comboboxItem = new ComboBoxItem();
+				comboboxItem.Content = expert.Firstname + " " + expert.Surname;
+				comboboxItem.Tag = expert.Id;
+				comboBoxSelecteerstageBegeleider.Items.Add(comboboxItem);
+			}
+		}
+
+		private void docentVisibilityChanged(object sender, DependencyPropertyChangedEventArgs e)
+		{
+			comboBoxSelecteerLeraar1.Items.Clear();
+			List<Teacher> teachers = _teacherMapper.FindAll();
+			ComboBoxItem comboboxItem;
+
+			foreach (Teacher teacher in teachers)
+			{
+				comboboxItem = new ComboBoxItem();
+				comboboxItem.Content = teacher.Firstname + " " + teacher.Surname;
+				comboboxItem.Tag = teacher.Id;
+				comboBoxSelecteerLeraar1.Items.Add(comboboxItem);
 			}
 		}
     }

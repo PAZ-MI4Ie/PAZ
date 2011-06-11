@@ -30,10 +30,6 @@ namespace PAZ
         private List<SessionRow> _master;
         public ICollectionView Sessions { get; private set; }
         bool _match;
-        private MysqlDb _db;
-        private UserMapper _userMapper;
-        private ClassroomMapper _classroomMapper;
-        private PairMapper _pairMapper;
 		private List<Teacher> _teachers;
 		private List<Student> _students;
         private List<Classroom> _classrooms;
@@ -46,13 +42,6 @@ namespace PAZ
             InitializeComponent();
 
             //TEST CODE:
-            _db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
-
-            _userMapper = new UserMapper(_db);
-            _classroomMapper = new ClassroomMapper(_db);
-            _pairMapper = new PairMapper(MysqlDb.GetInstance());
-            _userMapper = new UserMapper(_db);
-            _classroomMapper = new ClassroomMapper(_db);
             _controller = new PAZController(this);
 
             List<Session> tempSessions = _controller.SessionMapper.FindAll();
@@ -263,13 +252,9 @@ namespace PAZ
             //END TEST CODE
 
             calendar.createCalendar(_controller.IniReader, _classrooms);
-            string[] teachers = new string[] { "Marco Huysmans", "Ger Saris" };
-            string[] experts = new string[] { "Piet Janssen", "Karel Lessers" };
-            //calendar.addSession("2-5-2011", 1, 1, "Jeroen Schipper", "Hidde Jansen", teachers, experts);
-            //calendar.addSession("3-5-2011", 1, 1, "Freek Laurijssen", "Ibrahim Önder", teachers, experts);
             calendar.loadAllSessions(tempSessions);
             UnPlannedPairs unPlannedPairs = new UnPlannedPairs();
-            unPlannedPairs.loadAllPairs(_pairMapper);
+            unPlannedPairs.loadAllPairs(_controller.PairMapper);
             unPlannedPairs.Show();
             tabCalender.Focus();
         }
@@ -651,7 +636,7 @@ namespace PAZ
             if (Application.Current.Windows.Count == 1)
             {
                 UnPlannedPairs upp = new UnPlannedPairs();
-                upp.loadAllPairs(_pairMapper);
+                upp.loadAllPairs(_controller.PairMapper);
                 upp.Show();
             }
             else

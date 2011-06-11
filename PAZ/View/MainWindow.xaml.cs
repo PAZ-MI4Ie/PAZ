@@ -53,9 +53,9 @@ namespace PAZ
             //TEST CODE:
             _db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
 
-            _userMapper = new UserMapper(db);
-            _classroomMapper = new ClassroomMapper(db);
-            _pairMapper = new PairMapper(db);
+            _userMapper = new UserMapper(_db);
+            _classroomMapper = new ClassroomMapper(_db);
+            _pairMapper = new PairMapper(MysqlDb.GetInstance());
             _userMapper = new UserMapper(_db);
             _classroomMapper = new ClassroomMapper(_db);
 
@@ -280,8 +280,9 @@ namespace PAZ
             //calendar.addSession("2-5-2011", 1, 1, "Jeroen Schipper", "Hidde Jansen", teachers, experts);
             //calendar.addSession("3-5-2011", 1, 1, "Freek Laurijssen", "Ibrahim Önder", teachers, experts);
             calendar.loadAllSessions(tempSessions);
-            //UnPlannedPairs unPlannedPairs = new UnPlannedPairs(new Model.Mappers.PairMapper(db));
-            //unPlannedPairs.Show();
+            UnPlannedPairs unPlannedPairs = new UnPlannedPairs();
+            unPlannedPairs.loadAllPairs(_pairMapper);
+            unPlannedPairs.Show();
             tabCalender.Focus();
         }
 
@@ -673,6 +674,23 @@ namespace PAZ
                 MessageBox.Show("Uw instellingen zijn opgeslagen.");
             else
                 MessageBox.Show("Er is iets mis gegaan met het opslaan.");
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void btnOpenUnplannedWindow_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Application.Current.Windows.Count == 1)
+            {
+                UnPlannedPairs upp = new UnPlannedPairs();
+                upp.loadAllPairs(_pairMapper);
+                upp.Show();
+            }
+            else
+                MessageBox.Show("Het scherm met de nog niet ingeplande paren staat nog open.");
         }
     }
 

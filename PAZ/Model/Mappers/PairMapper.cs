@@ -52,6 +52,21 @@ namespace PAZ.Model.Mappers
             return result;
         }
 
+        public List<Pair> FindAllUnplanned()
+        {
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "SELECT id, number_of_guests, student1, student2 FROM pair WHERE id NOT IN ( SELECT pair_id FROM SESSION )";
+            MySqlDataReader Reader = this._db.ExecuteCommand(command);
+            List<Pair> result = new List<Pair>();
+            while (Reader.Read())
+            {
+                result.Add(this.ProcessRow(new Pair(), Reader));
+            }
+            this._db.CloseConnection();
+            return result;
+        }
+
         public Dictionary<int, string> FindAttachments(int pairId)
         {
             Dictionary<int, string> result = new Dictionary<int, string>();

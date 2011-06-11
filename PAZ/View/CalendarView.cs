@@ -9,6 +9,7 @@ using System.Windows.Shapes;
 using System.Globalization;
 using System.ComponentModel;
 using PAZ.Model;
+using PAZMySQL;
 
 namespace PAZ.View
 {
@@ -16,10 +17,12 @@ namespace PAZ.View
     {
         //TODO: database data ophalen
         public Dictionary<string, Grid> dateGrids;
+        private static Dictionary<string, Grid> _dateGrids;
         public CalendarView()
             : base()
         {
             dateGrids = new Dictionary<string, Grid>();
+            _dateGrids = dateGrids;
         }
 
         #region Drag & Drop
@@ -32,7 +35,7 @@ namespace PAZ.View
                 int column = GetColumn(session);
                 int row = GetRow(session);
                 CheckAvailability(session, false);
-                DragDropEffects drag = DragDrop.DoDragDrop(session, date + ";" + column + ";" + row + ";\n" + session.Content, DragDropEffects.Move);
+                DragDropEffects drag = DragDrop.DoDragDrop(session, session.Id + ";" + date + ";" + column + ";" + row + ";\n" + session.Content, DragDropEffects.Move);
                 if (drag == DragDropEffects.None)
                     CheckAvailability(null, true);
             }
@@ -52,7 +55,7 @@ namespace PAZ.View
                     {
                         string[] other = dataString.Split(';');
                         string[] users = dataString.Split('\n');
-                        if(removeSession(other[0],Convert.ToInt32(other[1]),Convert.ToInt32(other[2])))
+                        if(removeSession(other[1],Convert.ToInt32(other[2]),Convert.ToInt32(other[3])))
                             addSession(session.Id, GetSessionDate(session), GetColumn(session), GetRow(session), users[1], users[2], new string[] { users[4], users[5] }, new string[] { users[7], users[8] });
                     }
                 }
@@ -60,7 +63,7 @@ namespace PAZ.View
             }
         }
 
-        private void CheckAvailability(Label currentSession, bool dropped)
+        public void CheckAvailability(Label currentSession, bool dropped)
         {
             foreach (KeyValuePair<string, Grid> keyValue in dateGrids)
             {
@@ -87,6 +90,40 @@ namespace PAZ.View
                                 if ((string)session.Content == null)
                                     session.Background = Brushes.LightGreen;
                             }
+                        }
+                        else
+                        {
+                            session.Background = Brushes.White;
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void CheckAvailability(bool dropped)
+        {
+            foreach (KeyValuePair<string, Grid> keyValue in _dateGrids)
+            {
+                Grid dateGrid = keyValue.Value;
+                //foreach User in Session.Pair.Attachment
+                // check for current timeslot(row) & date for blockdays/block_timeslots
+                //if found something
+                // get row of that timeslot
+                // if hardblock
+                //  set background to red
+                // else if !hardblock
+                //  set background to orange
+                // else
+                //  set background to green
+                for (int row = 0; row < 4; row++)
+                {
+                    for (int i = 0; i < 8; i++)
+                    {
+                        Label session = dateGrid.Children[i + (row * 8)] as Label;
+                        if (!dropped)
+                        {
+                            if ((string)session.Content == null)
+                                session.Background = Brushes.LightGreen;
                         }
                         else
                         {
@@ -264,7 +301,39 @@ namespace PAZ.View
             session.Drop -= Session_Drop;
             session.Background = Brushes.White;
             session.ToolTip = "Studenten\n\nDocenten\n\nExperts";
+
+            //Context Menu
+            System.Windows.Controls.ContextMenu editMenu = new ContextMenu();
+            //edit menu
+            MenuItem edit = new MenuItem();
+            edit.Header = "Wijzigen";
+            edit.Click += new RoutedEventHandler(edit_Click);
+            editMenu.Items.Add(edit);
+            //delete menu
+            MenuItem delete = new MenuItem();
+            delete.Header = "Verwijderen";
+            delete.Click += new RoutedEventHandler(delete_Click);
+            editMenu.Items.Add(delete);
+            session.ContextMenu = editMenu;
         }
+
+        void edit_Click(object sender, RoutedEventArgs e)
+        {
+            //Get the label
+            CustomLabel lol = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
+        }
+
+        void delete_Click(object sender, RoutedEventArgs e)
+        {
+            //Get the label
+            CustomLabel lol = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
+            SessionMapper _mapper = new SessionMapper(MysqlDb.GetInstance());
+
+            //TODO: get session and remove from db
+            //TODO: remove session from calendar
+        }
+
+        
 
         public void addSession(Session session)
         {
@@ -289,17 +358,6 @@ namespace PAZ.View
                     return pair.Key;
             }
             return null;
-        }
-
-        public bool removeSession(CustomLabel session)
-        {
-            Grid parent = HasSession(session);
-            if (parent != null)
-            {
-                parent.Children.Remove(session);
-                return true;
-            }
-            return false;
         }
 
         public bool removeSession(string date, int column, int row)

@@ -42,9 +42,9 @@ namespace PAZ.View
                     MessageBox.Show("Er is iets mis gegaan met het verwijderen.");*/
         }
 
-        public void update(List<Model.Pair> pairs)
+        public void loadAllPairs(PairMapper pairmapper)
         {
-            GridPairs.Children.Clear();
+            List<Model.Pair> pairs = pairmapper.FindAllUnplanned();
             int i = 0;
             foreach (Model.Pair pair in pairs)
             {
@@ -54,8 +54,8 @@ namespace PAZ.View
                                  pair.Student2.Firstname + " " + pair.Student2.Surname + "\n\n";
                 string teachers = "";
                 string experts = "";
-                foreach (Model.User attachment in pair.Participants)
-                {
+                foreach (Model.User attachment in pair.Attachments)
+                {//TODO: find out why attachment shows up if there isnt any...
                     string name = attachment.Firstname + " " + attachment.Surname + "\n";
                     if (attachment.User_type == "teacher")
                         teachers += name;
@@ -66,6 +66,7 @@ namespace PAZ.View
                 label.BorderBrush = Brushes.LightGray;
                 label.BorderThickness = new Thickness(2);
                 label.Margin = new Thickness(1, 1, 1, 1);
+                label.MouseMove += new MouseEventHandler(pair_MouseMove);
                 Grid.SetRow(label, i);
                 if (GridPairs.RowDefinitions.Count != pairs.Count)
                 {
@@ -76,6 +77,18 @@ namespace PAZ.View
                 }
                 GridPairs.Children.Add(label);
                 i++;
+            }
+        }
+
+        void pair_MouseMove(object sender, MouseEventArgs e)
+        {
+            CustomLabel pair = sender as CustomLabel;
+            if (pair != null && e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+            {
+                CalendarView.CheckAvailability(false);
+                DragDropEffects drag = DragDrop.DoDragDrop(pair, pair.Id, DragDropEffects.Move);
+                if (drag == DragDropEffects.None)
+                    CalendarView.CheckAvailability(true);
             }
         }
     }

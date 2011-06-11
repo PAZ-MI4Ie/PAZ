@@ -25,7 +25,7 @@ namespace PAZ.View
             InitializeComponent();
         }
 
-        public SessionWindow(bool editing)//, Session session)
+        public SessionWindow(Session session)
         {
             InitializeComponent();
 
@@ -33,16 +33,7 @@ namespace PAZ.View
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            ComboBoxItem selectedItem = (ComboBoxItem)(cbTeacher1.SelectedValue);
-            string teacher1 = selectedItem.Content.ToString();
-            selectedItem = (ComboBoxItem)(cbTeacher2.SelectedValue);
-            string teacher2 = selectedItem.Content.ToString();
-            selectedItem = (ComboBoxItem)(cbExpert1.SelectedValue);
-            string expert1 = selectedItem.Content.ToString();
-            selectedItem = (ComboBoxItem)(cbExpert2.SelectedValue);
-            string expert2 = selectedItem.Content.ToString();
-            names = new string[] { txtStudent1.Text, txtStudent2.Text, teacher1, teacher2, expert1, expert2 };
-            this.Close();
+
         }
 
         public static string[] AddNewSession()

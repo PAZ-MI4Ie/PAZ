@@ -35,6 +35,7 @@ namespace PAZ
 		private StudentMapper _studentMapper;	
 		private TeacherMapper _teacherMapper;
 		private ExpertMapper _expertMapper;
+        private EmailTemplateMapper _emailTemplateMapper;
         private PairMapper _pairMapper;
 		private List<Teacher> _teachers;
 		private List<Student> _students;
@@ -61,6 +62,7 @@ namespace PAZ
             _userMapper = new UserMapper(_db);
 			_expertMapper = new ExpertMapper(_db);
 			_studentMapper = new StudentMapper(_db);
+            _emailTemplateMapper = new EmailTemplateMapper(_db);
 
             SessionMapper sessionmapper = new SessionMapper(_db);
 			Console.WriteLine(sessionmapper.FindAll());
@@ -330,7 +332,7 @@ namespace PAZ
 
         private void buttonEmailVersturen_Click(object sender, RoutedEventArgs e)
         {
-            _controller.EmailVersturenClicked(_master);
+            _controller.EmailVersturenClicked(_master, _emailTemplateMapper);
         }
 
         private void buttonBriefPrinten_Click(object sender, RoutedEventArgs e)

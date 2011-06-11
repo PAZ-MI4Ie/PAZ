@@ -67,7 +67,9 @@
     <Compile Include="Control\IniReader\IniSection.cs" />
     <Compile Include="Model\Email.cs" />
     <Compile Include="Control\Emailer.cs" />
+    <Compile Include="Model\EmailTemplate.cs" />
     <Compile Include="Model\Mappers\BlockedTimeslotMapper.cs" />
+    <Compile Include="Model\Mappers\EmailTemplateMapper.cs" />
     <Compile Include="Model\Mappers\PairAttachmentMapper.cs" />
     <Compile Include="Model\Mappers\ClassroomMapper.cs" />
     <Compile Include="Model\Mappers\SessionMapper.cs" />

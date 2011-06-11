@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Ini;
+using PAZ.Model;
+using PAZ.Model.Mappers;
 using PAZ.View;
 
 namespace PAZ.Control
@@ -45,12 +47,19 @@ namespace PAZ.Control
             }
         }
 
-        public void EmailVersturenClicked(List<SessionRow> sessions)
+        public void EmailVersturenClicked(List<SessionRow> sessions, EmailTemplateMapper emailTemplateMapper)
         {
-            EmailWindow emailWindow = new EmailWindow(sessions, this);
+            EmailTemplate emailTemplate = emailTemplateMapper.Find(1);
+
+            EmailWindow emailWindow = new EmailWindow(sessions, emailTemplate, this);
             emailWindow.ShowDialog();
 
             _emailWindow = emailWindow;
+        }
+
+        public void EmailWindowClosed(EmailTemplate updatedTemplate)
+        {
+            // TO DO SAVE
         }
 
         public IniFile readIni()
@@ -73,17 +82,9 @@ namespace PAZ.Control
                 ini.Add("TIME", section);
 
                 section = new IniSection();
-                section.Add("inleiding", "Hierbij ontvangt u de tijd(en) waarop u aanwezig moet zijn voor de afstudeerzitting(en)");
-                section.Add("informatie", "In het afstudeerlokaal wordt voor aanvang van de zitting koffie en thee geserveerd.");
-                section.Add("afsluiting", "Voor eventuele vragen neem contact op met Lilian Reuken, telefoonnummer (073) 629 5256 of Regien Blom telefoonnummer (073) 629 54 55.");
-                section.Add("afzenders", "Lilian Reuken en Regien Blom");
-                ini.Add("EMAILBERICHT", section);
-
-                section = new IniSection();
                 section.Add("email_user", "paz.planner@gmail.com");
                 section.Add("email_password", "Paz.planner01");
                 section.Add("email_from", "paz.planner@gmail.com");
-                section.Add("email_displayname", "Avans Planner Systeem");
                 section.Add("email_host", "smtp.gmail.com");
                 section.Add("email_port", "587");
                 section.Add("email_onderwerp", "Afstudeerzitting(en)");

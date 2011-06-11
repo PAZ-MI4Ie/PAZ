@@ -31,17 +31,15 @@ namespace PAZ
         private IniFile _ini;
         private PAZController _controller;
 
-        public EmailWindow(List<SessionRow> sessions, PAZController controller)
+        public EmailWindow(List<SessionRow> sessions, EmailTemplate emailTemplate, PAZController controller)
         {
             InitializeComponent();
 
-            _ini = controller.IniReader;
-
-            tbAfzender.Text = _ini["EMAILSETTINGS"]["email_displayname"];
-            tbInleiding.Text += _ini["EMAILBERICHT"]["inleiding"];
-            tbInformatie.Text += _ini["EMAILBERICHT"]["informatie"];
-            tbAfsluiting.Text += _ini["EMAILBERICHT"]["afsluiting"];
-            tbAfzenders.Text += _ini["EMAILBERICHT"]["afzenders"];
+            tbAfzender.Text = emailTemplate.Displayname;
+            tbInleiding.Text += emailTemplate.Inleiding;
+            tbInformatie.Text += emailTemplate.Informatie;
+            tbAfsluiting.Text += emailTemplate.Afsluiting;
+            tbAfzenders.Text += emailTemplate.Afzenders;
 
             _teachers = new List<Teacher>();
             _students = new List<Student>();
@@ -64,6 +62,7 @@ namespace PAZ
             StudentenToevoegen();
             DocentenToevoegen();
 
+            _ini = controller.IniReader;
             _controller = controller;
         }
 
@@ -476,12 +475,7 @@ namespace PAZ
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            _ini["EMAILBERICHT"]["afzender"] = tbAfzender.Text;
-            _ini["EMAILBERICHT"]["inleiding"] = tbInleiding.Text;
-            _ini["EMAILBERICHT"]["informatie"] = tbInformatie.Text;
-            _ini["EMAILBERICHT"]["afsluiting"] = tbAfsluiting.Text;
-            _ini["EMAILBERICHT"]["afzenders"] = tbAfzenders.Text;
-            _ini.Save();
+            _controller.EmailWindowClosed(new EmailTemplate(tbAfzender.Text, tbInleiding.Text, tbInformatie.Text, tbAfsluiting.Text, tbAfzenders.Text));
         }
     }
 }

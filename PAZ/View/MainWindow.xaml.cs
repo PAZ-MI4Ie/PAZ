@@ -50,8 +50,10 @@ namespace PAZ
 
             _controller = new PAZController(this);
 
+            IniFile ini = _controller.IniReader;
+
             //TEST CODE:
-            _db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
+            _db = new MysqlDb(ini["DATABASESETTINGS"]["db_host"], ini["DATABASESETTINGS"]["db_username"], ini["DATABASESETTINGS"]["db_password"], ini["DATABASESETTINGS"]["db_database"]);//Must be somewhere central
 
             _userMapper = new UserMapper(_db);
             _classroomMapper = new ClassroomMapper(_db);

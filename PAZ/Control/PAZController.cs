@@ -73,12 +73,28 @@ namespace PAZ.Control
                 ini.Add("TIME", section);
 
                 section = new IniSection();
-                section.Add("afzender", "Avans Planner Systeem");
                 section.Add("inleiding", "Hierbij ontvangt u de tijd(en) waarop u aanwezig moet zijn voor de afstudeerzitting(en)");
                 section.Add("informatie", "In het afstudeerlokaal wordt voor aanvang van de zitting koffie en thee geserveerd.");
-                section.Add("afsluiting", "Voor eventuele vragen kunt u zich wenden tot Lilian Reuken, telefoonnummer (073) 629 5256 of Regien Blom telefoonnummer (073) 629 54 55.");
+                section.Add("afsluiting", "Voor eventuele vragen neem contact op met Lilian Reuken, telefoonnummer (073) 629 5256 of Regien Blom telefoonnummer (073) 629 54 55.");
                 section.Add("afzenders", "Lilian Reuken en Regien Blom");
                 ini.Add("EMAILBERICHT", section);
+
+                section = new IniSection();
+                section.Add("email_user", "paz.planner@gmail.com");
+                section.Add("email_password", "Paz.planner01");
+                section.Add("email_from", "paz.planner@gmail.com");
+                section.Add("email_displayname", "Avans Planner Systeem");
+                section.Add("email_host", "smtp.gmail.com");
+                section.Add("email_port", "587");
+                section.Add("email_onderwerp", "Afstudeerzitting(en)");
+                ini.Add("EMAILSETTINGS", section);
+
+                section = new IniSection();
+                section.Add("db_host", "student.aii.avans.nl");
+                section.Add("db_username", "MI4Ie");
+                section.Add("db_password", "4DRcUrzV");
+                section.Add("db_database", "MI4Ie_db");
+                ini.Add("DATABASESETTINGS", section);
 
                 ini.Save();
             }

@@ -37,7 +37,7 @@ namespace PAZ
 
             _ini = controller.IniReader;
 
-            tbAfzender.Text = _ini["EMAILBERICHT"]["afzender"];
+            tbAfzender.Text = _ini["EMAILSETTINGS"]["email_displayname"];
             tbInleiding.Text += _ini["EMAILBERICHT"]["inleiding"];
             tbInformatie.Text += _ini["EMAILBERICHT"]["informatie"];
             tbAfsluiting.Text += _ini["EMAILBERICHT"]["afsluiting"];
@@ -194,7 +194,7 @@ namespace PAZ
         }
 
         /**
-        * Stuurt de e-mailberichten via de Gmail-server
+        * Stuurt e-mailberichten via een mail server
         * 
         * Auteur: Gökhan en Yorg
         */
@@ -210,13 +210,13 @@ namespace PAZ
             {
                 Emailer emailer = _controller.Emailer;
 
-                emailer.User = "paz.planner@gmail.com";     // het gmail-adres
-                emailer.Password = "Paz.planner01";         // het gmail-wachtwoord            
-                emailer.From = emailer.User;                // de afzender
-                emailer.DisplayName = tbAfzender.Text;      // de naam van de afzender zoals die getoond wordt
-                emailer.Host = "smtp.gmail.com";            // de gmail-server
-                emailer.Port = 587;                         // het gmail-server poortnummer
-                emailer.Subject = "Afstudeerzitting(en)";                    // het onderwerp van e-mailbericht
+                emailer.User = _ini["EMAILSETTINGS"]["email_user"];                     // het gebruikte account voor het versturen van de e-mails
+                emailer.Password = _ini["EMAILSETTINGS"]["email_password"];             // het wachtwoord behorende bij bovenstaande account          
+                emailer.From = _ini["EMAILSETTINGS"]["email_from"];                     // de afzender
+                emailer.DisplayName = tbAfzender.Text;                                  // de naam van de afzender zoals die getoond wordt
+                emailer.Host = _ini["EMAILSETTINGS"]["email_host"];                     // de server host
+                emailer.Port = Convert.ToInt32(_ini["EMAILSETTINGS"]["email_port"]);    // het gebruikte poort nummer
+                emailer.Subject = _ini["EMAILSETTINGS"]["email_onderwerp"];             // het onderwerp van het e-mailbericht
                 
                 foreach (User user in _receivers)
                 {

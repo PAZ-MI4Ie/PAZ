@@ -32,7 +32,7 @@ namespace PAZ.Control
 
             PDFexporter = new PDFExporter(mainWindow.GridOverzichtList);
             Emailer = new Emailer();
-            IniReader = readIni();
+            IniReader = ReadIni();
 
             //TEST CODE:
             DB = new MysqlDb(IniReader["DATABASESETTINGS"]["db_host"], IniReader["DATABASESETTINGS"]["db_username"], IniReader["DATABASESETTINGS"]["db_password"], IniReader["DATABASESETTINGS"]["db_database"]);//Must be somewhere central
@@ -82,10 +82,10 @@ namespace PAZ.Control
 
         public void EmailWindowClosed(EmailTemplate updatedTemplate)
         {
-            // TO DO SAVE
+            EmailTemplateMapper.Save(updatedTemplate);
         }
 
-        public IniFile readIni()
+        public IniFile ReadIni()
         {
             IniFile ini = new Ini.IniFile("sys.ini");
             if (ini.Exists())

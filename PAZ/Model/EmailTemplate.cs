@@ -7,8 +7,9 @@ namespace PAZ.Model
 {
     public class EmailTemplate
     {
-        public EmailTemplate(string displayname, string inleiding, string informatie, string afsluiting, string afzenders)
+        public EmailTemplate(int id, string displayname, string inleiding, string informatie, string afsluiting, string afzenders)
         {
+            Id = id;
             Displayname = displayname;
             Inleiding = inleiding;
             Informatie = informatie;
@@ -16,6 +17,7 @@ namespace PAZ.Model
             Afzenders = afzenders;
         }
 
+        public int Id { get; private set; }
         public string Displayname { get; private set; }
         public string Inleiding { get; private set; }
         public string Informatie { get; private set; }

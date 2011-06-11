@@ -30,6 +30,7 @@ namespace PAZ
 
         private IniFile _ini;
         private PAZController _controller;
+        private EmailTemplate _emailTemplate;
 
         public EmailWindow(List<SessionRow> sessions, EmailTemplate emailTemplate, PAZController controller)
         {
@@ -64,6 +65,7 @@ namespace PAZ
 
             _ini = controller.IniReader;
             _controller = controller;
+            _emailTemplate = emailTemplate;
         }
 
 
@@ -475,7 +477,7 @@ namespace PAZ
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            _controller.EmailWindowClosed(new EmailTemplate(tbAfzender.Text, tbInleiding.Text, tbInformatie.Text, tbAfsluiting.Text, tbAfzenders.Text));
+            _controller.EmailWindowClosed(new EmailTemplate(_emailTemplate.Id, tbAfzender.Text, tbInleiding.Text, tbInformatie.Text, tbAfsluiting.Text, tbAfzenders.Text));
         }
     }
 }

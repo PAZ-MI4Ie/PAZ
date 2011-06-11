@@ -3,6 +3,7 @@ using Ini;
 using PAZ.Model;
 using PAZ.Model.Mappers;
 using PAZ.View;
+using PAZMySQL;
 
 namespace PAZ.Control
 {
@@ -11,6 +12,16 @@ namespace PAZ.Control
         public PDFExporter PDFexporter { get; private set; }
         public Emailer Emailer { get; private set; }
         public IniFile IniReader { get; private set; }
+        public MysqlDb DB { get; private set; }
+
+        public SessionMapper SessionMapper { get; private set; }
+        public UserMapper UserMapper { get; private set; }
+        public ClassroomMapper ClassroomMapper { get; private set; }
+        public StudentMapper StudentMapper { get; private set; }
+        public TeacherMapper TeacherMapper { get; private set; }
+        public ExpertMapper ExpertMapper { get; private set; }
+        public PairMapper PairMapper { get; private set; }
+        public EmailTemplateMapper EmailTemplateMapper { get; private set; }
 
         private MainWindow _mainWindow;
         private EmailWindow _emailWindow;
@@ -22,6 +33,18 @@ namespace PAZ.Control
             PDFexporter = new PDFExporter(mainWindow.GridOverzichtList);
             Emailer = new Emailer();
             IniReader = readIni();
+
+            //TEST CODE:
+            DB = new MysqlDb(IniReader["DATABASESETTINGS"]["db_host"], IniReader["DATABASESETTINGS"]["db_username"], IniReader["DATABASESETTINGS"]["db_password"], IniReader["DATABASESETTINGS"]["db_database"]);//Must be somewhere central
+
+            SessionMapper = new SessionMapper(DB);
+            UserMapper = new UserMapper(DB);
+            ClassroomMapper = new ClassroomMapper(DB);
+            StudentMapper = new StudentMapper(DB);
+            TeacherMapper = new TeacherMapper(DB);
+            ExpertMapper = new ExpertMapper(DB);
+            PairMapper = new PairMapper(DB);
+            EmailTemplateMapper = new EmailTemplateMapper(DB); 
         }
 
         public void ExportRoosterClicked()
@@ -47,9 +70,9 @@ namespace PAZ.Control
             }
         }
 
-        public void EmailVersturenClicked(List<SessionRow> sessions, EmailTemplateMapper emailTemplateMapper)
+        public void EmailVersturenClicked(List<SessionRow> sessions)
         {
-            EmailTemplate emailTemplate = emailTemplateMapper.Find(1);
+            EmailTemplate emailTemplate = EmailTemplateMapper.Find(1);
 
             EmailWindow emailWindow = new EmailWindow(sessions, emailTemplate, this);
             emailWindow.ShowDialog();

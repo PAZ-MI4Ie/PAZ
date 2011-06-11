@@ -30,20 +30,13 @@ namespace PAZ
         private List<SessionRow> _master;
         public ICollectionView Sessions { get; private set; }
         bool _match;
-        private UserMapper _userMapper;
-		private ClassroomMapper _classroomMapper;
-		private StudentMapper _studentMapper;	
-		private TeacherMapper _teacherMapper;
-		private ExpertMapper _expertMapper;
-        private EmailTemplateMapper _emailTemplateMapper;
-        private PairMapper _pairMapper;
+        
 		private List<Teacher> _teachers;
 		private List<Student> _students;
         private List<Classroom> _classrooms;
         private List<Pair> _pairs;
 
         private PAZController _controller;
-        private MysqlDb _db;
 
         public MainWindow()
         {
@@ -51,33 +44,17 @@ namespace PAZ
 
             _controller = new PAZController(this);
 
-            IniFile ini = _controller.IniReader;
-
-            //TEST CODE:
-            _db = new MysqlDb(ini["DATABASESETTINGS"]["db_host"], ini["DATABASESETTINGS"]["db_username"], ini["DATABASESETTINGS"]["db_password"], ini["DATABASESETTINGS"]["db_database"]);//Must be somewhere central
-
-            _userMapper = new UserMapper(_db);
-            _classroomMapper = new ClassroomMapper(_db);
-            _pairMapper = new PairMapper(_db);
-            _userMapper = new UserMapper(_db);
-			_expertMapper = new ExpertMapper(_db);
-			_studentMapper = new StudentMapper(_db);
-            _emailTemplateMapper = new EmailTemplateMapper(_db);
-
-            SessionMapper sessionmapper = new SessionMapper(_db);
-			Console.WriteLine(sessionmapper.FindAll());
-            List<Session> tempSessions = sessionmapper.FindAll();
+            List<Session> tempSessions = _controller.SessionMapper.FindAll();
+            Console.WriteLine(tempSessions);
             _master = new List<SessionRow>();
             foreach (Session s in tempSessions)
             {
                 _master.Add(new SessionRow(s));
             }
 			//END OF TEST CODE
-            _teacherMapper = new TeacherMapper(_db);
-            _teachers = _teacherMapper.FindAll();
 
-            StudentMapper studentmapper = new StudentMapper(MysqlDb.GetInstance());
-            _students = studentmapper.FindAll();
+            _teachers = _controller.TeacherMapper.FindAll();
+            _students = _controller.StudentMapper.FindAll();
 
             Student verlept = new Student();
             verlept.Firstname = "Henk";
@@ -252,8 +229,8 @@ namespace PAZ
             Sessions = CollectionViewSource.GetDefaultView(_master);
             GridOverzichtList.ItemsSource = Sessions;
 
-            _classrooms = _classroomMapper.FindAll();
-            _pairs = _pairMapper.FindAll();
+            _classrooms = _controller.ClassroomMapper.FindAll();
+            _pairs = _controller.PairMapper.FindAll();
             //Test CODE
             _classrooms = new List<Classroom>();
             Classroom room = new Classroom(1, "OB202");
@@ -295,13 +272,13 @@ namespace PAZ
         private void buttonVerwijderGebruikers_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Weet u zeker dat u alle gebruikers wilt verwijderen? \n\nLet op: deze actie kan niet ongedaan worden.", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                MessageBox.Show(_userMapper.Delete() ? "Succesvol. Alle gebruikers zijn verwijderd." : "Mislukt, de gebruikers konden niet verwijderd worden.", "Gebruikers verwijderen");
+                MessageBox.Show(_controller.UserMapper.Delete() ? "Succesvol. Alle gebruikers zijn verwijderd." : "Mislukt, de gebruikers konden niet verwijderd worden.", "Gebruikers verwijderen");
         }
 
         private void buttonVerwijderLokalen_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Weet u zeker dat u alle lokalen wilt verwijderen? \n\nLet op: deze actie kan niet ongedaan worden.", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                MessageBox.Show(_classroomMapper.Delete() ? "Succesvol. Alle lokalen zijn verwijderd." : "Mislukt, de lokalen konden niet verwijderd worden.", "Lokalen verwijderen");
+                MessageBox.Show(_controller.ClassroomMapper.Delete() ? "Succesvol. Alle lokalen zijn verwijderd." : "Mislukt, de lokalen konden niet verwijderd worden.", "Lokalen verwijderen");
         }
 
         private void comboBoxSelecteerType_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -332,7 +309,7 @@ namespace PAZ
 
         private void buttonEmailVersturen_Click(object sender, RoutedEventArgs e)
         {
-            _controller.EmailVersturenClicked(_master, _emailTemplateMapper);
+            _controller.EmailVersturenClicked(_master);
         }
 
         private void buttonBriefPrinten_Click(object sender, RoutedEventArgs e)
@@ -612,7 +589,7 @@ namespace PAZ
 				newTeacher.BlockType = teacher_blocktype_selected;
 
 				//Send to the database
-				_teacherMapper.Save(newTeacher);
+				_controller.TeacherMapper.Save(newTeacher);
 				MessageBox.Show("Leraar toegevoegd");
 				textBoxLeraarVoornaam.Text = "";
 				textLeraarAchternaam.Text = "";
@@ -636,7 +613,7 @@ namespace PAZ
 				textBoxLokaalGegevens.BorderBrush = Brushes.Gray;
 				Classroom newClassroom = new Classroom();
 				newClassroom.Room_number = textBoxLokaalGegevens.Text;
-				_classroomMapper.Save(newClassroom);
+				_controller.ClassroomMapper.Save(newClassroom);
 				MessageBox.Show("Lokaal toegevoegd");
 			}
 		}
@@ -769,7 +746,7 @@ namespace PAZ
 				newExpert.City = textBoxBegeleiderCity.Text;
 
 				//Send to the database
-				_expertMapper.Save(newExpert);
+				_controller.ExpertMapper.Save(newExpert);
 				MessageBox.Show("Begeleider toegevoegd");
 				textBoxBegeleiderVoornaam.Text = "";
 				textBoxBegeleiderAchternaam.Text = "";
@@ -898,7 +875,7 @@ namespace PAZ
 				newExpert.City = textBoxExpertCity.Text;
 
 				//Send to the database
-				_expertMapper.Save(newExpert);
+				_controller.ExpertMapper.Save(newExpert);
 				MessageBox.Show("Expert toegevoegd");
 				textBoxExternVoornaam.Text = "";
 				textBoxExternAchternaam.Text = "";
@@ -924,7 +901,7 @@ namespace PAZ
 		private void stageBegeleiderVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
 		{
 			comboBoxSelecteerstageBegeleider.Items.Clear();
-			List<Expert> experts = _expertMapper.FindAll();
+			List<Expert> experts = _controller.ExpertMapper.FindAll();
 			ComboBoxItem comboboxItem;
 
 			foreach (Expert expert in experts)
@@ -939,7 +916,7 @@ namespace PAZ
 		private void docentVisibilityChanged(object sender, DependencyPropertyChangedEventArgs e)
 		{
 			comboBoxSelecteerLeraar1.Items.Clear();
-			List<Teacher> teachers = _teacherMapper.FindAll();
+			List<Teacher> teachers = _controller.TeacherMapper.FindAll();
 			ComboBoxItem comboboxItem;
 
 			foreach (Teacher teacher in teachers)
@@ -1045,7 +1022,7 @@ namespace PAZ
 				//TODO: Pairing?
 
 				//Send to the database
-				_studentMapper.Save(newStudent);
+				_controller.StudentMapper.Save(newStudent);
 				MessageBox.Show("Student toegevoegd");
 				textBoxVoornaam.Text = "";
 				textBoxAchternaam.Text = "";

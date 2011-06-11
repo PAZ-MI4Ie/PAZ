@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
 using System.Threading;
+using PAZ.Model;
 
-namespace PAZ.Model
+namespace PAZ.Control
 {
-
     /**
     * In deze klassen worden e-mailberichten verzonden naar studenten en docenten 
     * via de mailserver van Gmail.
     * 
-    * Auteur: Gökhan 
+    * Auteur: Gökhan en Yorg
     */
     public class Emailer
     {

@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using Ini;
+using PAZ.Control;
 using PAZ.Model;
 using PAZ.View;
 
@@ -28,16 +29,19 @@ namespace PAZ
         private string _selectedReceiverEmail = string.Empty;
 
         private IniFile _ini;
+        private PAZController _controller;
 
-        public EmailWindow(List<SessionRow> sessions, IniFile ini)
+        public EmailWindow(List<SessionRow> sessions, PAZController controller)
         {
             InitializeComponent();
 
-            tbAfzender.Text = ini["EMAILBERICHT"]["afzender"];
-            tbInleiding.Text += ini["EMAILBERICHT"]["inleiding"];
-            tbInformatie.Text += ini["EMAILBERICHT"]["informatie"];
-            tbAfsluiting.Text += ini["EMAILBERICHT"]["afsluiting"];
-            tbAfzenders.Text += ini["EMAILBERICHT"]["afzenders"];
+            _ini = controller.IniReader;
+
+            tbAfzender.Text = _ini["EMAILBERICHT"]["afzender"];
+            tbInleiding.Text += _ini["EMAILBERICHT"]["inleiding"];
+            tbInformatie.Text += _ini["EMAILBERICHT"]["informatie"];
+            tbAfsluiting.Text += _ini["EMAILBERICHT"]["afsluiting"];
+            tbAfzenders.Text += _ini["EMAILBERICHT"]["afzenders"];
 
             _teachers = new List<Teacher>();
             _students = new List<Student>();
@@ -60,7 +64,7 @@ namespace PAZ
             StudentenToevoegen();
             DocentenToevoegen();
 
-            _ini = ini;
+            _controller = controller;
         }
 
 
@@ -204,7 +208,7 @@ namespace PAZ
 
             if (MessageBox.Show("Weet u zeker dat u e-mailberichten wilt versturen?", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                Emailer emailer = new Emailer();            // maakt object emailer
+                Emailer emailer = _controller.Emailer;
 
                 emailer.User = "paz.planner@gmail.com";     // het gmail-adres
                 emailer.Password = "Paz.planner01";         // het gmail-wachtwoord            

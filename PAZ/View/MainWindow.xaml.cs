@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.ComponentModel;
-using Microsoft.Win32;
-using System.IO;
-using PAZMySQL;
-using PAZ.Model;
 using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Globalization;
 using Ini;
-using PAZ.View;
-using System.Text.RegularExpressions;
+using Microsoft.Win32;
+using PAZ.Control;
+using PAZ.Model;
 using PAZ.Model.Mappers;
+using PAZ.View;
+using PAZMySQL;
 
 namespace PAZ
 {
@@ -30,10 +29,8 @@ namespace PAZ
     {
         private List<SessionRow> _master;
         public ICollectionView Sessions { get; private set; }
-        bool match;
-        private PDFExport _pdfExport;
+        bool _match;
         private UserMapper _userMapper;
-        private IniFile _ini;
 		private ClassroomMapper _classroomMapper;
 		private StudentMapper _studentMapper;	
 		private TeacherMapper _teacherMapper;
@@ -44,11 +41,14 @@ namespace PAZ
         private List<Classroom> _classrooms;
         private List<Pair> _pairs;
 
+        private PAZController _controller;
         private MysqlDb _db;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            _controller = new PAZController(this);
 
             //TEST CODE:
             _db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
@@ -248,11 +248,6 @@ namespace PAZ
             Sessions = CollectionViewSource.GetDefaultView(_master);
             GridOverzichtList.ItemsSource = Sessions;
 
-            // maak object
-            _pdfExport = new PDFExport(GridOverzichtList);
-
-            _ini = readIni();
-
             _classrooms = _classroomMapper.FindAll();
             _pairs = _pairMapper.FindAll();
             //Test CODE
@@ -275,7 +270,7 @@ namespace PAZ
             _classrooms.Add(room);
             //END TEST CODE
 
-            calendar.createCalendar(_ini, _classrooms);
+            calendar.createCalendar(_controller.IniReader, _classrooms);
             string[] teachers = new string[] { "Marco Huysmans", "Ger Saris" };
             string[] experts = new string[] { "Piet Janssen", "Karel Lessers" };
             //calendar.addSession("2-5-2011", 1, 1, "Jeroen Schipper", "Hidde Jansen", teachers, experts);
@@ -290,15 +285,7 @@ namespace PAZ
 
         private void buttonExportPDF_Click(object sender, RoutedEventArgs e)
         {
-            // dit zorgt ervoor dat er geen filters worden toegepast in de PDF uitdraai
-            textboxSearch.Text = "";
-
-            string fileName;
-            if (OpenNewSaveDialog("Roosteroverzicht PAZ", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
-            {
-                // maak en exporteer als pdf
-                _pdfExport.CreateOverviewPDF(fileName);
-            }
+            _controller.ExportRoosterClicked();
         }
 
         private void buttonVerwijderGebruikers_Click(object sender, RoutedEventArgs e)
@@ -341,21 +328,13 @@ namespace PAZ
 
         private void buttonEmailVersturen_Click(object sender, RoutedEventArgs e)
         {
-            EmailWindow email = new EmailWindow(_master, _ini);
-            email.ShowDialog();
+            _controller.EmailVersturenClicked(_master);
         }
 
         private void buttonBriefPrinten_Click(object sender, RoutedEventArgs e)
         {
-            // dit zorgt ervoor dat er geen filters worden toegepast in de PDF uitdraai
-            textboxSearch.Text = "";
-
-            string fileName;
-            if (OpenNewSaveDialog("Bevestigingsbrieven PAZ", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
-            {
-                // maak en exporteer als pdf
-                _pdfExport.CreateLetterPDF(fileName);
-            }
+            MessageBox.Show("Tijdelijk buiten werking tot Teun de mappers update.");
+            //_controller.BriefPrintenClicked();
         }
 
         private void GridOverzichtList_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
@@ -376,17 +355,17 @@ namespace PAZ
 
                     switch (comboBoxSearch.SelectedIndex)
                     {
-                        case 1: match = ((SessionRow)(item)).Datum.ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 2: match = ((SessionRow)(item)).Timeslot.ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 3: match = ((SessionRow)(item)).Lokaal.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 4: match = ((SessionRow)(item)).Studenten.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 5: match = ((SessionRow)(item)).Docenten.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 6: match = ((SessionRow)(item)).Deskundigen.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 7: match = ((SessionRow)(item)).AantalGasten.ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 1: _match = ((SessionRow)(item)).Datum.ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 2: _match = ((SessionRow)(item)).Timeslot.ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 3: _match = ((SessionRow)(item)).Lokaal.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 4: _match = ((SessionRow)(item)).Studenten.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 5: _match = ((SessionRow)(item)).Docenten.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 6: _match = ((SessionRow)(item)).Deskundigen.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 7: _match = ((SessionRow)(item)).AantalGasten.ToString().Contains(textboxSearch.Text.ToLower()); break;
 
                     }
 
-                    return match;
+                    return _match;
                 };
             }
             else
@@ -406,41 +385,6 @@ namespace PAZ
             //        item = new Zitting();
             //        return true;
             //    };
-        }
-        public IniFile readIni()
-        {
-            IniFile ini = new Ini.IniFile("sys.ini");
-            if (ini.Exists())
-                ini.Load();
-            else
-            {
-                IniSection section = new IniSection();
-                section.Add("startdate", "1-05-2011");
-                section.Add("enddate", "15-05-2011");
-                ini.Add("DATES", section);
-
-                section = new IniSection();
-                section.Add("block1", "09:00-10:30");
-                section.Add("block2", "11:00-12:30");
-                section.Add("block3", "13:00-14:30");
-                section.Add("block4", "15:00-16:30");
-                ini.Add("TIME", section);
-
-                section = new IniSection();
-                section.Add("afzender", "Avans Planner Systeem");
-                section.Add("inleiding", "Hierbij ontvangt u de tijd(en) waarop u aanwezig moet zijn voor de afstudeerzitting(en)");
-                section.Add("informatie", "In het afstudeerlokaal wordt voor aanvang van de zitting koffie en thee geserveerd.");
-                section.Add("afsluiting", "Voor eventuele vragen kunt u zich wenden tot Lilian Reuken, telefoonnummer (073) 629 5256 of Regien Blom telefoonnummer (073) 629 54 55.");
-                section.Add("afzenders", "Lilian Reuken en Regien Blom");
-                ini.Add("EMAILBERICHT", section);
-
-                ini.Save();
-            }
-
-            textBoxDeadlineStart.Text = ini["DATES"]["startdate"];
-            textBoxDeadlineEind.Text = ini["DATES"]["enddate"];
-
-            return ini;
         }
 
         /*
@@ -530,7 +474,7 @@ namespace PAZ
          * Return: De waarde teruggeven nadat de gebruiker het scherm sluit
          * Auteur: Yorg 
          */
-        private bool? OpenNewSaveDialog(string defaultFileName, string defaultExtension, string filter, out string outFileName, bool appendDate = true)
+        public bool? OpenNewSaveDialog(string defaultFileName, string defaultExtension, string filter, out string outFileName, bool appendDate = true)
         {
             // Maak het dialoog
             SaveFileDialog saveDialog = new SaveFileDialog();
@@ -694,10 +638,10 @@ namespace PAZ
 		}
         private void buttonOptiesOpslaan_Click(object sender, RoutedEventArgs e)
         {
-            _ini["DATES"]["startdate"] = textBoxDeadlineStart.Text;
-            _ini["DATES"]["enddate"] = textBoxDeadlineEind.Text;
+            _controller.IniReader["DATES"]["startdate"] = textBoxDeadlineStart.Text;
+            _controller.IniReader["DATES"]["enddate"] = textBoxDeadlineEind.Text;
 
-            bool isSaved = _ini.Save();
+            bool isSaved = _controller.IniReader.Save();
             if(isSaved)
                 MessageBox.Show("Uw instellingen zijn opgeslagen.");
             else

@@ -30,7 +30,10 @@ namespace PAZ
         private List<SessionRow> _master;
         public ICollectionView Sessions { get; private set; }
         bool _match;
-        
+        private MysqlDb _db;
+        private UserMapper _userMapper;
+        private ClassroomMapper _classroomMapper;
+        private PairMapper _pairMapper;
 		private List<Teacher> _teachers;
 		private List<Student> _students;
         private List<Classroom> _classrooms;

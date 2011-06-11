@@ -7,7 +7,7 @@ using PAZ.Model;
 
 namespace PAZMySQL
 {
-    class SessionMapper : Mapper
+    public class SessionMapper : Mapper
     {
         public SessionMapper(MysqlDb db) : base(db)
         {

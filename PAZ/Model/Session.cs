@@ -84,8 +84,8 @@ namespace PAZ.Model
 		}
 
         //TEMP CODE:
-        private Expert[] _temp_experts;
-        private Teacher[] _temp_teachers;
+        private Expert[] _temp_experts = new Expert[MAX_EXPERTS];
+        private Teacher[] _temp_teachers = new Teacher[MAX_TEACHERS];
 
         public Expert[] GetExperts()
         {

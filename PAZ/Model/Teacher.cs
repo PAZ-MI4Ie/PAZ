@@ -7,10 +7,13 @@ namespace PAZ.Model
 {
     public class Teacher : User
     {
-        public enum session_spread {ANY,CLOSE,FAR};
+		public enum session_spread { ANY, CLOSE, FAR };
 
 		public session_spread Session_spread { get; set; }
 		public DateTime blockedTimeslot { get; set; }
+		public int BlockType { get; set; }
+
+        private static int tempHack = 0;
 
 		public Teacher()
 		{
@@ -21,6 +24,7 @@ namespace PAZ.Model
 			: base(surname, firstname)
 		{
 			this.User_type = "teacher";
+            this.Email = "teacher" + (++tempHack) + "@avans.nl";
 		}
     }
 }

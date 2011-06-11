@@ -5,12 +5,13 @@ using System.Windows;
 using System.Windows.Controls;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
-using iText = iTextSharp.text;
+using PAZ.Model;
 using PAZ.View;
+using iText = iTextSharp.text;
 
-namespace PAZ.Model
+namespace PAZ.Control
 {
-    public class PDFExport
+    public class PDFExporter
     {
         private const int CONTACT_INFORMATION_NUM_COLUMNS = 4;
         private const int FOOTER_NUM_COLUMNS = 3;
@@ -27,11 +28,11 @@ namespace PAZ.Model
             PDF_Letter
         };
 
-        private DataGrid dataGrid;
+        private DataGrid _dataGrid;
 
-        public PDFExport(DataGrid datagrid)
+        public PDFExporter(DataGrid dataGrid)
         {
-            this.dataGrid = datagrid;
+            _dataGrid = dataGrid;
         }
 
         /**
@@ -94,10 +95,10 @@ namespace PAZ.Model
         */
         private PdfPTable MakeRoster()
         {
-            if (dataGrid.Items.Count <= 0)
+            if (_dataGrid.Items.Count <= 0)
                 return null;
 
-            int aantalKolommen = ((SessionRow)dataGrid.Items[0]).GetDataList().Count;
+            int aantalKolommen = ((SessionRow)_dataGrid.Items[0]).GetDataList().Count;
 
             // Maak een tabel met even veel aantal kolommen als de datagrid
             PdfPTable rosterTable = new PdfPTable(aantalKolommen);
@@ -105,7 +106,7 @@ namespace PAZ.Model
             // bepaal de breedte voor elke kolom in volgorde
             float[] columnWidths = new float[aantalKolommen];
             for (int columnNo = 0; columnNo < aantalKolommen; ++columnNo)
-                columnWidths[columnNo] = (float) dataGrid.Columns[columnNo].Width.Value;
+                columnWidths[columnNo] = (float) _dataGrid.Columns[columnNo].Width.Value;
 
             rosterTable.SetWidths(columnWidths);
 
@@ -115,7 +116,7 @@ namespace PAZ.Model
             // Leest de kolomnamen uit de datagrid en voegt toe aan roosterTable
             for (int columnNo = 0; columnNo < aantalKolommen; ++columnNo)
             {
-                string columNaam = dataGrid.Columns[columnNo].Header.ToString();
+                string columNaam = _dataGrid.Columns[columnNo].Header.ToString();
 
                 Phrase ph = new Phrase(columNaam, FontFactory.GetFont("Arial", 13, Font.BOLD));
                 PdfPCell cell = new PdfPCell(ph);
@@ -126,11 +127,11 @@ namespace PAZ.Model
             }
 
             // Leest de rijen uit de datagrid en voegt deze toe aan roosterTable
-            for (int rowNo = 0; rowNo < dataGrid.Items.Count; ++rowNo)
+            for (int rowNo = 0; rowNo < _dataGrid.Items.Count; ++rowNo)
             {
-                SessionRow rowSession = (SessionRow)dataGrid.Items[rowNo];
+                SessionRow rowSession = (SessionRow)_dataGrid.Items[rowNo];
 
-                for (int columnNo = 0; columnNo < dataGrid.Columns.Count; ++columnNo)
+                for (int columnNo = 0; columnNo < _dataGrid.Columns.Count; ++columnNo)
                 {
                     Phrase ph = new Phrase(rowSession.GetDataList()[columnNo].ToString(), FontFactory.GetFont("Arial", 13, Font.NORMAL));
                     PdfPCell cell = new PdfPCell(ph);
@@ -167,9 +168,9 @@ namespace PAZ.Model
 
                 // het document openen
                 document.Open();
-                for (int rowNo = 0; rowNo < dataGrid.Items.Count; ++rowNo)
+                for (int rowNo = 0; rowNo < _dataGrid.Items.Count; ++rowNo)
                 {
-                    SessionRow rowSession = (SessionRow)dataGrid.Items[rowNo];
+                    SessionRow rowSession = (SessionRow)_dataGrid.Items[rowNo];
                     Expert[] experts = rowSession.GetSessionModel().GetExperts();
 
                     for (int iExpert = 0; iExpert < experts.Length; ++iExpert)

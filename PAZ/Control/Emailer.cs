@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
 using System.Threading;
+using PAZ.Model;
 
-namespace PAZ.Model
+namespace PAZ.Control
 {
-
     /**
     * In deze klassen worden e-mailberichten verzonden naar studenten en docenten 
     * via de mailserver van Gmail.
     * 
-    * Auteur: Gökhan 
+    * Auteur: Gökhan en Yorg
     */
     public class Emailer
     {
         public string From = string.Empty;
+        public string DisplayName = string.Empty;
         public string To = string.Empty;
         public string User = string.Empty;
         public string Password = string.Empty;
@@ -46,9 +47,9 @@ namespace PAZ.Model
             _emailQueue.Enqueue(new Email(To, Subject, Body));
             Body = string.Empty;
 
-            new Thread(new ThreadStart(SendMessage)).Start();
+            if(_emailQueue.Count <= 1)
+                new Thread(new ThreadStart(SendMessage)).Start();
         }
-
 
         /**
         * Verstuurt het e-mailbericht
@@ -57,43 +58,47 @@ namespace PAZ.Model
         */
         private void SendMessage()
         {
-            try
+            while (_emailQueue.Count > 0)
             {
-                MailMessage msg = new MailMessage();
-                SmtpClient smtpClient = new SmtpClient(Host);
-                smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-
-                Email emailMessage = _emailQueue.Dequeue();
-
-                msg.From = new MailAddress(From);
-                msg.To.Add(emailMessage.To);
-                msg.Subject = emailMessage.Subject;
-                msg.IsBodyHtml = IsHtml;
-                msg.Body = emailMessage.Body;
-
-                if (AuthenticationMode > 0)
-                {
-                    smtpClient.Credentials = new NetworkCredential(User, Password);
-                }
-
-                smtpClient.Port = Port;
-                smtpClient.EnableSsl = UseSSL;
-
                 try
                 {
-                    // Stuur het bericht    
-                    smtpClient.Send(msg);
-                }
+                    MailMessage msg = new MailMessage();
+                    SmtpClient smtpClient = new SmtpClient(Host);
+                    smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
 
+                    msg.From = new MailAddress(From, DisplayName);
+
+                    Email emailMessage = _emailQueue.Dequeue();
+                    msg.To.Add(emailMessage.To);
+                    msg.Subject = emailMessage.Subject;
+                    msg.Body = emailMessage.Body;
+
+                    msg.IsBodyHtml = IsHtml;
+                
+                    if (AuthenticationMode > 0)
+                    {
+                        smtpClient.Credentials = new NetworkCredential(User, Password);
+                    }
+
+                    smtpClient.Port = Port;
+                    smtpClient.EnableSsl = UseSSL;
+
+                    try
+                    {
+                        // Stuur het bericht    
+                        smtpClient.Send(msg);
+                    }
+
+                    catch (Exception ex)
+                    {
+                        ex.ToString();
+
+                    }
+                }
                 catch (Exception ex)
                 {
                     ex.ToString();
-
                 }
-            }
-            catch (Exception ex)
-            {
-                ex.ToString();
             }
         }
     }

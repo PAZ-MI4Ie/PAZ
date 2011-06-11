@@ -62,13 +62,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Control\ControllerIO.cs" />
     <Compile Include="Control\PAZController.cs" />
-    <Compile Include="IniReader\IniFile.cs" />
-    <Compile Include="IniReader\IniSection.cs" />
+    <Compile Include="Control\IniReader\IniFile.cs" />
+    <Compile Include="Control\IniReader\IniSection.cs" />
     <Compile Include="Model\Email.cs" />
-    <Compile Include="Model\Emailer.cs" />
+    <Compile Include="Control\Emailer.cs" />
+    <Compile Include="Model\EmailTemplate.cs" />
     <Compile Include="Model\Mappers\BlockedTimeslotMapper.cs" />
+    <Compile Include="Model\Mappers\EmailTemplateMapper.cs" />
     <Compile Include="Model\Mappers\PairAttachmentMapper.cs" />
     <Compile Include="Model\Mappers\ClassroomMapper.cs" />
     <Compile Include="Model\Mappers\SessionMapper.cs" />
@@ -85,7 +86,7 @@
     <Compile Include="Model\Mappers\StudentMapper.cs" />
     <Compile Include="Model\Mappers\TeacherMapper.cs" />
     <Compile Include="Model\Pair.cs" />
-    <Compile Include="Model\PDFExport.cs" />
+    <Compile Include="Control\PDFExporter.cs" />
     <Compile Include="Model\Planning.cs" />
     <Compile Include="Model\Session.cs" />
     <Compile Include="Model\Student.cs" />

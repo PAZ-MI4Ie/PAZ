@@ -35,7 +35,6 @@ namespace PAZ
 
             tbInleiding.Text += emailTemplate.Inleiding;
             tbInformatie.Text += emailTemplate.Informatie;
-            tbAfsluiting.Text += emailTemplate.Afsluiting;
             tbAfzenders.Text += emailTemplate.Afzenders;
 
             _experts = new List<Expert>();
@@ -150,73 +149,6 @@ namespace PAZ
         {
             MessageBox.Show("Tijdelijk buiten werking tot Teun de mappers update.");
             //_controller.BriefPrintenBevestigingClicked();
-        }
-
-        /**
-         * Het doel van deze functie is om een email body te maken aan de hand van een receiver
-         * Input: receiver de ontvanger waarvoor de email gemaakt wordt
-         * Return: de gehele body
-         * Auteur: Gökhan en Yorg 
-         */
-        private string CreateEmailBody(User receiver)
-        {
-            string emailBody = "<html> \n <head> \n <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'> \n </head> \n <body> \n";
-                
-            // Inhoud van de brief
-            emailBody += "<p>Beste " + receiver.Firstname + " " + receiver.Surname + ",</p>"; ;
-
-            int zittingNummer = 0;
-            for (int i = 0; i < _sessions.Count; ++i)
-            {
-                Session sessionModel = _sessions[i].GetSessionModel();
-
-                List<User> users = new List<User>();
-                Teacher[] teachers = sessionModel.GetTeachers();
-                for (int j = 0; j < teachers.Length; ++j)
-                    users.Add(teachers[j]);
-
-                users.Add(sessionModel.Pair.Student1);
-                users.Add(sessionModel.Pair.Student2);
-
-                foreach (User sessionUser in users)
-                {
-                    if (sessionUser == receiver)
-                    {
-                        if(receiver is Student)
-                            emailBody += "Je Afstudeerzitting";
-                        else if (receiver is Teacher)
-                        {
-                            emailBody += "<p>";
-                            emailBody += tbInleiding.Text;
-                            emailBody += "</p>";
-
-                            emailBody += "<p>U neemt deel aan de volgende zittingen: <br /> Zitting " + (++zittingNummer);
-                        }
-
-                        emailBody += " is gepland op, " + _sessions[i].Datum + " om " + sessionModel.Daytime.Time + ", in lokaal " + sessionModel.Classroom.Room_number + "<br />";
-                    }
-                }
-            }
-
-            emailBody += "</p>";
-
-            emailBody += "<p>";
-            emailBody += tbInformatie.Text;
-            emailBody += "</p>";
-
-            emailBody += "<p>";
-            emailBody += tbAfsluiting.Text;
-            emailBody += "</p>";
-
-            emailBody += "<p>Met vriendelijke groet, </p>";
-
-            emailBody += "<p>";
-            emailBody += tbAfzenders.Text;
-            emailBody += "<br /><i>Coördinatoren stage en afstuderen</i></p>";
-
-            emailBody += "</body> \n </html>";
-
-            return emailBody;
         }
 
         /**

@@ -311,8 +311,7 @@ namespace PAZ
 
         private void buttonBriefPrinten_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Tijdelijk buiten werking tot Teun de mappers update.");
-            //_controller.BriefPrintenClicked();
+            _controller.BriefPrintenClicked(_master);
         }
 
         private void GridOverzichtList_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)

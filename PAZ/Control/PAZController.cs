@@ -24,7 +24,6 @@ namespace PAZ.Control
         public EmailTemplateMapper EmailTemplateMapper { get; private set; }
 
         private MainWindow _mainWindow;
-        private EmailWindow _emailWindow;
 
         public PAZController(MainWindow mainWindow)
         {
@@ -57,7 +56,15 @@ namespace PAZ.Control
             }
         }
 
-        public void BriefPrintenClicked()
+        public void BriefPrintenClicked(List<SessionRow> sessions)
+        {
+            EmailTemplate emailTemplate = EmailTemplateMapper.Find(1);
+
+            LetterWindow letterWindow = new LetterWindow(sessions, emailTemplate, this);
+            letterWindow.ShowDialog();
+        }
+
+        public void BriefPrintenBevestigingClicked()
         {
             // dit zorgt ervoor dat er geen filters worden toegepast in de PDF uitdraai
             _mainWindow.textboxSearch.Text = "";
@@ -76,8 +83,6 @@ namespace PAZ.Control
 
             EmailWindow emailWindow = new EmailWindow(sessions, emailTemplate, this);
             emailWindow.ShowDialog();
-
-            _emailWindow = emailWindow;
         }
 
         public void EmailWindowClosed(EmailTemplate updatedTemplate)

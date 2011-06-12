@@ -92,6 +92,9 @@
     <Compile Include="Model\Student.cs" />
     <Compile Include="Model\Teacher.cs" />
     <Compile Include="Model\User.cs" />
+    <Compile Include="View\LetterWindow.xaml.cs">
+      <DependentUpon>LetterWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\CustomLabel.cs" />
     <Compile Include="View\SessionRow.cs" />
     <Compile Include="Model\Mappers\MysqlDb.cs" />
@@ -111,6 +114,10 @@
     <Compile Include="View\UnPlannedPairs.xaml.cs">
       <DependentUpon>UnPlannedPairs.xaml</DependentUpon>
     </Compile>
+    <Page Include="View\LetterWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\EmailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

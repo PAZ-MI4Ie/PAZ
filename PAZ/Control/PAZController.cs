@@ -22,6 +22,7 @@ namespace PAZ.Control
         public ExpertMapper ExpertMapper { get; private set; }
         public PairMapper PairMapper { get; private set; }
         public EmailTemplateMapper EmailTemplateMapper { get; private set; }
+        public LetterTemplateMapper LetterTemplateMapper { get; private set; }
 
         private MainWindow _mainWindow;
 
@@ -43,7 +44,8 @@ namespace PAZ.Control
             TeacherMapper = new TeacherMapper(DB);
             ExpertMapper = new ExpertMapper(DB);
             PairMapper = new PairMapper(DB);
-            EmailTemplateMapper = new EmailTemplateMapper(DB); 
+            EmailTemplateMapper = new EmailTemplateMapper(DB);
+            LetterTemplateMapper = new LetterTemplateMapper(DB);
         }
 
         public void ExportRoosterClicked()
@@ -56,15 +58,15 @@ namespace PAZ.Control
             }
         }
 
-        public void BriefPrintenClicked(List<SessionRow> sessions)
+        public void BriefMakenClicked(List<SessionRow> sessions)
         {
-            EmailTemplate emailTemplate = EmailTemplateMapper.Find(1);
+            LetterTemplate letterTemplate = LetterTemplateMapper.Find(1);
 
-            LetterWindow letterWindow = new LetterWindow(sessions, emailTemplate, this);
+            LetterWindow letterWindow = new LetterWindow(sessions, letterTemplate, this);
             letterWindow.ShowDialog();
         }
 
-        public void BriefPrintenBevestigingClicked()
+        public void BriefMakenBevestigingClicked()
         {
             // dit zorgt ervoor dat er geen filters worden toegepast in de PDF uitdraai
             _mainWindow.textboxSearch.Text = "";
@@ -88,6 +90,11 @@ namespace PAZ.Control
         public void EmailWindowClosed(EmailTemplate updatedTemplate)
         {
             EmailTemplateMapper.Save(updatedTemplate);
+        }
+
+        public void LetterWindowClosed(LetterTemplate updatedTemplate)
+        {
+            LetterTemplateMapper.Save(updatedTemplate);
         }
 
         public IniFile ReadIni()

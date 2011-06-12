@@ -309,9 +309,9 @@ namespace PAZ
             _controller.EmailVersturenClicked(_master);
         }
 
-        private void buttonBriefPrinten_Click(object sender, RoutedEventArgs e)
+        private void buttonBriefMaken_Click(object sender, RoutedEventArgs e)
         {
-            _controller.BriefPrintenClicked(_master);
+            _controller.BriefMakenClicked(_master);
         }
 
         private void GridOverzichtList_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)

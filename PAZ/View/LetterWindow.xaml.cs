@@ -27,15 +27,25 @@ namespace PAZ
 
         private IniFile _ini;
         private PAZController _controller;
-        private EmailTemplate _emailTemplate;
+        private LetterTemplate _letterTemplate;
 
-        public LetterWindow(List<SessionRow> sessions, EmailTemplate emailTemplate, PAZController controller)
+        public LetterWindow(List<SessionRow> sessions, LetterTemplate letterTemplate, PAZController controller)
         {
             InitializeComponent();
 
-            tbInleiding.Text += emailTemplate.Inleiding;
-            tbInformatie.Text += emailTemplate.Informatie;
-            tbAfzenders.Text += emailTemplate.Afzenders;
+            tbKenmerk.Text = letterTemplate.Kenmerk;
+            tbContactpersonen.Text = letterTemplate.Contactpersonen;
+            tbTelefoon.Text = letterTemplate.Telefoon;
+            tbEmail.Text = letterTemplate.Email;
+            tbAvansLocatie.Text = letterTemplate.AvansLocatie;
+            tbBeginKern.Text = letterTemplate.BeginKern;
+            tbReisInformatie.Text = letterTemplate.ReisInformatie;
+            tbVerdereInformatie.Text = letterTemplate.VerdereInformatie;
+            tbAfzenders.Text = letterTemplate.Afzenders;
+            tbBijlagen.Text = letterTemplate.Bijlagen;
+            tbVoettekstLinks.Text = letterTemplate.VoettekstLinks;
+            tbVoettekstMidden.Text = letterTemplate.VoettekstCenter;
+            tbVoettekstRechts.Text = letterTemplate.VoettekstRechts;
 
             _experts = new List<Expert>();
             _receivers = new List<User>();
@@ -55,7 +65,7 @@ namespace PAZ
 
             _ini = controller.IniReader;
             _controller = controller;
-            _emailTemplate = emailTemplate;
+            _letterTemplate = letterTemplate;
         }
 
 
@@ -148,7 +158,7 @@ namespace PAZ
         private void bntVerzenden_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Tijdelijk buiten werking tot Teun de mappers update.");
-            //_controller.BriefPrintenBevestigingClicked();
+            //_controller.BriefMakenBevestigingClicked();
         }
 
         /**
@@ -196,7 +206,22 @@ namespace PAZ
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //_controller.EmailWindowClosed(new EmailTemplate(_emailTemplate.Id, tbAfzender.Text, tbInleiding.Text, tbInformatie.Text, tbAfsluiting.Text, tbAfzenders.Text));
+            // TO DO: Move to a Save button?
+            _controller.LetterWindowClosed(new LetterTemplate(
+                                            _letterTemplate.Id, 
+                                            tbKenmerk.Text, 
+                                            tbContactpersonen.Text, 
+                                            tbTelefoon.Text, 
+                                            tbEmail.Text, 
+                                            tbAvansLocatie.Text, 
+                                            tbBeginKern.Text,
+                                            tbReisInformatie.Text,
+                                            tbVerdereInformatie.Text,
+                                            tbAfzenders.Text,
+                                            tbBijlagen.Text,
+                                            tbVoettekstLinks.Text,
+                                            tbVoettekstMidden.Text,
+                                            tbVoettekstRechts.Text));
         }
     }
 }

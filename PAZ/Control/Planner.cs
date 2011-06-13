@@ -9,39 +9,6 @@ namespace PAZ.Control
 {
     class Planner
     {
-        private int CheckScore(Planning planning)
-        {
-            int score = 0;
-            foreach (Session session in planning.Sessions)
-            {
-                foreach (User user in session.Pair.Participants)
-                {
-                    bool countedScore = false;
-                    foreach (Blocked_timeslot blockedTimeSlot in user.BlockedTimeslots)
-                    {
-                        if (session.Daytime_id == blockedTimeSlot.Daytime_id)
-                        {
-                            if (!blockedTimeSlot.Hardblock)
-                            {
-                                ++score;
-                                countedScore = true;
-                                break;
-                            }
-                            else
-                            {
-                                return -1;
-                            }
-                        }
-                    }
-                    if (!countedScore)
-                    {
-                        score += 2;
-                    }
-                }
-            }
-            return score;
-        }
-
         public Planning Plan(List<Pair> pairs)
         {
             Planning result = new Planning();
@@ -65,7 +32,7 @@ namespace PAZ.Control
                     ++daytimeI;
                 }
             }
-            Console.WriteLine(this.CheckScore(result));
+            Console.WriteLine(result.GetScore());
             return result;
         }
     }

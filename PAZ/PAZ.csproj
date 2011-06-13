@@ -65,6 +65,7 @@
     <Compile Include="Control\PAZController.cs" />
     <Compile Include="Control\IniReader\IniFile.cs" />
     <Compile Include="Control\IniReader\IniSection.cs" />
+    <Compile Include="Control\Planner.cs" />
     <Compile Include="Model\Email.cs" />
     <Compile Include="Control\Emailer.cs" />
     <Compile Include="Model\EmailTemplate.cs" />

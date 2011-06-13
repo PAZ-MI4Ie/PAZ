@@ -26,14 +26,14 @@ namespace PAZ.Control
             {
                 Session session = new Session();
                 session.Pair = pair;
-                int daytimeI = r.Next(0, available.Count - 1);
+                int daytimeI = r.Next(0, available.Count);
                 while (session.Pair.ScoreAt(available.ElementAt(daytimeI).Key) == -1 && available.ElementAt(daytimeI).Value.Count < 1)
                 {
-                    daytimeI = r.Next(0, available.Count - 1);
+                    daytimeI = r.Next(0, available.Count);
                 }
                 session.Daytime = available.ElementAt(daytimeI).Key;
 
-                int classRoomI = r.Next(0, available.ElementAt(daytimeI).Value.Count-1);
+                int classRoomI = r.Next(0, available.ElementAt(daytimeI).Value.Count);
                 session.Classroom = available.ElementAt(daytimeI).Value.ElementAt(classRoomI);
                 available[session.Daytime].RemoveAt(classRoomI);
                 result.Sessions.Add(session);

@@ -52,6 +52,8 @@ namespace PAZ
             {
                 _master.Add(new SessionRow(s));
             }
+            Planner planner = new Planner();
+            planner.Plan(_controller.PairMapper.FindAll());
 			//END OF TEST CODE
 
             _teachers = _controller.TeacherMapper.FindAll();

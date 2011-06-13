@@ -87,12 +87,14 @@
     <Compile Include="Model\login.cs" />
     <Compile Include="Model\Mappers\StudentMapper.cs" />
     <Compile Include="Model\Mappers\TeacherMapper.cs" />
+    <Compile Include="Model\Mappers\TimeslotMapper.cs" />
     <Compile Include="Model\Pair.cs" />
     <Compile Include="Control\PDFExporter.cs" />
     <Compile Include="Model\Planning.cs" />
     <Compile Include="Model\Session.cs" />
     <Compile Include="Model\Student.cs" />
     <Compile Include="Model\Teacher.cs" />
+    <Compile Include="Model\Timeslot.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="View\LetterWindow.xaml.cs">
       <DependentUpon>LetterWindow.xaml</DependentUpon>

@@ -15,6 +15,7 @@ namespace PAZ.Model
             get
             {
                 // Deze tijden komen uit de Planning Zittingen.xslx op BB, het invoeren hiervan zou nog anders moeten als deze tijden instelbaar zijn...
+                // TO DO: fix this shit :)
                 switch (Timeslot)
                 {
                     case 1:

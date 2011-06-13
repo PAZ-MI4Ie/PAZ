@@ -23,6 +23,7 @@ namespace PAZ.Control
         public PairMapper PairMapper { get; private set; }
         public EmailTemplateMapper EmailTemplateMapper { get; private set; }
         public LetterTemplateMapper LetterTemplateMapper { get; private set; }
+        public TimeslotMapper TimeslotMapper { get; private set; }
 
         private MainWindow _mainWindow;
 
@@ -46,6 +47,7 @@ namespace PAZ.Control
             PairMapper = new PairMapper(DB);
             EmailTemplateMapper = new EmailTemplateMapper(DB);
             LetterTemplateMapper = new LetterTemplateMapper(DB);
+            TimeslotMapper = new TimeslotMapper(DB);
         }
 
         public void ExportRoosterClicked()
@@ -108,13 +110,6 @@ namespace PAZ.Control
                 section.Add("startdate", "1-05-2011");
                 section.Add("enddate", "15-05-2011");
                 ini.Add("DATES", section);
-
-                section = new IniSection();
-                section.Add("block1", "09:00-10:30");
-                section.Add("block2", "11:00-12:30");
-                section.Add("block3", "13:00-14:30");
-                section.Add("block4", "15:00-16:30");
-                ini.Add("TIME", section);
 
                 section = new IniSection();
                 section.Add("email_user", "paz.planner@gmail.com");

@@ -41,9 +41,9 @@ namespace PAZ
         {
             InitializeComponent();
 
-            //TEST CODE:
             _controller = new PAZController(this);
 
+            //TEST CODE:
             List<Session> tempSessions = _controller.SessionMapper.FindAll();
             Console.WriteLine(tempSessions);
             _master = new List<SessionRow>();
@@ -251,7 +251,7 @@ namespace PAZ
             _classrooms.Add(room);
             //END TEST CODE
 
-            calendar.createCalendar(_controller.IniReader, _classrooms);
+            calendar.createCalendar(_controller.IniReader, _classrooms, _controller);
             calendar.loadAllSessions(tempSessions);
             UnPlannedPairs unPlannedPairs = new UnPlannedPairs();
             unPlannedPairs.loadAllPairs(_controller.PairMapper);

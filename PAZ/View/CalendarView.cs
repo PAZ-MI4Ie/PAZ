@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Controls;
+using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using System.Globalization;
-using System.ComponentModel;
+using PAZ.Control;
 using PAZ.Model;
 using PAZMySQL;
 
@@ -135,7 +133,7 @@ namespace PAZ.View
         }
         #endregion
         
-        public void createCalendar(Ini.IniFile ini, List<Classroom> classrooms)
+        public void createCalendar(Ini.IniFile ini, List<Classroom> classrooms, PAZController controller)
         {
             DateTime startDate = DateTime.Parse(ini["DATES"]["startdate"]);
             DateTime stopDate = DateTime.Parse(ini["DATES"]["enddate"]);
@@ -196,13 +194,14 @@ namespace PAZ.View
                         Children.Add(header);
                     }
 
+                    List<Timeslot> timeslots = controller.TimeslotMapper.FindAll();
 
                     //Making rows
-                    for (int block = 1; block <= 4; block++)
+                    for (int block = 0; block < timeslots.Count ; ++block)
                     {
                         row = new RowDefinition();
                         //blok 1 = row for headers(classrooms,date)
-                        if (block == 1)
+                        if (block == 0)
                             row.Height = new GridLength(60);
                         else
                             row.Height = height;
@@ -210,7 +209,7 @@ namespace PAZ.View
                         rows++;
 
                         Label blk = new Label();
-                        blk.Content = ini["TIME"]["block" + block];
+                        blk.Content = timeslots[block].Time;
                         blk.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
                         blk.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
                         Grid.SetColumn(blk, 0);

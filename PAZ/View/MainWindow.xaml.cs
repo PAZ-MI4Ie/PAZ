@@ -52,8 +52,6 @@ namespace PAZ
             {
                 _master.Add(new SessionRow(s));
             }
-            Planner planner = new Planner();
-            planner.Plan(_controller.PairMapper.FindAll());
 			//END OF TEST CODE
 
             _teachers = _controller.TeacherMapper.FindAll();
@@ -1046,6 +1044,13 @@ namespace PAZ
 				textBoxStudentennummer.Text = "";
 			}
 		}
+
+        private void buttonZittingenGenereren_Click(object sender, RoutedEventArgs e)
+        {
+            Planner planner = new Planner();
+            //@MarkM: Schermpje dat ie bezig is laten zien aub
+            planner.Plan(_controller.PairMapper.FindAll());
+        }
     }
 
 	public static class ValidatorExtensions

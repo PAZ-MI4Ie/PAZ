@@ -29,7 +29,7 @@ namespace PAZ
         private PAZController _controller;
         private LetterTemplate _letterTemplate;
 
-        public LetterWindow(List<SessionRow> sessions, LetterTemplate letterTemplate, PAZController controller)
+        public LetterWindow(List<SessionRow> sessions, LetterTemplate letterTemplate)
         {
             InitializeComponent();
 
@@ -63,8 +63,8 @@ namespace PAZ
 
             ExpertsToevoegen();
 
-            _ini = controller.IniReader;
-            _controller = controller;
+            _controller = PAZController.GetInstance();
+            _ini = _controller.IniReader;
             _letterTemplate = letterTemplate;
         }
 

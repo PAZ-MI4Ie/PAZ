@@ -194,13 +194,13 @@ namespace PAZ.View
                         Children.Add(header);
                     }
 
-                    List<Timeslot> timeslots = controller.TimeslotMapper.FindAll();
+                    List<Timeslot> timeslots = controller.Timeslots;
 
                     //Making rows
                     for (int block = 0; block < timeslots.Count ; ++block)
                     {
                         row = new RowDefinition();
-                        //blok 1 = row for headers(classrooms,date)
+                        //blok 0 = row for headers(classrooms,date)
                         if (block == 0)
                             row.Height = new GridLength(60);
                         else

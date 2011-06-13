@@ -32,7 +32,7 @@ namespace PAZ
         private PAZController _controller;
         private EmailTemplate _emailTemplate;
 
-        public EmailWindow(List<SessionRow> sessions, EmailTemplate emailTemplate, PAZController controller)
+        public EmailWindow(List<SessionRow> sessions, EmailTemplate emailTemplate)
         {
             InitializeComponent();
 
@@ -63,8 +63,8 @@ namespace PAZ
             StudentenToevoegen();
             DocentenToevoegen();
 
-            _ini = controller.IniReader;
-            _controller = controller;
+            _controller = PAZController.GetInstance();
+            _ini = _controller.IniReader;
             _emailTemplate = emailTemplate;
         }
 
@@ -282,7 +282,7 @@ namespace PAZ
                             emailBody += "<p>U neemt deel aan de volgende zittingen: <br /> Zitting " + (++zittingNummer);
                         }
 
-                        emailBody += " is gepland op, " + _sessions[i].Datum + " om " + sessionModel.Daytime.Time + ", in lokaal " + sessionModel.Classroom.Room_number + "<br />";
+                        emailBody += " is gepland op, " + _sessions[i].Datum + " om " + sessionModel.Daytime.Starttime + ", in lokaal " + sessionModel.Classroom.Room_number + "<br />";
                     }
                 }
             }

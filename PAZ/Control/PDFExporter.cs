@@ -237,7 +237,7 @@ namespace PAZ.Control
                         document.Add(new iText.Paragraph("Hierbij ontvangt u de afstudeerscriptie van onze student " + rowSession.GetSessionModel().Pair.Student1.Study + ", " + rowSession.GetSessionModel().Pair.Student1.Firstname + " " + rowSession.GetSessionModel().Pair.Student1.Surname + " van wie u de afstudeerbespreking zult bijwonen. Begeleidende docenten " + rowSession.GetSessionModel().GetTeachers()[0].Firstname + " " + rowSession.GetSessionModel().GetTeachers()[0].Surname + " en " + rowSession.GetSessionModel().GetTeachers()[1].Firstname + " " + rowSession.GetSessionModel().GetTeachers()[1].Surname + " zullen bij de zitting aanwezig zijn.", standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + rowSession.GetSessionModel().Daytime.Time + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, Onderwijsboulevard 215 te `s-Hertogenbosch.", standardFont));
+                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + rowSession.GetSessionModel().Daytime.Starttime + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, Onderwijsboulevard 215 te `s-Hertogenbosch.", standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
                         document.Add(new iText.Paragraph("In het afstudeerlokaal wordt voor aanvang van de zitting koffie en thee geserveerd.", standardFont));

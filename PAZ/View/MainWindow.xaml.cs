@@ -41,7 +41,8 @@ namespace PAZ
         {
             InitializeComponent();
 
-            _controller = new PAZController(this);
+            _controller = PAZController.GetInstance();
+            _controller.Init(this);
 
             //TEST CODE:
             List<Session> tempSessions = _controller.SessionMapper.FindAll();

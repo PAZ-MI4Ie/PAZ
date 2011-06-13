@@ -25,18 +25,31 @@ namespace PAZ.Control
         public LetterTemplateMapper LetterTemplateMapper { get; private set; }
         public TimeslotMapper TimeslotMapper { get; private set; }
 
+        public List<Timeslot> Timeslots { get; private set; }
+
         private MainWindow _mainWindow;
 
-        public PAZController(MainWindow mainWindow)
-        {
-            _mainWindow = mainWindow;
+        private static PAZController _controller;
 
-            PDFexporter = new PDFExporter(mainWindow.GridOverzichtList);
+        public static PAZController GetInstance()
+        {
+            if (PAZController._controller == null)
+                PAZController._controller = new PAZController();
+
+            return PAZController._controller;
+        }
+
+        public PAZController()
+        {
             Emailer = new Emailer();
             IniReader = ReadIni();
+        }
 
-            //TEST CODE:
-            DB = new MysqlDb(IniReader["DATABASESETTINGS"]["db_host"], IniReader["DATABASESETTINGS"]["db_username"], IniReader["DATABASESETTINGS"]["db_password"], IniReader["DATABASESETTINGS"]["db_database"]);//Must be somewhere central
+        public void Init(MainWindow mainWindow)
+        {
+            PDFexporter = new PDFExporter(mainWindow.GridOverzichtList);
+
+            DB = MysqlDb.GetInstance();
 
             SessionMapper = new SessionMapper(DB);
             UserMapper = new UserMapper(DB);
@@ -48,6 +61,10 @@ namespace PAZ.Control
             EmailTemplateMapper = new EmailTemplateMapper(DB);
             LetterTemplateMapper = new LetterTemplateMapper(DB);
             TimeslotMapper = new TimeslotMapper(DB);
+
+            Timeslots = TimeslotMapper.FindAll();
+
+            _mainWindow = mainWindow;
         }
 
         public void ExportRoosterClicked()
@@ -64,7 +81,7 @@ namespace PAZ.Control
         {
             LetterTemplate letterTemplate = LetterTemplateMapper.Find(1);
 
-            LetterWindow letterWindow = new LetterWindow(sessions, letterTemplate, this);
+            LetterWindow letterWindow = new LetterWindow(sessions, letterTemplate);
             letterWindow.ShowDialog();
         }
 
@@ -85,7 +102,7 @@ namespace PAZ.Control
         {
             EmailTemplate emailTemplate = EmailTemplateMapper.Find(1);
 
-            EmailWindow emailWindow = new EmailWindow(sessions, emailTemplate, this);
+            EmailWindow emailWindow = new EmailWindow(sessions, emailTemplate);
             emailWindow.ShowDialog();
         }
 
@@ -130,8 +147,9 @@ namespace PAZ.Control
                 ini.Save();
             }
 
-            _mainWindow.textBoxDeadlineStart.Text = ini["DATES"]["startdate"];
-            _mainWindow.textBoxDeadlineEind.Text = ini["DATES"]["enddate"];
+            // TO DO: Dit regelen...
+            //_mainWindow.textBoxDeadlineStart.Text = ini["DATES"]["startdate"];
+            //_mainWindow.textBoxDeadlineEind.Text = ini["DATES"]["enddate"];
 
             return ini;
         }

@@ -6,17 +6,17 @@
         <TabControl HorizontalAlignment="Left" Name="tcGeadresseerden" VerticalAlignment="Top" Width="662" UseLayoutRounding="False" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Height="441" Margin="12,12,0,0">
             <TabItem Header="Bericht aanpassen" Name="tiBericht">
                 <Grid>
-                    <TextBox HorizontalAlignment="Left" Margin="117,150,0,169.723" Name="tbInformatie" Width="385" Text="" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" />
-                    <TextBox AcceptsReturn="True" AcceptsTab="True" Height="68.723" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="117,75,0,0" Name="tbInleiding" Text="" TextWrapping="Wrap" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto" Width="385" />
-                    <TextBox AcceptsReturn="True" AcceptsTab="True" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="117,244,0,86.723" Name="tbAfsluiting" Text="" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Width="385" />
+                    <TextBox HorizontalAlignment="Left" Margin="117,150,0,169.723" Name="tbInformatie" Width="385" Text="" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" TextChanged="textBox_TextChanged" />
+                    <TextBox AcceptsReturn="True" AcceptsTab="True" Height="68.723" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="117,75,0,0" Name="tbInleiding" Text="" TextWrapping="Wrap" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto" Width="385" TextChanged="textBox_TextChanged" />
+                    <TextBox AcceptsReturn="True" AcceptsTab="True" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="117,244,0,86.723" Name="tbAfsluiting" Text="" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Width="385" TextChanged="textBox_TextChanged" />
                     <Label Content="Inleiding:" Height="28" HorizontalAlignment="Left" Margin="6,75,0,0" Name="lblWaarschuwing" VerticalAlignment="Top" FlowDirection="LeftToRight" HorizontalContentAlignment="Right" Width="104.75" />
                     <Label Content="Informatie:" FlowDirection="LeftToRight" Height="28" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="6,150,0,0" Name="lblInformatie" VerticalAlignment="Top" Width="104.75" />
                     <Label Content="Afsluiting:" FlowDirection="LeftToRight" Height="28" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="6,244,0,0" Name="lblAfsluiting" VerticalAlignment="Top" Width="104.75" />
-                    <TextBox AcceptsReturn="True" AcceptsTab="True" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="117,327,0,27.723" Name="tbAfzenders" Text="" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Width="385" />
+                    <TextBox AcceptsReturn="True" AcceptsTab="True" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="117,327,0,27.723" Name="tbAfzenders" Text="" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Width="385" TextChanged="textBox_TextChanged" />
                     <Label Content="Afzenders:" FlowDirection="LeftToRight" Height="28" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="6,327,0,0" Name="lblAfzenders" VerticalAlignment="Top" Width="104.75" />
                     <TextBlock Height="39.723" HorizontalAlignment="Left" Margin="519,91,0,0" Name="textBlockWaarschuwing" Text="Alleen zichtbaar voor docenten" VerticalAlignment="Top" TextWrapping="Wrap" Width="98.573" />
                     <Label Content="Naam Afzender:" FlowDirection="LeftToRight" Height="28" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="6,14,0,0" Name="lblAfzender" VerticalAlignment="Top" Width="104.75" />
-                    <TextBox Height="28" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="117,14,0,0" Name="tbAfzender" Text="" VerticalAlignment="Top" VerticalScrollBarVisibility="Disabled" Width="385" />
+                    <TextBox Height="28" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="117,14,0,0" Name="tbAfzender" Text="" VerticalAlignment="Top" VerticalScrollBarVisibility="Disabled" Width="385" TextChanged="textBox_TextChanged" />
                     <Separator Height="9.723" HorizontalAlignment="Left" Margin="6,48,0,0" Name="separator3" VerticalAlignment="Top" Width="640" />
                     <TextBlock Height="17" HorizontalAlignment="Left" Margin="518.427,19,0,0" Name="textBlockEmailAfzender" Text="E-mail" TextWrapping="Wrap" VerticalAlignment="Top" Width="37.573" />
                 </Grid>
@@ -63,7 +63,8 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button Content="Annuleren" Height="29" HorizontalAlignment="Left" Margin="483,459,0,0" Name="btnAnnuleren" VerticalAlignment="Top" Width="90" Click="btnAnnuleren_Click" />
+        <Button Content="Annuleren" Height="29" HorizontalAlignment="Left" Margin="399,459,0,0" Name="btnAnnuleren" VerticalAlignment="Top" Width="90" Click="btnAnnuleren_Click" />
         <Button Content="Verzenden" Height="29" HorizontalAlignment="Left" Margin="579,459,0,0" Name="bntVerzenden" VerticalAlignment="Top" Width="78" Click="bntVerzenden_Click" />
+        <Button Content="Toepassen" Height="29" HorizontalAlignment="Left" IsEnabled="False" Margin="495,459,0,0" Name="btnSave" VerticalAlignment="Top" Width="78" Click="btnSave_Click" />
     </Grid>
 </Window>

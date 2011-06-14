@@ -106,12 +106,12 @@ namespace PAZ.Control
             emailWindow.ShowDialog();
         }
 
-        public void EmailWindowClosed(EmailTemplate updatedTemplate)
+        public void EmailWindowSaveClicked(EmailTemplate updatedTemplate)
         {
             EmailTemplateMapper.Save(updatedTemplate);
         }
 
-        public void LetterWindowClosed(LetterTemplate updatedTemplate)
+        public void LetterWindowSaveClicked(LetterTemplate updatedTemplate)
         {
             LetterTemplateMapper.Save(updatedTemplate);
         }

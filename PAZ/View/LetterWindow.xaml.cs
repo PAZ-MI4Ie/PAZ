@@ -66,6 +66,8 @@ namespace PAZ
             _controller = PAZController.GetInstance();
             _ini = _controller.IniReader;
             _letterTemplate = letterTemplate;
+
+            btnSave.IsEnabled = false;
         }
 
 
@@ -205,14 +207,18 @@ namespace PAZ
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // TO DO: Move to a Save button?
-            _controller.LetterWindowClosed(new LetterTemplate(
-                                            _letterTemplate.Id, 
-                                            tbKenmerk.Text, 
-                                            tbContactpersonen.Text, 
-                                            tbTelefoon.Text, 
-                                            tbEmail.Text, 
-                                            tbAvansLocatie.Text, 
+            // TO DO: Waarschuwing popup, vraag om op te slaan indien er wijzigingen waren
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            _controller.LetterWindowSaveClicked(new LetterTemplate(
+                                            _letterTemplate.Id,
+                                            tbKenmerk.Text,
+                                            tbContactpersonen.Text,
+                                            tbTelefoon.Text,
+                                            tbEmail.Text,
+                                            tbAvansLocatie.Text,
                                             tbBeginKern.Text,
                                             tbReisInformatie.Text,
                                             tbVerdereInformatie.Text,
@@ -221,6 +227,13 @@ namespace PAZ
                                             tbVoettekstLinks.Text,
                                             tbVoettekstMidden.Text,
                                             tbVoettekstRechts.Text));
+
+            btnSave.IsEnabled = false;
+        }
+
+        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            btnSave.IsEnabled = true;
         }
     }
 }

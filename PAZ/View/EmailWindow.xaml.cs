@@ -66,6 +66,8 @@ namespace PAZ
             _controller = PAZController.GetInstance();
             _ini = _controller.IniReader;
             _emailTemplate = emailTemplate;
+
+            btnSave.IsEnabled = false;
         }
 
 
@@ -477,7 +479,19 @@ namespace PAZ
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            _controller.EmailWindowClosed(new EmailTemplate(_emailTemplate.Id, tbAfzender.Text, tbInleiding.Text, tbInformatie.Text, tbAfsluiting.Text, tbAfzenders.Text));
+            // TO DO: Waarschuwing popup, vraag om op te slaan indien er wijzigingen waren
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            _controller.EmailWindowSaveClicked(new EmailTemplate(_emailTemplate.Id, tbAfzender.Text, tbInleiding.Text, tbInformatie.Text, tbAfsluiting.Text, tbAfzenders.Text));
+
+            btnSave.IsEnabled = false;
+        }
+
+        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            btnSave.IsEnabled = true;
         }
     }
 }

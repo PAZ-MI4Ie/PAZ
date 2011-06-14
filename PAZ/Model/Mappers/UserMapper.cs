@@ -96,6 +96,12 @@ namespace PAZMySQL
          */
         public bool Delete()
         {
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "DELETE FROM user WHERE user_type != ?usertype";
+            command.Parameters.Add(new MySqlParameter("?usertype", MySqlDbType.String)).Value = "admin";
+            this._db.ExecuteCommand(command);
+            this._db.CloseConnection();
             return true;
         }
     }

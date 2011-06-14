@@ -9,6 +9,7 @@ using PAZ.Control;
 using PAZ.Model;
 using PAZMySQL;
 using PAZ.Model.Mappers;
+using System.Windows.Input;
 
 namespace PAZ.View
 {
@@ -43,7 +44,7 @@ namespace PAZ.View
         void Session_Drop(object sender, DragEventArgs e)
         {
             CustomLabel session = sender as CustomLabel;
-            if (session != null)
+            if (session != null && session.Background != Brushes.Red)
             {
                 // If the DataObject contains string data, extract it.
                 if (e.Data.GetDataPresent(DataFormats.StringFormat))
@@ -54,14 +55,10 @@ namespace PAZ.View
                         string[] other = dataString.Split(';');
                         string[] users = dataString.Split('\n');
                         if(removeSessionLabel(other[1],Convert.ToInt32(other[2]),Convert.ToInt32(other[3])))
-                            addSession(session.Id, GetSessionDate(session), GetColumn(session), GetRow(session), users[1], users[2], new string[] { users[4], users[5] }, new string[] { users[7], users[8] });
+                            addSession(Sessionmapper.Find(Convert.ToInt32(other[0])));
                     }
                 }
                 revertCheckAvailability();
-            }
-            else if(session.Background == Brushes.Red)
-            {
-
             }
         }
         
@@ -137,7 +134,10 @@ namespace PAZ.View
                     {
                         Label session = dateGrid.Children[i + ((row - 1) * 8)] as Label;
                         if (session != currentSession)
+                        {
+
                             session.Background = background;
+                        }
                     }
                 }
             }
@@ -297,38 +297,66 @@ namespace PAZ.View
         {
             foreach (Session session in sessions)
             {
-                int classroom = session.Classroom.Id;
-                string student1 = session.Pair.Student1.Firstname + " " + session.Pair.Student1.Surname;
-                string student2 = session.Pair.Student2.Firstname + " " + session.Pair.Student2.Surname;
-                string[] teachers = new string[1];
-                string[] experts = new string[1];
-                foreach (User user in session.Pair.Attachments)
-                {
-                    if (user.User_type == "teacher")
-                        teachers[0] += user.Firstname + " " + user.Surname + ",";
-                    else
-                        experts[0] += user.Firstname + " " + user.Surname + ",";
-                }
-                teachers = teachers[0].Split(',');
-                experts = experts[0].Split(',');
-                addSession(session.Id, session.Daytime.Date.ToShortDateString(), session.Classroom_id, session.Daytime.Timeslot,
-                            student1, student2, teachers, experts);
+                addSession(session);
             }
         }
 
-        public void addSession(int id,string date, int classroomId, int timeslot, string student1, string student2, string[] teachers, string[] experts)
+        void edit_Click(object sender, RoutedEventArgs e)
         {
-            CustomLabel session = new CustomLabel();
-            session = dateGrids[date].Children[(classroomId) + ((timeslot) * 8)] as CustomLabel;
-            session.Id = id;
-            session.Content = student1 + "\n" + student2 + "\n\n" + teachers[0] + "\n" + teachers[1] +"\n\n"+ experts[0] + "\n" + experts[1];
-            session.BorderBrush = Brushes.LightGray;
-            session.BorderThickness = new Thickness(2);
-            session.MouseMove += new System.Windows.Input.MouseEventHandler(session_MouseMove);
-            session.AllowDrop = false;
-            session.Drop -= Session_Drop;
-            session.Background = Brushes.White;
-            session.ToolTip = "Studenten\n\nDocenten\n\nExperts";
+            //Get the label
+            CustomLabel session = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
+        }
+
+        void delete_Click(object sender, RoutedEventArgs e)
+        {
+            //Get the label
+            CustomLabel sessionLabel = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
+            Session session = Sessionmapper.Find(sessionLabel.Id);
+
+            //TODO: get session and remove from db
+            //TODO: remove session from calendar
+            bool removed = removeSession(session);
+            if (removed)
+            {
+                MessageBox.Show("De zitting is succesvol verwijderd");
+            }
+            else
+            {
+                MessageBox.Show("Er is iets mis gegaan met het verwijderen van de zitting", "Foutmelding", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        
+
+        public void addSession(Session session)
+        {
+            CustomLabel sessionLabel = dateGrids[session.Daytime.Date.ToShortDateString()].Children[(session.Classroom.Id) + ((session.Daytime.Timeslot) * 8)] as CustomLabel;
+            sessionLabel.Id = session.Id;
+            string[] students = new string[1];
+            string[] teachers = new string[1];
+            string[] experts = new string[1];
+            foreach (User user in session.Pair.Participants)
+            {
+                string name = user.Firstname + " " + user.Surname + ",";
+                if (user.User_type == "teacher")
+                    teachers[0] += name;
+                else if (user.User_type == "student")
+                    students[0] += name;
+                else
+                    experts[0] += name;
+            }
+            teachers = teachers[0].Split(',');
+            experts = experts[0].Split(',');
+            students = students[0].Split(',');
+
+            sessionLabel.Content = students[0] + "\n" + students[1] + "\n\n" + teachers[0] + "\n" + teachers[1] + "\n\n" + experts[0] + "\n" + experts[1];
+            sessionLabel.BorderBrush = Brushes.LightGray;
+            sessionLabel.BorderThickness = new Thickness(2);
+            sessionLabel.MouseMove += new System.Windows.Input.MouseEventHandler(session_MouseMove);
+            sessionLabel.AllowDrop = false;
+            sessionLabel.Drop -= Session_Drop;
+            sessionLabel.Background = Brushes.White;
+            sessionLabel.ToolTip = "Studenten\n\nDocenten\n\nExperts";
 
             //Context Menu
             System.Windows.Controls.ContextMenu editMenu = new ContextMenu();
@@ -342,37 +370,14 @@ namespace PAZ.View
             delete.Header = "Verwijderen";
             delete.Click += new RoutedEventHandler(delete_Click);
             editMenu.Items.Add(delete);
-            session.ContextMenu = editMenu;
+            sessionLabel.ContextMenu = editMenu;
         }
 
-        void edit_Click(object sender, RoutedEventArgs e)
-        {
-            //Get the label
-            CustomLabel session = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
-        }
-
-        void delete_Click(object sender, RoutedEventArgs e)
-        {
-            //Get the label
-            CustomLabel session = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
-            SessionMapper _mapper = new SessionMapper(MysqlDb.GetInstance());
-
-            removeSession();
-
-            //TODO: get session and remove from db
-            //TODO: remove session from calendar
-            //bool removed = removeSession();
-            //if true
-            // MessageBox.Show("De zitting is succesvol verwijderd");
-            //else
-            // MessageBox.Show("Er is iets mis gegaan met het verwijderen van de zitting","Foutmelding",MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        
-
-        public void addSession(Session session)
+        public void addNewSession(Session session)
         {
 
+            Sessionmapper.Save(session);
+            addSession(session);
         }
 
         public Grid HasSession(CustomLabel session)
@@ -394,13 +399,15 @@ namespace PAZ.View
             }
             return null;
         }
-        public bool removeSession()
+        public bool removeSession(Session session)
         {
-            //remove session from database
-            //if succesvol
-            // removeSessionLabel()
-            // update unplannedPairWindow
-            // return true
+            bool succesfull = true;// Sessionmapper.Delete(session);
+            if(succesfull)
+            {
+                removeSessionLabel(session);
+                UnPlannedPairs.update(new UnPlannedPairs(),Pairmapper);
+                return true;
+            }
             return false;
         }
 
@@ -418,6 +425,25 @@ namespace PAZ.View
                 session.ContextMenu = null;
                 session.AllowDrop = true;
                 session.Drop += new DragEventHandler(Session_Drop);
+                return true;
+            }
+            return false;
+        }
+
+        public bool removeSessionLabel(Session session)
+        {
+            CustomLabel sessionLabel = dateGrids[session.Daytime.Date.ToShortDateString()].Children[(session.Classroom.Id) + ((session.Daytime.Timeslot) * 8)] as CustomLabel;
+            if (session != null)
+            {
+                sessionLabel.Id = 0;
+                sessionLabel.Content = null;
+                sessionLabel.ToolTip = null;
+                sessionLabel.BorderBrush = null;
+                sessionLabel.BorderThickness = new Thickness(0);
+                sessionLabel.MouseMove -= session_MouseMove;
+                sessionLabel.ContextMenu = null;
+                sessionLabel.AllowDrop = true;
+                sessionLabel.Drop += new DragEventHandler(Session_Drop);
                 return true;
             }
             return false;

@@ -40,22 +40,7 @@ namespace PAZMySQL
                 result.Add(this.ProcessRow(new Session(), Reader));
             }
             this._db.CloseConnection();
-
-			/* dummy data
-			Daytime daytime = new Daytime(1, new DateTime(2011, 5, 10), 1);
-			Classroom classroom = new Classroom(1, "OB002");
-            Student student1 = new Student("Jan", "Piet", 0000000, "Management en Bestuur");
-            Student student2 = new Student("Piet", "Jan", 0000000, "Management en Bestuur");
-			Teacher teacher1 = new Teacher("Saris", "Ger");
-			Teacher teacher2 = new Teacher("Hogenboom", "Keesjan");
-			Expert expert1 = new Expert("Klein", "Aad");
-			Expert expert2 = new Expert("Groot", "Ad");
-			Pair pair = new Pair(1, student1, student2, 12);
-
-			result.Add(new Session(daytime, classroom, pair, teacher1, teacher2, expert1, expert2));
-			end dummy data*/
-
-			return result;
+            return result;
 		}
 
         public Session Find(int id)
@@ -68,6 +53,33 @@ namespace PAZMySQL
             Reader.Read();//Only 1 row
             this._db.CloseConnection();
             return this.ProcessRow(new Session(), Reader);
+            
+        }
+
+        public void Save(Session session)
+        {
+            Boolean insert = true;
+            if (session.Id != 0)
+            {
+                insert = false;
+            }
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            if (insert)
+            {
+                command.CommandText = "INSERT INTO session (daytime_id, classroom_id, pair_id) VALUES " +
+                "(?daytime_id, ?classroom_id, ?pair_id)";
+            }
+            else
+            {
+                command.CommandText = "UPDATE session (daytime_id, classroom_id, pair_id) VALUES " +
+                "(?daytime_id, ?classroom_id, ?pair_id) WHERE user_id = ?user_id";
+            }
+            command.Parameters.Add(new MySqlParameter("?daytime_id", MySqlDbType.Int32)).Value = session.Daytime.Id;
+            command.Parameters.Add(new MySqlParameter("?classroom_id", MySqlDbType.Int32)).Value = session.Classroom.Id;
+            command.Parameters.Add(new MySqlParameter("?pair_id", MySqlDbType.String)).Value = session.Pair.ID;
+            this._db.ExecuteCommand(command);
+            this._db.CloseConnection();
         }
     }
 }

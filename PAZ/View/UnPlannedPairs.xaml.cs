@@ -24,22 +24,10 @@ namespace PAZ.View
             InitializeComponent();
         }
 
-        public void addPair()
+        public static void update(UnPlannedPairs c, PairMapper pairMapper)
         {
-
-        }
-
-        public void RemovePair(int id)
-        {/*
-            Model.Pair pair = pairmapper.Find(id);
-            if (pairs.Contains(pair))
-                if (pairs.Remove(pair))
-                {
-                    update(pairs);
-                    MessageBox.Show("Het paar met de studenten: " + pair.Student1.Firstname + " " + pair.Student1.Surname + ", " + pair.Student2.Firstname + " " + pair.Student2.Surname + " is verwijderd");
-                }
-                else
-                    MessageBox.Show("Er is iets mis gegaan met het verwijderen.");*/
+            c.GridPairs.Children.Clear();
+            c.loadAllPairs(pairMapper);
         }
 
         public void loadAllPairs(PairMapper pairmapper)
@@ -85,10 +73,10 @@ namespace PAZ.View
             CustomLabel pair = sender as CustomLabel;
             if (pair != null && e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
             {
-                CalendarView.CheckAvailability(false);
+                CalendarView.CheckAvailability(pair,false);
                 DragDropEffects drag = DragDrop.DoDragDrop(pair, pair.Id, DragDropEffects.Move);
                 if (drag == DragDropEffects.None)
-                    CalendarView.CheckAvailability(true);
+                    CalendarView.revertCheckAvailability();
             }
         }
     }

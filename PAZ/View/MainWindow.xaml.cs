@@ -41,9 +41,10 @@ namespace PAZ
         {
             InitializeComponent();
 
-            //TEST CODE:
-            _controller = new PAZController(this);
+            _controller = PAZController.GetInstance();
+            _controller.Init(this);
 
+            //TEST CODE:
             List<Session> tempSessions = _controller.SessionMapper.FindAll();
             Console.WriteLine(tempSessions);
             _master = new List<SessionRow>();
@@ -250,9 +251,10 @@ namespace PAZ
             room = new Classroom(8, "OC202");
             _classrooms.Add(room);
             //END TEST CODE
+
             CalendarView.Sessionmapper = _controller.SessionMapper;
             CalendarView.Pairmapper = _controller.PairMapper;
-            calendar.createCalendar(_controller.IniReader, _classrooms);
+            calendar.createCalendar(_controller.IniReader, _classrooms, _controller);
             calendar.loadAllSessions(tempSessions);
             UnPlannedPairs unPlannedPairs = new UnPlannedPairs();
             unPlannedPairs.loadAllPairs(_controller.PairMapper);
@@ -310,10 +312,9 @@ namespace PAZ
             _controller.EmailVersturenClicked(_master);
         }
 
-        private void buttonBriefPrinten_Click(object sender, RoutedEventArgs e)
+        private void buttonBriefMaken_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Tijdelijk buiten werking tot Teun de mappers update.");
-            //_controller.BriefPrintenClicked();
+            _controller.BriefMakenClicked(_master);
         }
 
         private void GridOverzichtList_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
@@ -1045,6 +1046,13 @@ namespace PAZ
 				textBoxStudentennummer.Text = "";
 			}
 		}
+
+        private void buttonZittingenGenereren_Click(object sender, RoutedEventArgs e)
+        {
+            Planner planner = new Planner();
+            //@MarkM: Schermpje dat ie bezig is laten zien aub
+            planner.Plan(_controller.PairMapper.FindAll());
+        }
     }
 
 	public static class ValidatorExtensions

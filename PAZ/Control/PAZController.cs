@@ -22,20 +22,34 @@ namespace PAZ.Control
         public ExpertMapper ExpertMapper { get; private set; }
         public PairMapper PairMapper { get; private set; }
         public EmailTemplateMapper EmailTemplateMapper { get; private set; }
+        public LetterTemplateMapper LetterTemplateMapper { get; private set; }
+        public TimeslotMapper TimeslotMapper { get; private set; }
+
+        public List<Timeslot> Timeslots { get; private set; }
 
         private MainWindow _mainWindow;
-        private EmailWindow _emailWindow;
 
-        public PAZController(MainWindow mainWindow)
+        private static PAZController _controller;
+
+        public static PAZController GetInstance()
         {
-            _mainWindow = mainWindow;
+            if (PAZController._controller == null)
+                PAZController._controller = new PAZController();
 
-            PDFexporter = new PDFExporter(mainWindow.GridOverzichtList);
+            return PAZController._controller;
+        }
+
+        public PAZController()
+        {
             Emailer = new Emailer();
             IniReader = ReadIni();
+        }
 
-            //TEST CODE:
-            DB = new MysqlDb(IniReader["DATABASESETTINGS"]["db_host"], IniReader["DATABASESETTINGS"]["db_username"], IniReader["DATABASESETTINGS"]["db_password"], IniReader["DATABASESETTINGS"]["db_database"]);//Must be somewhere central
+        public void Init(MainWindow mainWindow)
+        {
+            PDFexporter = new PDFExporter(mainWindow.GridOverzichtList);
+
+            DB = MysqlDb.GetInstance();
 
             SessionMapper = new SessionMapper(DB);
             UserMapper = new UserMapper(DB);
@@ -44,7 +58,13 @@ namespace PAZ.Control
             TeacherMapper = new TeacherMapper(DB);
             ExpertMapper = new ExpertMapper(DB);
             PairMapper = new PairMapper(DB);
-            EmailTemplateMapper = new EmailTemplateMapper(DB); 
+            EmailTemplateMapper = new EmailTemplateMapper(DB);
+            LetterTemplateMapper = new LetterTemplateMapper(DB);
+            TimeslotMapper = new TimeslotMapper(DB);
+
+            Timeslots = TimeslotMapper.FindAll();
+
+            _mainWindow = mainWindow;
         }
 
         public void ExportRoosterClicked()
@@ -57,7 +77,15 @@ namespace PAZ.Control
             }
         }
 
-        public void BriefPrintenClicked()
+        public void BriefMakenClicked(List<SessionRow> sessions)
+        {
+            LetterTemplate letterTemplate = LetterTemplateMapper.Find(1);
+
+            LetterWindow letterWindow = new LetterWindow(sessions, letterTemplate);
+            letterWindow.ShowDialog();
+        }
+
+        public void BriefMakenBevestigingClicked()
         {
             // dit zorgt ervoor dat er geen filters worden toegepast in de PDF uitdraai
             _mainWindow.textboxSearch.Text = "";
@@ -74,15 +102,18 @@ namespace PAZ.Control
         {
             EmailTemplate emailTemplate = EmailTemplateMapper.Find(1);
 
-            EmailWindow emailWindow = new EmailWindow(sessions, emailTemplate, this);
+            EmailWindow emailWindow = new EmailWindow(sessions, emailTemplate);
             emailWindow.ShowDialog();
-
-            _emailWindow = emailWindow;
         }
 
         public void EmailWindowClosed(EmailTemplate updatedTemplate)
         {
             EmailTemplateMapper.Save(updatedTemplate);
+        }
+
+        public void LetterWindowClosed(LetterTemplate updatedTemplate)
+        {
+            LetterTemplateMapper.Save(updatedTemplate);
         }
 
         public IniFile ReadIni()
@@ -96,13 +127,6 @@ namespace PAZ.Control
                 section.Add("startdate", "1-05-2011");
                 section.Add("enddate", "15-05-2011");
                 ini.Add("DATES", section);
-
-                section = new IniSection();
-                section.Add("block1", "09:00-10:30");
-                section.Add("block2", "11:00-12:30");
-                section.Add("block3", "13:00-14:30");
-                section.Add("block4", "15:00-16:30");
-                ini.Add("TIME", section);
 
                 section = new IniSection();
                 section.Add("email_user", "paz.planner@gmail.com");
@@ -123,8 +147,9 @@ namespace PAZ.Control
                 ini.Save();
             }
 
-            _mainWindow.textBoxDeadlineStart.Text = ini["DATES"]["startdate"];
-            _mainWindow.textBoxDeadlineEind.Text = ini["DATES"]["enddate"];
+            // TO DO: Dit regelen...
+            //_mainWindow.textBoxDeadlineStart.Text = ini["DATES"]["startdate"];
+            //_mainWindow.textBoxDeadlineEind.Text = ini["DATES"]["enddate"];
 
             return ini;
         }

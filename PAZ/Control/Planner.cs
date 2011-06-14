@@ -4,68 +4,49 @@ using System.Linq;
 using System.Text;
 using PAZ.Model;
 using PAZMySQL;
+using Ini;
 
 namespace PAZ.Control
 {
     class Planner
     {
-        private int CheckScore(Planning planning)
-        {
-            int score = 0;
-            foreach (Session session in planning.Sessions)
-            {
-                foreach (User user in session.Pair.Participants)
-                {
-                    bool countedScore = false;
-                    foreach (Blocked_timeslot blockedTimeSlot in user.BlockedTimeslots)
-                    {
-                        if (session.Daytime_id == blockedTimeSlot.Daytime_id)
-                        {
-                            if (!blockedTimeSlot.Hardblock)
-                            {
-                                ++score;
-                                countedScore = true;
-                                break;
-                            }
-                            else
-                            {
-                                return -1;
-                            }
-                        }
-                    }
-                    if (!countedScore)
-                    {
-                        score += 2;
-                    }
-                }
-            }
-            return score;
-        }
-
         public Planning Plan(List<Pair> pairs)
         {
+            IniFile ini = PAZController.GetInstance().IniReader;
+            int max_tries = Int32.Parse(ini["AUTOPLANNERSETTINGS"]["max_tries"]);
+            Random r = new Random();
             Planning result = new Planning();
 
             List<Classroom> classrooms = new ClassroomMapper(MysqlDb.GetInstance()).FindAll();
             List<Daytime> daytimes = new DaytimeMapper(MysqlDb.GetInstance()).FindAll();
-            int classroomI = 0;
-            int daytimeI = 0;
+            Dictionary<Daytime, List<Classroom>> available = new Dictionary<Daytime,List<Classroom>>();
+            foreach (Daytime daytime in daytimes)
+            {
+                available.Add(daytime, new List<Classroom>(classrooms));//Clone :)
+            }
+
             foreach (Pair pair in pairs)
             {
                 Session session = new Session();
-                session.Classroom = classrooms[classroomI];
-                session.Daytime = daytimes[daytimeI];
                 session.Pair = pair;
-                result.Sessions.Add(session);
-                Console.WriteLine(pair.Student1.Firstname + " en " + pair.Student2.Firstname + " at " + session.Daytime.Date + " slot " + session.Daytime.Timeslot + " in " + session.Classroom.Room_number);
-                ++classroomI;
-                if (classroomI == classrooms.Count)
+                int daytimeI = r.Next(0, available.Count);
+                int tries = 0;
+                while (session.Pair.ScoreAt(available.ElementAt(daytimeI).Key) == -1 && available.ElementAt(daytimeI).Value.Count < 1 && tries < max_tries)
                 {
-                    classroomI = 0;
-                    ++daytimeI;
+                    daytimeI = r.Next(0, available.Count);
+                    ++tries;
                 }
+                session.Daytime = available.ElementAt(daytimeI).Key;
+
+                int classRoomI = r.Next(0, available.ElementAt(daytimeI).Value.Count);
+                session.Classroom = available.ElementAt(daytimeI).Value.ElementAt(classRoomI);
+                available[session.Daytime].RemoveAt(classRoomI);
+                result.Sessions.Add(session);
             }
-            Console.WriteLine(this.CheckScore(result));
+            if (result.GetScore() == -1)
+            {
+                return this.Plan(pairs);
+            }
             return result;
         }
     }

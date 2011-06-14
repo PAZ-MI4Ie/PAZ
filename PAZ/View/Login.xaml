@@ -29,6 +29,15 @@
             </Grid>
         </GroupBox>
         <Grid Height="137" HorizontalAlignment="Left" Margin="33,72,0,0" Name="gridLoadingSreen" Visibility="Hidden"  VerticalAlignment="Top" Width="392" Background="White">
+            <Border
+                            BorderThickness="5"
+                            BorderBrush="Black"
+                            Width="392"
+                            Height="137"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            >
+            </Border>
             <Label Content="Laden. Moment geduld aub." Height="28" HorizontalAlignment="Left" Margin="93,64,0,0" Name="labelLoading" VerticalAlignment="Top" Width="199" FontWeight="Bold" FontFamily="Verdana" Foreground="#FFC44E4E" />
         </Grid>
     </Grid>

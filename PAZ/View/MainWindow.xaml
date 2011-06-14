@@ -220,6 +220,11 @@
 
                 </Grid>
             </TabItem>
+
+            <TabItem Header="Wijzigen" Name="tabItemWijzigen" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">
+                <Grid Name="GridWijzigen">
+                </Grid>
+            </TabItem>
             
             <!-- ACTIES-->
             <TabItem Header="Acties" Name="tabItemActies" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">

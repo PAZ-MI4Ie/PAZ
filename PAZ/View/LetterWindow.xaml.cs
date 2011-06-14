@@ -157,7 +157,7 @@ namespace PAZ
 
         private void bntMaken_Click(object sender, RoutedEventArgs e)
         {
-            _controller.BriefMakenBevestigingClicked(_receivers);
+            _controller.BriefMakenBevestigingClicked(_receivers, this);
         }
 
         /**

@@ -22,12 +22,6 @@ namespace PAZ.Control
         private const string FOOTER_FONT_FAMILY = "Verdana";
         private const int FOOTER_FONT_SIZE = 6;
 
-        public enum PdfType
-        {
-            PDF_Overview,
-            PDF_Letter
-        };
-
         private DataGrid _dataGrid;
 
         public PDFExporter(DataGrid dataGrid)
@@ -147,7 +141,7 @@ namespace PAZ.Control
          * Dit maakt de brieven om te versturen naar de experts in zijn geheel en zet ze in een PDF document
          * Auteur: Yorg 
          */
-        public void CreateLetterPDF(String filename, List<Expert> receivers)
+        public void CreateLetterPDF(String filename, List<Expert> receivers, LetterWindow letterWindow)
         {
             // het document(standaard A4-formaat) maken
             iTextSharp.text.Document document = new iText.Document(PageSize.A4, 75.0f, 75.0f, 0.0f, 0.0f);
@@ -155,7 +149,7 @@ namespace PAZ.Control
             try
             {
                 // Creeër een PDF pagina instantie(deze regelt de footer, meer niet)
-                pdfPage page = new pdfPage();  
+                pdfPage page = new pdfPage(letterWindow);  
 
                 // De writer maken die naar het document luistert en zet de stream om in een PDF-bestand
                 PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(filename, FileMode.Create));
@@ -218,7 +212,7 @@ namespace PAZ.Control
                         document.Add(new iText.Paragraph(" "));
 
                         // Contact informatie tabel
-                        document.Add(MakeContactInformationTable());
+                        document.Add(MakeContactInformationTable(letterWindow));
 
                         // Leeg ruimte toevoegen
                         document.Add(new iText.Paragraph(" "));
@@ -232,34 +226,34 @@ namespace PAZ.Control
                         document.Add(new iText.Paragraph("Hierbij ontvangt u de afstudeerscriptie van onze student " + rowSession.GetSessionModel().Pair.Student1.Study + ", " + rowSession.GetSessionModel().Pair.Student1.Firstname + " " + rowSession.GetSessionModel().Pair.Student1.Surname + " van wie u de afstudeerbespreking zult bijwonen. Begeleidende docenten " + rowSession.GetSessionModel().GetTeachers()[0].Firstname + " " + rowSession.GetSessionModel().GetTeachers()[0].Surname + " en " + rowSession.GetSessionModel().GetTeachers()[1].Firstname + " " + rowSession.GetSessionModel().GetTeachers()[1].Surname + " zullen bij de zitting aanwezig zijn.", standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + rowSession.GetSessionModel().Daytime.Starttime + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, Onderwijsboulevard 215 te `s-Hertogenbosch.", standardFont));
+                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + rowSession.GetSessionModel().Daytime.Starttime + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, " + letterWindow.tbAvansLocatie.Text, standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph("In het afstudeerlokaal wordt voor aanvang van de zitting koffie en thee geserveerd.", standardFont));
+                        document.Add(new iText.Paragraph(letterWindow.tbBeginKern.Text, standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph("Wij kennen u graag een reiskostenvergoeding toe.", standardFont));
-                        document.Add(new iText.Paragraph("Mocht u daar gebruik van willen maken dan verzoeken wij u deze procedure te volgen:", standardFont));
+                        document.Add(new iText.Paragraph(letterWindow.tbReisInformatie.Text, standardFont));
+                        //document.Add(new iText.Paragraph("Mocht u daar gebruik van willen maken dan verzoeken wij u deze procedure te volgen:", standardFont));
 
-                        // Korte lijst van stappen in de procedure
-                        iText.List unorderedList = new iText.List(iText.List.UNORDERED);
-                        unorderedList.SetListSymbol("\u2022");
-                        unorderedList.Add(new iText.ListItem("vul het bijgevoegde formulier ‘Afsprakenformulier Freelancer’ zo volledig mogelijk in;", standardFont));
-                        unorderedList.Add(new iText.ListItem("vul het bijgevoegde formulier ‘Declaratieformulier Freelancer’ in;", standardFont));
-                        unorderedList.Add(new iText.ListItem("deze formulieren tezamen met een kopie van uw paspoort of identiteitskaart (een kopie van uw rijbewijs volstaat niet) ongefrankeerd terugsturen naar: Avans Hogeschool, t.a.v. Praktijkbureu AMB, Antwoordnummer 11095, 5200 VC ’s‑Hertogenbosch.", standardFont));
+                        //// Korte lijst van stappen in de procedure
+                        //iText.List unorderedList = new iText.List(iText.List.UNORDERED);
+                        //unorderedList.SetListSymbol("\u2022");
+                        //unorderedList.Add(new iText.ListItem("vul het bijgevoegde formulier ‘Afsprakenformulier Freelancer’ zo volledig mogelijk in;", standardFont));
+                        //unorderedList.Add(new iText.ListItem("vul het bijgevoegde formulier ‘Declaratieformulier Freelancer’ in;", standardFont));
+                        //unorderedList.Add(new iText.ListItem("deze formulieren tezamen met een kopie van uw paspoort of identiteitskaart (een kopie van uw rijbewijs volstaat niet) ongefrankeerd terugsturen naar: Avans Hogeschool, t.a.v. Praktijkbureu AMB, Antwoordnummer 11095, 5200 VC ’s‑Hertogenbosch.", standardFont));
 
-                        document.Add(unorderedList);
+                        //document.Add(unorderedList);
 
                         // Ga verder met de inhoud van het document
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph("Bijgaand ontvangt u tevens een A4-tje met een beschrijving van de rol van de externe deskundige en een routebeschrijving. Voor eventuele vragen kunt u zich wenden tot Lilian Reuken, telefoonnummer (073) 629 52 56 of Regien Blom telefoonnummer (073) 629 54 55.", standardFont));
+                        document.Add(new iText.Paragraph(letterWindow.tbVerdereInformatie.Text, standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
                         document.Add(new iText.Paragraph("Wij danken u hartelijk voor uw medewerking.", standardFont));
                         document.Add(new iText.Paragraph("Met vriendelijke groet,", standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph("Lilian Reuken en Regien Blom", standardFont));
+                        document.Add(new iText.Paragraph(letterWindow.tbAfzenders.Text, standardFont));
 
                         // Verander de font style tijdelijk
                         standardFont.SetStyle(Font.ITALIC);
@@ -269,7 +263,7 @@ namespace PAZ.Control
                         // Verander de font style weer terug
                         standardFont.SetStyle(Font.NORMAL);
 
-                        document.Add(new iText.Paragraph("        Bijlage(n):	scriptie afspraken, formulier freelancer, declaratieformulier freelancer, rol van externe deskundige, routebeschrijving", standardFont));
+                        document.Add(new iText.Paragraph("        Bijlage(n):	" + letterWindow.tbBijlagen, standardFont));
 
                         // We hebben nu een brief gemaakt voor deze expert, als deze meermaals in het systeem voorkomt, negeer die dan
                         ignoreList.Add(expert);
@@ -299,7 +293,7 @@ namespace PAZ.Control
          * Return: De gemaakte tabel
          * Auteur: Yorg 
          */
-        private PdfPTable MakeContactInformationTable()
+        private PdfPTable MakeContactInformationTable(LetterWindow letterWindow)
         {
             // Maak een tabel met het opgegeven aantal kolommen
             PdfPTable rosterTable = new PdfPTable(CONTACT_INFORMATION_NUM_COLUMNS);
@@ -319,9 +313,9 @@ namespace PAZ.Control
             // START EERSTE RIJ
 
             rosterTable.AddCell(MakeTableCell("ons kenmerk", standardBoldFont, true));
-            rosterTable.AddCell(MakeTableCell("Afst alg/corr/ 0809/ 10.06.09", standardFont));
+            rosterTable.AddCell(MakeTableCell(letterWindow.tbKenmerk.Text, standardFont));
             rosterTable.AddCell(MakeTableCell("contactpersonen", standardBoldFont, true));
-            rosterTable.AddCell(MakeTableCell("Lilian Reuken en Regien Blom", standardFont));
+            rosterTable.AddCell(MakeTableCell(letterWindow.tbContactpersonen.Text, standardFont));
 
             // EINDE EERSTE RIJ
 
@@ -330,7 +324,7 @@ namespace PAZ.Control
             rosterTable.AddCell(MakeTableCell("datum", standardBoldFont, true));
             rosterTable.AddCell(MakeTableCell(DateTime.Now.Day + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year, standardFont));
             rosterTable.AddCell(MakeTableCell("telefoon", standardBoldFont, true));
-            rosterTable.AddCell(MakeTableCell("(073) 629 52 56/ (073) 629 54 55", standardFont));
+            rosterTable.AddCell(MakeTableCell(letterWindow.tbTelefoon.Text, standardFont));
 
             // EINDE TWEEDE RIJ
 
@@ -339,7 +333,7 @@ namespace PAZ.Control
             rosterTable.AddCell(MakeTableCell("onderwerp", standardBoldFont, true));
             rosterTable.AddCell(MakeTableCell("Afstudeerzitting", standardFont));
             rosterTable.AddCell(MakeTableCell("e-mail", standardBoldFont, true));
-            rosterTable.AddCell(MakeTableCell("ac.reuken@avans.nl/ r.blom-depoel@avans.nl", standardFont));
+            rosterTable.AddCell(MakeTableCell(letterWindow.tbEmail.Text, standardFont));
 
             // EINDE DERDE RIJ
 
@@ -369,6 +363,13 @@ namespace PAZ.Control
          */
         private class pdfPage : iTextSharp.text.pdf.PdfPageEventHelper
         {
+            LetterWindow _letterWindow;
+
+            public pdfPage(LetterWindow letterWindow) : base ()
+            {
+                _letterWindow = letterWindow;
+            }
+
             // Override
             public override void OnEndPage(PdfWriter writer, Document document)
             {
@@ -386,9 +387,9 @@ namespace PAZ.Control
                 // Bepaal het font om te gebruiken voor de voettekst
                 Font footerFont = FontFactory.GetFont(FOOTER_FONT_FAMILY, FOOTER_FONT_SIZE);
 
-                footerTable.AddCell(MakeTableCell("Onderwijsboulevard 215" + Environment.NewLine + "5223 DE 's-Hertogenbosch", footerFont));
-                footerTable.AddCell(MakeTableCell("Postbus 732" + Environment.NewLine + "5201 AS 's-Hertogenbosch", footerFont));
-                footerTable.AddCell(MakeTableCell("Telefoon (073) 629 52 95" + Environment.NewLine + "Telefax (073) 629 54 90" + Environment.NewLine + "www.avans.nl", footerFont));
+                footerTable.AddCell(MakeTableCell(_letterWindow.tbVoettekstLinks.Text, footerFont));
+                footerTable.AddCell(MakeTableCell(_letterWindow.tbVoettekstMidden.Text, footerFont));
+                footerTable.AddCell(MakeTableCell(_letterWindow.tbVoettekstRechts.Text, footerFont));
 
                 // Schrijf de rijen naar de PDF output stream
                 footerTable.WriteSelectedRows(0, -1, document.LeftMargin, document.BottomMargin + 40, writer.DirectContent);

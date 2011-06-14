@@ -44,6 +44,9 @@ namespace PAZ
             _controller = PAZController.GetInstance();
             _controller.Init(this);
 
+            textBoxDeadlineStart.Text = _controller.IniReader["DATES"]["startdate"];
+            textBoxDeadlineEind.Text = _controller.IniReader["DATES"]["enddate"];
+
             //TEST CODE:
             List<Session> tempSessions = _controller.SessionMapper.FindAll();
             Console.WriteLine(tempSessions);
@@ -229,7 +232,7 @@ namespace PAZ
 
             Sessions = CollectionViewSource.GetDefaultView(_master);
             GridOverzichtList.ItemsSource = Sessions;
-
+           
             _classrooms = _controller.ClassroomMapper.FindAll();
             _pairs = _controller.PairMapper.FindAll();
             //Test CODE
@@ -260,6 +263,7 @@ namespace PAZ
             unPlannedPairs.loadAllPairs(_controller.PairMapper);
             unPlannedPairs.Show();
             tabCalender.Focus();
+            
         }
 
 
@@ -1052,6 +1056,12 @@ namespace PAZ
             Planner planner = new Planner();
             //@MarkM: Schermpje dat ie bezig is laten zien aub
             planner.Plan(_controller.PairMapper.FindAll());
+        }
+
+        private void GridOverzichtList_Loaded(object sender, RoutedEventArgs e)
+        {
+            GridOverzichtList.Columns[0].SortDirection = ListSortDirection.Ascending;
+            GridOverzichtList.Columns[1].SortDirection = ListSortDirection.Ascending;
         }
     }
 

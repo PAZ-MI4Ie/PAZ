@@ -147,10 +147,6 @@ namespace PAZ.Control
                 ini.Save();
             }
 
-            // TO DO: Dit regelen...
-            //_mainWindow.textBoxDeadlineStart.Text = ini["DATES"]["startdate"];
-            //_mainWindow.textBoxDeadlineEind.Text = ini["DATES"]["enddate"];
-
             return ini;
         }
     }

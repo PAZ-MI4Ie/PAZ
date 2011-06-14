@@ -250,7 +250,8 @@ namespace PAZ
             room = new Classroom(8, "OC202");
             _classrooms.Add(room);
             //END TEST CODE
-
+            CalendarView.Sessionmapper = _controller.SessionMapper;
+            CalendarView.Pairmapper = _controller.PairMapper;
             calendar.createCalendar(_controller.IniReader, _classrooms);
             calendar.loadAllSessions(tempSessions);
             UnPlannedPairs unPlannedPairs = new UnPlannedPairs();

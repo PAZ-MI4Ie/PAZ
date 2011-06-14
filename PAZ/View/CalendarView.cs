@@ -10,19 +10,20 @@ using System.Globalization;
 using System.ComponentModel;
 using PAZ.Model;
 using PAZMySQL;
+using PAZ.Model.Mappers;
 
 namespace PAZ.View
 {
     public class CalendarView : Grid
     {
-        //TODO: database data ophalen
-        public Dictionary<string, Grid> dateGrids;
-        private static Dictionary<string, Grid> _dateGrids;
+        //TODO: database data schrijven + verwijderen
+        public static Dictionary<string, Grid> dateGrids;
+        public static SessionMapper Sessionmapper { get; set; }
+        public static PairMapper  Pairmapper { get; set; }
         public CalendarView()
             : base()
         {
             dateGrids = new Dictionary<string, Grid>();
-            _dateGrids = dateGrids;
         }
 
         #region Drag & Drop
@@ -34,16 +35,15 @@ namespace PAZ.View
                 string date = GetSessionDate(session);
                 int column = GetColumn(session);
                 int row = GetRow(session);
-                CheckAvailability(session, false);
+                CheckAvailability(session,true);
                 DragDropEffects drag = DragDrop.DoDragDrop(session, session.Id + ";" + date + ";" + column + ";" + row + ";\n" + session.Content, DragDropEffects.Move);
                 if (drag == DragDropEffects.None)
-                    CheckAvailability(null, true);
+                    revertCheckAvailability();
             }
         }
 
         void Session_Drop(object sender, DragEventArgs e)
         {
-            //check dates
             CustomLabel session = sender as CustomLabel;
             if (session != null)
             {
@@ -55,80 +55,108 @@ namespace PAZ.View
                     {
                         string[] other = dataString.Split(';');
                         string[] users = dataString.Split('\n');
-                        if(removeSession(other[1],Convert.ToInt32(other[2]),Convert.ToInt32(other[3])))
+                        if(removeSessionLabel(other[1],Convert.ToInt32(other[2]),Convert.ToInt32(other[3])))
                             addSession(session.Id, GetSessionDate(session), GetColumn(session), GetRow(session), users[1], users[2], new string[] { users[4], users[5] }, new string[] { users[7], users[8] });
                     }
                 }
-                CheckAvailability(null, true);
+                revertCheckAvailability();
+            }
+            else if(session.Background == Brushes.Red)
+            {
+
+            }
+        }
+        
+        public static void CheckAvailability(CustomLabel currentSession, bool isSession)
+        {
+            //TODO: optimising.. possible??
+
+            //getting all blocked timeslots of all users
+            List<Blocked_timeslot> blockedSlots = new List<Blocked_timeslot>();
+            if (isSession)
+            {
+                Session s = Sessionmapper.Find(currentSession.Id);
+                foreach (User u in s.Pair.Participants)
+                {
+                    foreach (Blocked_timeslot b in u.BlockedTimeslots)
+                    {
+                        blockedSlots.Add(b);
+                    }
+
+                }
+            }
+            else
+            {
+                Pair p = Pairmapper.Find(currentSession.Id);
+                foreach (User u in p.Participants)
+                {
+                    foreach (Blocked_timeslot b in u.BlockedTimeslots)
+                    {
+                        blockedSlots.Add(b);
+                    }
+
+                }
+            }
+
+
+            foreach (KeyValuePair<string, Grid> keyValue in dateGrids)
+            {
+                Grid dateGrid = keyValue.Value;
+
+                for (int row = 1; row <= 4; row++)
+                {
+                    Brush background = null;
+
+                    foreach (Blocked_timeslot b in blockedSlots)
+                    {
+                        if (b.Daytime.Date.ToShortDateString() == keyValue.Key && b.Daytime.Timeslot == row)
+                        {
+                            //A blocked timeslot found and its a hardblock
+                            if (b.Hardblock == true)
+                            {
+                                background = Brushes.Red;
+                            }
+                            //A blocked timeslot found and its not a hardblock
+                            else
+                            {
+                                background = Brushes.Orange;
+                            }
+
+                            blockedSlots.Remove(b);
+                        }
+                        //if there is a blocked timslot, stop looking
+                        if (background != null)
+                            break;
+                    }
+                    
+
+                    //not blocked timeslots found, so all are available
+                    if (background == null)
+                        background = Brushes.LightGreen;
+
+                    //set the color for the timeslot
+                    for (int i = 0; i < 8; i++)
+                    {
+                        Label session = dateGrid.Children[i + ((row - 1) * 8)] as Label;
+                        if (session != currentSession)
+                            session.Background = background;
+                    }
+                }
             }
         }
 
-        public void CheckAvailability(Label currentSession, bool dropped)
+        public static void revertCheckAvailability()
         {
             foreach (KeyValuePair<string, Grid> keyValue in dateGrids)
             {
                 Grid dateGrid = keyValue.Value;
-                //foreach User in Session.Pair.Attachment
-                // check for current timeslot(row) & date for blockdays/block_timeslots
-                //if found something
-                // get row of that timeslot
-                // if hardblock
-                //  set background to red
-                // else if !hardblock
-                //  set background to orange
-                // else
-                //  set background to green
-                for (int row = 0; row < 4; row++)
-                {
-                    for (int i = 0; i < 8; i++)
-                    {
-                        Label session = dateGrid.Children[i + (row * 8)] as Label;
-                        if (!dropped)
-                        {
-                            if (session != currentSession)
-                            {
-                                if ((string)session.Content == null)
-                                    session.Background = Brushes.LightGreen;
-                            }
-                        }
-                        else
-                        {
-                            session.Background = Brushes.White;
-                        }
-                    }
-                }
-            }
-        }
 
-        public static void CheckAvailability(bool dropped)
-        {
-            foreach (KeyValuePair<string, Grid> keyValue in _dateGrids)
-            {
-                Grid dateGrid = keyValue.Value;
-                //foreach User in Session.Pair.Attachment
-                // check for current timeslot(row) & date for blockdays/block_timeslots
-                //if found something
-                // get row of that timeslot
-                // if hardblock
-                //  set background to red
-                // else if !hardblock
-                //  set background to orange
-                // else
-                //  set background to green
                 for (int row = 0; row < 4; row++)
                 {
                     for (int i = 0; i < 8; i++)
                     {
                         Label session = dateGrid.Children[i + (row * 8)] as Label;
-                        if (!dropped)
-                        {
-                            if ((string)session.Content == null)
-                                session.Background = Brushes.LightGreen;
-                        }
-                        else
-                        {
-                            session.Background = Brushes.White;
-                        }
+                        session.Background = Brushes.White;
                     }
                 }
             }
@@ -293,6 +321,7 @@ namespace PAZ.View
         {
             CustomLabel session = new CustomLabel();
             session = dateGrids[date].Children[(classroomId) + ((timeslot) * 8)] as CustomLabel;
+            session.Id = id;
             session.Content = student1 + "\n" + student2 + "\n\n" + teachers[0] + "\n" + teachers[1] +"\n\n"+ experts[0] + "\n" + experts[1];
             session.BorderBrush = Brushes.LightGray;
             session.BorderThickness = new Thickness(2);
@@ -320,17 +349,24 @@ namespace PAZ.View
         void edit_Click(object sender, RoutedEventArgs e)
         {
             //Get the label
-            CustomLabel lol = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
+            CustomLabel session = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
         }
 
         void delete_Click(object sender, RoutedEventArgs e)
         {
             //Get the label
-            CustomLabel lol = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
+            CustomLabel session = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
             SessionMapper _mapper = new SessionMapper(MysqlDb.GetInstance());
+
+            removeSession();
 
             //TODO: get session and remove from db
             //TODO: remove session from calendar
+            //bool removed = removeSession();
+            //if true
+            // MessageBox.Show("De zitting is succesvol verwijderd");
+            //else
+            // MessageBox.Show("Er is iets mis gegaan met het verwijderen van de zitting","Foutmelding",MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         
@@ -359,8 +395,17 @@ namespace PAZ.View
             }
             return null;
         }
+        public bool removeSession()
+        {
+            //remove session from database
+            //if succesvol
+            // removeSessionLabel()
+            // update unplannedPairWindow
+            // return true
+            return false;
+        }
 
-        public bool removeSession(string date, int column, int row)
+        public bool removeSessionLabel(string date, int column, int row)
         {
             CustomLabel session = dateGrids[date].Children[(column) + ((row) * 8)] as CustomLabel;
             if (session != null)
@@ -371,6 +416,7 @@ namespace PAZ.View
                 session.BorderBrush = null;
                 session.BorderThickness = new Thickness(0);
                 session.MouseMove -= session_MouseMove;
+                session.ContextMenu = null;
                 session.AllowDrop = true;
                 session.Drop += new DragEventHandler(Session_Drop);
                 return true;

@@ -46,7 +46,7 @@
                         </Grid>
                     </GroupBox>
 
-                    <DataGrid Name="GridOverzichtList" RowHeight="50" Margin="0, 70, 0, 0" RowEditEnding="GridOverzichtList_RowEditEnding" ColumnWidth="105" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="#FFDEDEDE" Foreground="#FF6F6F6F" AlternatingRowBackground="#FFF8F8F8">
+                    <DataGrid Name="GridOverzichtList" RowHeight="50" Margin="0, 70, 0, 0" RowEditEnding="GridOverzichtList_RowEditEnding" ColumnWidth="105" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="#FFDEDEDE" Foreground="#FF6F6F6F" AlternatingRowBackground="#FFF8F8F8" Loaded="GridOverzichtList_Loaded">
                     </DataGrid>
                 </Grid>
             </TabItem>
@@ -288,9 +288,9 @@
                 <Grid Name="GridOpties">
 
 
-                    <GroupBox Header="Deadlines" Height="200" Margin="10,2,5,0" Name="groupBoxDeadlines" VerticalAlignment="Top">
+                    <GroupBox Header="Planning Datums" Height="200" Margin="10,2,5,0" Name="groupBoxDeadlines" VerticalAlignment="Top">
                         <Grid>
-                            <TextBlock Height="27" HorizontalAlignment="Left" Margin="24,15,0,0" Name="textBlockDeadlineBeschrijving" Text="Hier kunt u de deadline instellen, van en tot wanneer er voor de planning ingeschreven kan worden." VerticalAlignment="Top" Width="520" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
+                            <TextBlock Height="27" HorizontalAlignment="Left" Margin="24,15,0,0" Name="textBlockDeadlineBeschrijving" Text="Hier kunt u de begin- en einddatum van de agenda instellen." VerticalAlignment="Top" Width="520" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
                             <TextBlock Height="27" HorizontalAlignment="Left" Margin="24,55,0,0" Name="textBlockDeadlineStart" Text="Start datum" VerticalAlignment="Top" Width="172" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,55,0,0" Name="textBoxDeadlineStart" VerticalAlignment="Top" Width="252" />
 

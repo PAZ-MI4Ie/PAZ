@@ -14,12 +14,7 @@ using PAZ.Control;
 using PAZ.Model;
 using PAZ.Model.Mappers;
 using PAZ.View;
-<<<<<<< HEAD
-using System.Text.RegularExpressions;
-using PAZ.View;
-=======
 using PAZMySQL;
->>>>>>> d2f3a5c6193ce31200705b725523243350b69754
 
 namespace PAZ
 {
@@ -318,19 +313,7 @@ namespace PAZ
 
         private void buttonEmailVersturen_Click(object sender, RoutedEventArgs e)
         {
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-            EmailDialog OpenEmailWindow = new EmailDialog();
-            OpenEmailWindow.Show();
-
-=======
-            EmailWindow email = new EmailWindow();
-            email.ShowDialog();
->>>>>>> 14d374f3bd89315296e0cbfab36f2402cdb30c36
-=======
             _controller.EmailVersturenClicked(_master);
->>>>>>> d2f3a5c6193ce31200705b725523243350b69754
         }
 
         private void buttonBriefMaken_Click(object sender, RoutedEventArgs e)

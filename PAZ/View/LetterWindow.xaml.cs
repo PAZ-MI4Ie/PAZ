@@ -155,7 +155,7 @@ namespace PAZ
             return true;
         }
 
-        private void bntVerzenden_Click(object sender, RoutedEventArgs e)
+        private void bntMaken_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Tijdelijk buiten werking tot Teun de mappers update.");
             //_controller.BriefMakenBevestigingClicked();

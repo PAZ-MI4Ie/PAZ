@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MySql.Data;
+using Ini;
 using MySql.Data.MySqlClient;
+using PAZ.Control;
 
 namespace PAZMySQL
 {
-    class MysqlDb
+    public class MysqlDb
     {
         private String _host;
         private String _username;
@@ -20,7 +18,8 @@ namespace PAZMySQL
         {
             if (MysqlDb._db == null)
             {
-                MysqlDb._db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");
+                IniFile ini = PAZController.GetInstance().IniReader;
+                MysqlDb._db = new MysqlDb(ini["DATABASESETTINGS"]["db_host"], ini["DATABASESETTINGS"]["db_username"], ini["DATABASESETTINGS"]["db_password"], ini["DATABASESETTINGS"]["db_database"]);
             }
             return MysqlDb._db;
         }

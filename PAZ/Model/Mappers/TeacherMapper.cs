@@ -7,7 +7,7 @@ using PAZ.Model;
 
 namespace PAZMySQL
 {
-    class TeacherMapper : UserMapper
+    public class TeacherMapper : UserMapper
     {
         public TeacherMapper(MysqlDb db)
             : base(db)
@@ -158,7 +158,7 @@ namespace PAZMySQL
 					"(?daytime_id, ?user_id, ?hardblock)";
 				command.Parameters.Add(new MySqlParameter("?daytime_id", MySqlDbType.Int32)).Value = timeslot;
 				command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.String)).Value = teacher.Id;
-				command.Parameters.Add(new MySqlParameter("?hardblock", MySqlDbType.Int32)).Value = 1;
+				command.Parameters.Add(new MySqlParameter("?hardblock", MySqlDbType.Int32)).Value = teacher.BlockType;
 				this._db.ExecuteCommand(command);
 				this._db.CloseConnection();
 			}

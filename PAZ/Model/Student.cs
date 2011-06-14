@@ -5,11 +5,13 @@ using System.Text;
 
 namespace PAZ.Model
 {
-    class Student : User
+    public class Student : User
     {
         public int Studentnumber { get; set; }
         public string Study { get; set; }
-		
+
+        private static int tempHack = 0;
+
 		public Student()
 		{
 			this.User_type = "student";
@@ -22,6 +24,7 @@ namespace PAZ.Model
 
             this.Studentnumber = studentnumber;
             this.Study = study;
+            this.Email = "teacher" + (++tempHack) + "@avans.nl";
         }
     }
 }

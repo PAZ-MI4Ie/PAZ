@@ -7,7 +7,7 @@ using PAZ.Model;
 
 namespace PAZMySQL
 {
-    class SessionMapper : Mapper
+    public class SessionMapper : Mapper
     {
         public SessionMapper(MysqlDb db) : base(db)
         {
@@ -55,7 +55,7 @@ namespace PAZMySQL
 			Pair pair = new Pair(1, student1, student2, 12);
 
 			result.Add(new Session(daytime, classroom, pair, teacher1, teacher2, expert1, expert2));
-			 end dummy data */
+			// end dummy data*/
 
 			return result;
 		}

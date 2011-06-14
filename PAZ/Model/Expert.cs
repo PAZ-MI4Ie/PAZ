@@ -5,12 +5,13 @@ using System.Text;
 
 namespace PAZ.Model
 {
-    class Expert : User
+    public class Expert : User
     {
         public string Company { get; set; }
         public string Address { get; set; }
         public string Postcode { get; set; }
-        public string City { get; set; }
+		public string City { get; set; }
+		public string Telephone { get; set; }
 
 		public Expert()
 		{

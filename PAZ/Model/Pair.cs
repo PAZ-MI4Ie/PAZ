@@ -7,7 +7,7 @@ using PAZ.Model.Mappers;
 
 namespace PAZ.Model
 {
-    class Pair
+    public class Pair
     {
         public int ID { get; set; }
         private Student _student1;
@@ -90,5 +90,35 @@ namespace PAZ.Model
 			Student2 = student2;
 			Number_of_guests = number_of_guests;
 		}
+
+        public int ScoreAt(Daytime daytime)
+        {
+            int score = 0;
+            foreach (User user in this.Participants)
+            {
+                bool countedScore = false;
+                foreach (Blocked_timeslot blockedTimeSlot in user.BlockedTimeslots)
+                {
+                    if (daytime.Id == blockedTimeSlot.Daytime_id)
+                    {
+                        if (!blockedTimeSlot.Hardblock)
+                        {
+                            ++score;
+                            countedScore = true;
+                            break;
+                        }
+                        else
+                        {
+                            return -1;
+                        }
+                    }
+                }
+                if (!countedScore)
+                {
+                    score += 2;
+                }
+            }
+            return score;
+        }
     }
 }

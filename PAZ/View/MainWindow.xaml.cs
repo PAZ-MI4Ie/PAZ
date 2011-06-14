@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.ComponentModel;
-using Microsoft.Win32;
-using System.IO;
-using PAZMySQL;
-using PAZ.Model;
 using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Globalization;
 using Ini;
+using Microsoft.Win32;
+using PAZ.Control;
+using PAZ.Model;
+using PAZ.Model.Mappers;
 using PAZ.View;
-using System.Text.RegularExpressions;
+using PAZMySQL;
 
 namespace PAZ
 {
@@ -29,40 +29,34 @@ namespace PAZ
     {
         private List<SessionRow> _master;
         public ICollectionView Sessions { get; private set; }
-        bool match;
-        private PDFExport _pdfExport;
-        private UserMapper _userMapper;
-        private IniFile ini;
-		private ClassroomMapper _classroomMapper;
-		private StudentMapper _studentMapper;	
-		private TeacherMapper _teacherMapper;
-		private ExpertMapper _expertMapper;
+        bool _match;
 		private List<Teacher> _teachers;
 		private List<Student> _students;
+        private List<Classroom> _classrooms;
+        private List<Pair> _pairs;
 
+        private PAZController _controller;
 
         public MainWindow()
         {
             InitializeComponent();
 
+            _controller = PAZController.GetInstance();
+            _controller.Init(this);
+
             //TEST CODE:
-            MysqlDb db = new MysqlDb("student.aii.avans.nl", "MI4Ie", "4DRcUrzV", "MI4Ie_db");//Must be somewhere central
-
-            _userMapper = new UserMapper(db);
-			_classroomMapper = new ClassroomMapper(db);
-
-            SessionMapper sessionmapper = new SessionMapper(db);
-			Console.WriteLine(sessionmapper.FindAll());
-            List<Session> tempSessions = sessionmapper.FindAll();
+            List<Session> tempSessions = _controller.SessionMapper.FindAll();
+            Console.WriteLine(tempSessions);
             _master = new List<SessionRow>();
             foreach (Session s in tempSessions)
             {
                 _master.Add(new SessionRow(s));
             }
 			//END OF TEST CODE
-			this._teacherMapper = new TeacherMapper(db);
 
-            StudentMapper studentmapper = new StudentMapper(MysqlDb.GetInstance());
+            _teachers = _controller.TeacherMapper.FindAll();
+            _students = _controller.StudentMapper.FindAll();
+
             Student verlept = new Student();
             verlept.Firstname = "Henk";
             verlept.Surname = "de Vries";
@@ -74,6 +68,7 @@ namespace PAZ
             //studentmapper.Save(verlept);
             //END OF TEST CODE
 
+            #region test shit
             /*
             _master = new List<Zitting>
             {
@@ -230,38 +225,40 @@ namespace PAZ
 
             };
 			 */
+            #endregion
 
             Sessions = CollectionViewSource.GetDefaultView(_master);
             GridOverzichtList.ItemsSource = Sessions;
 
-            // maak object
-            _pdfExport = new PDFExport(GridOverzichtList);
-
-            ini = readIni();
-            List<Classroom> classrooms = new List<Classroom>();
+            _classrooms = _controller.ClassroomMapper.FindAll();
+            _pairs = _controller.PairMapper.FindAll();
+            //Test CODE
+            _classrooms = new List<Classroom>();
             Classroom room = new Classroom(1, "OB202");
-            classrooms.Add(room);
+            _classrooms.Add(room);
             room = new Classroom(2, "OB203");
-            classrooms.Add(room);
+            _classrooms.Add(room);
             room = new Classroom(3, "OB204");
-            classrooms.Add(room);
+            _classrooms.Add(room);
             room = new Classroom(4, "OB205");
-            classrooms.Add(room);
+            _classrooms.Add(room);
             room = new Classroom(5, "OC201");
-            classrooms.Add(room);
+            _classrooms.Add(room);
             room = new Classroom(6, "OB201");
-            classrooms.Add(room);
+            _classrooms.Add(room);
             room = new Classroom(7, "OC302");
-            classrooms.Add(room);
+            _classrooms.Add(room);
             room = new Classroom(8, "OC202");
-            classrooms.Add(room);
-            calendar.createCalendar(ini, classrooms);
-            string[] teachers = new string[] { "Marco Huysmans", "Ger Saris" };
-            string[] experts = new string[] { "Piet Janssen", "Karel Lessers" };
-            calendar.addSession("2-5-2011", 1, 1, "Jeroen Schipper", "Hidde Jansen", teachers, experts);
-            calendar.addSession("3-5-2011", 1, 1, "Freek Laurijssen", "Ibrahim Önder", teachers, experts);
-            //calendar.loadAllSessions();
+            _classrooms.Add(room);
+            //END TEST CODE
 
+            CalendarView.Sessionmapper = _controller.SessionMapper;
+            CalendarView.Pairmapper = _controller.PairMapper;
+            calendar.createCalendar(_controller.IniReader, _classrooms, _controller);
+            calendar.loadAllSessions(tempSessions);
+            UnPlannedPairs unPlannedPairs = new UnPlannedPairs();
+            unPlannedPairs.loadAllPairs(_controller.PairMapper);
+            unPlannedPairs.Show();
             tabCalender.Focus();
         }
 
@@ -269,27 +266,19 @@ namespace PAZ
 
         private void buttonExportPDF_Click(object sender, RoutedEventArgs e)
         {
-            // dit zorgt ervoor dat er geen filters worden toegepast in de PDF uitdraai
-            textboxSearch.Text = "";
-
-            string fileName;
-            if (OpenNewSaveDialog("Roosteroverzicht PAZ", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
-            {
-                // maak en exporteer als pdf
-                _pdfExport.CreateOverviewPDF(fileName);
-            }
+            _controller.ExportRoosterClicked();
         }
 
         private void buttonVerwijderGebruikers_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Weet u zeker dat u alle gebruikers wilt verwijderen? \n\nLet op: deze actie kan niet ongedaan worden.", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                MessageBox.Show(_userMapper.Delete() ? "Succesvol. Alle gebruikers zijn verwijderd." : "Mislukt, de gebruikers konden niet verwijderd worden.", "Gebruikers verwijderen");
+                MessageBox.Show(_controller.UserMapper.Delete() ? "Succesvol. Alle gebruikers zijn verwijderd." : "Mislukt, de gebruikers konden niet verwijderd worden.", "Gebruikers verwijderen");
         }
 
         private void buttonVerwijderLokalen_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Weet u zeker dat u alle lokalen wilt verwijderen? \n\nLet op: deze actie kan niet ongedaan worden.", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                MessageBox.Show(_classroomMapper.Delete() ? "Succesvol. Alle lokalen zijn verwijderd." : "Mislukt, de lokalen konden niet verwijderd worden.", "Lokalen verwijderen");
+                MessageBox.Show(_controller.ClassroomMapper.Delete() ? "Succesvol. Alle lokalen zijn verwijderd." : "Mislukt, de lokalen konden niet verwijderd worden.", "Lokalen verwijderen");
         }
 
         private void comboBoxSelecteerType_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -320,21 +309,12 @@ namespace PAZ
 
         private void buttonEmailVersturen_Click(object sender, RoutedEventArgs e)
         {
-            EmailWindow email = new EmailWindow();
-            email.ShowDialog();
+            _controller.EmailVersturenClicked(_master);
         }
 
-        private void buttonBriefPrinten_Click(object sender, RoutedEventArgs e)
+        private void buttonBriefMaken_Click(object sender, RoutedEventArgs e)
         {
-            // dit zorgt ervoor dat er geen filters worden toegepast in de PDF uitdraai
-            textboxSearch.Text = "";
-
-            string fileName;
-            if (OpenNewSaveDialog("Bevestigingsbrieven PAZ", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
-            {
-                // maak en exporteer als pdf
-                _pdfExport.CreateLetterPDF(fileName);
-            }
+            _controller.BriefMakenClicked(_master);
         }
 
         private void GridOverzichtList_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
@@ -355,17 +335,17 @@ namespace PAZ
 
                     switch (comboBoxSearch.SelectedIndex)
                     {
-                        case 1: match = ((SessionRow)(item)).Datum.ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 2: match = ((SessionRow)(item)).Timeslot.ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 3: match = ((SessionRow)(item)).Lokaal.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 4: match = ((SessionRow)(item)).Studenten.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 5: match = ((SessionRow)(item)).Docenten.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 6: match = ((SessionRow)(item)).Deskundigen.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 7: match = ((SessionRow)(item)).AantalGasten.ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 1: _match = ((SessionRow)(item)).Datum.ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 2: _match = ((SessionRow)(item)).Timeslot.ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 3: _match = ((SessionRow)(item)).Lokaal.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 4: _match = ((SessionRow)(item)).Studenten.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 5: _match = ((SessionRow)(item)).Docenten.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 6: _match = ((SessionRow)(item)).Deskundigen.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 7: _match = ((SessionRow)(item)).AantalGasten.ToString().Contains(textboxSearch.Text.ToLower()); break;
 
                     }
 
-                    return match;
+                    return _match;
                 };
             }
             else
@@ -385,33 +365,6 @@ namespace PAZ
             //        item = new Zitting();
             //        return true;
             //    };
-        }
-        public IniFile readIni()
-        {
-            IniFile ini = new Ini.IniFile("sys.ini");
-            if (ini.Exists())
-                ini.Load();
-            else
-            {
-                IniSection section = new IniSection();
-                section.Add("startdate", "1-05-2011");
-                section.Add("enddate", "15-05-2011");
-                ini.Add("DATES", section);
-
-                section = new IniSection();
-                section.Add("block1", "09:00-10:30");
-                section.Add("block2", "11:00-12:30");
-                section.Add("block3", "13:00-14:30");
-                section.Add("block4", "15:00-16:30");
-                ini.Add("TIME", section);
-
-                ini.Save();
-            }
-
-            textBoxDeadlineStart.Text = ini["DATES"]["startdate"];
-            textBoxDeadlineEind.Text = ini["DATES"]["enddate"];
-
-            return ini;
         }
 
         /*
@@ -501,7 +454,7 @@ namespace PAZ
          * Return: De waarde teruggeven nadat de gebruiker het scherm sluit
          * Auteur: Yorg 
          */
-        private bool? OpenNewSaveDialog(string defaultFileName, string defaultExtension, string filter, out string outFileName, bool appendDate = true)
+        public bool? OpenNewSaveDialog(string defaultFileName, string defaultExtension, string filter, out string outFileName, bool appendDate = true)
         {
             // Maak het dialoog
             SaveFileDialog saveDialog = new SaveFileDialog();
@@ -612,6 +565,17 @@ namespace PAZ
 				sessionSpread = Teacher.session_spread.ANY;
 			}
 
+			int teacher_blocktype_selected = 1;
+
+			if (teacher_blocktype_soft.IsChecked == true)
+			{
+				teacher_blocktype_selected = 0;
+			}
+			else if (teacher_blocktype_hard.IsChecked == true)
+			{
+				teacher_blocktype_selected = 1;
+			}
+
 			if (hasInputError == false)
 			{
 				//Create teacher object and add values
@@ -621,10 +585,19 @@ namespace PAZ
 				newTeacher.Email = EmailLeraar1.Text;
 				newTeacher.Session_spread = sessionSpread;
 				newTeacher.blockedTimeslot = datePickerBlockedDay1.SelectedDate.Value;
+				newTeacher.BlockType = teacher_blocktype_selected;
 
 				//Send to the database
-				_teacherMapper.Save(newTeacher);
+				_controller.TeacherMapper.Save(newTeacher);
 				MessageBox.Show("Leraar toegevoegd");
+				textBoxLeraarVoornaam.Text = "";
+				textLeraarAchternaam.Text = "";
+				EmailLeraar1.Text = "";
+				datePickerBlockedDay1.Text = "";
+				sessionVerspreid.IsChecked = false;
+				sessionDichtBijElkaar.IsChecked = false;
+				teacher_blocktype_soft.IsChecked = false;
+				teacher_blocktype_hard.IsChecked = false;
 			}
 		}
 
@@ -639,20 +612,446 @@ namespace PAZ
 				textBoxLokaalGegevens.BorderBrush = Brushes.Gray;
 				Classroom newClassroom = new Classroom();
 				newClassroom.Room_number = textBoxLokaalGegevens.Text;
-				_classroomMapper.Save(newClassroom);
+				_controller.ClassroomMapper.Save(newClassroom);
 				MessageBox.Show("Lokaal toegevoegd");
 			}
 		}
         private void buttonOptiesOpslaan_Click(object sender, RoutedEventArgs e)
         {
-            ini["DATES"]["startdate"] = textBoxDeadlineStart.Text;
-            ini["DATES"]["enddate"] = textBoxDeadlineEind.Text;
+            _controller.IniReader["DATES"]["startdate"] = textBoxDeadlineStart.Text;
+            _controller.IniReader["DATES"]["enddate"] = textBoxDeadlineEind.Text;
 
-            bool isSaved = ini.Save();
+            bool isSaved = _controller.IniReader.Save();
             if(isSaved)
                 MessageBox.Show("Uw instellingen zijn opgeslagen.");
             else
                 MessageBox.Show("Er is iets mis gegaan met het opslaan.");
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void btnOpenUnplannedWindow_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Application.Current.Windows.Count == 1)
+            {
+                UnPlannedPairs upp = new UnPlannedPairs();
+                upp.loadAllPairs(_controller.PairMapper);
+                upp.Show();
+            }
+            else
+                MessageBox.Show("Het scherm met de nog niet ingeplande paren staat nog open.");
+        }
+
+		private void onBegeleiderAddClicked(object sender, RoutedEventArgs e)
+		{
+			//Use this for input errors
+			bool hasInputError = false;
+
+
+			//Check first name
+			if (textBoxBegeleiderVoornaam.Text.Equals(String.Empty))
+			{
+				textBoxBegeleiderVoornaam.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderVoornaam.BorderBrush = Brushes.Gray;
+			}
+
+			//Check surname
+			if (textBoxBegeleiderAchternaam.Text.Equals(String.Empty))
+			{
+				textBoxBegeleiderAchternaam.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderAchternaam.BorderBrush = Brushes.Gray;
+			}
+
+			//Check email adress
+			if (textBoxBegeleiderEmail.Text.Equals(String.Empty))
+			{
+				textBoxBegeleiderEmail.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderEmail.BorderBrush = Brushes.Gray;
+			}
+			if (!textBoxBegeleiderEmail.Text.IsValidEmailAddress())
+			{
+				textBoxBegeleiderEmail.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderEmail.BorderBrush = Brushes.Gray;
+			}
+
+			//Check company
+			if (textBoxBegeleiderBedrijf.Text.Equals(String.Empty))
+			{
+				textBoxBegeleiderBedrijf.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderBedrijf.BorderBrush = Brushes.Gray;
+			}
+
+			//Check Adres
+			if (textBoxBegeleiderAdres.Text.Equals(String.Empty))
+			{
+				textBoxBegeleiderAdres.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderAdres.BorderBrush = Brushes.Gray;
+			}
+
+			//Check Postcode
+			if (textBoxBegeleiderPostcode.Text.Equals(String.Empty))
+			{
+				textBoxBegeleiderPostcode.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderPostcode.BorderBrush = Brushes.Gray;
+			}
+
+			//Check telephone
+			if (textBoxBegeleiderTelefoonnummer.Text.Equals(String.Empty))
+			{
+				textBoxBegeleiderTelefoonnummer.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderTelefoonnummer.BorderBrush = Brushes.Gray;
+			}
+
+			//Check city
+			if (textBoxBegeleiderCity.Text.Equals(String.Empty))
+			{
+				textBoxBegeleiderCity.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxBegeleiderCity.BorderBrush = Brushes.Gray;
+			}
+
+			if (hasInputError == false)
+			{
+				//Create expert object and add values
+				Expert newExpert = new Expert();
+				newExpert.Firstname = textBoxBegeleiderVoornaam.Text;
+				newExpert.Surname = textBoxBegeleiderAchternaam.Text;
+				newExpert.Email = textBoxBegeleiderBedrijf.Text;
+				newExpert.Company = textBoxBegeleiderBedrijf.Text;
+				newExpert.Address = textBoxBegeleiderAdres.Text;
+				newExpert.Postcode = textBoxBegeleiderPostcode.Text;
+				newExpert.Telephone = textBoxBegeleiderTelefoonnummer.Text;
+				newExpert.City = textBoxBegeleiderCity.Text;
+
+				//Send to the database
+				_controller.ExpertMapper.Save(newExpert);
+				MessageBox.Show("Begeleider toegevoegd");
+				textBoxBegeleiderVoornaam.Text = "";
+				textBoxBegeleiderAchternaam.Text = "";
+				textBoxBegeleiderEmail.Text = "";
+				textBoxBegeleiderBedrijf.Text = "";
+				textBoxBegeleiderAdres.Text = "";
+				textBoxBegeleiderPostcode.Text = "";
+				textBoxBegeleiderTelefoonnummer.Text = "";
+				textBoxBegeleiderCity.Text = "";
+			}
+		}
+
+		private void onExpertAddClicked(object sender, RoutedEventArgs e)
+		{
+			//Use this for input errors
+			bool hasInputError = false;
+
+			//Check first name
+			if (textBoxExternVoornaam.Text.Equals(String.Empty))
+			{
+				textBoxExternVoornaam.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternVoornaam.BorderBrush = Brushes.Gray;
+			}
+
+			//Check surname
+			if (textBoxExternAchternaam.Text.Equals(String.Empty))
+			{
+				textBoxExternAchternaam.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternAchternaam.BorderBrush = Brushes.Gray;
+			}
+
+			//Check email adress
+			if (textBoxExternEmail.Text.Equals(String.Empty))
+			{
+				textBoxExternEmail.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternEmail.BorderBrush = Brushes.Gray;
+			}
+			if (!textBoxExternEmail.Text.IsValidEmailAddress())
+			{
+				textBoxExternEmail.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternEmail.BorderBrush = Brushes.Gray;
+			}
+
+			//Check company
+			if (textBoxExternBedrijf.Text.Equals(String.Empty))
+			{
+				textBoxExternBedrijf.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternBedrijf.BorderBrush = Brushes.Gray;
+			}
+
+			//Check Adres
+			if (textBoxExternAdres.Text.Equals(String.Empty))
+			{
+				textBoxExternAdres.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternAdres.BorderBrush = Brushes.Gray;
+			}
+
+			//Check Postcode
+			if (textBoxExternPostcode.Text.Equals(String.Empty))
+			{
+				textBoxExternPostcode.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternPostcode.BorderBrush = Brushes.Gray;
+			}
+
+			//Check telephone
+			if (textBoxExternTelefoonnummer.Text.Equals(String.Empty))
+			{
+				textBoxExternTelefoonnummer.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternTelefoonnummer.BorderBrush = Brushes.Gray;
+			}
+
+			//Check city
+			if (textBoxExpertCity.Text.Equals(String.Empty))
+			{
+				textBoxExpertCity.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExpertCity.BorderBrush = Brushes.Gray;
+			}
+
+			if (hasInputError == false)
+			{
+				//Create expert object and add values
+				Expert newExpert = new Expert();
+				newExpert.Firstname = textBoxExternVoornaam.Text;
+				newExpert.Surname = textBoxExternAchternaam.Text;
+				newExpert.Email = textBoxExternEmail.Text;
+				newExpert.Company = textBoxExternBedrijf.Text;
+				newExpert.Address = textBoxExternAdres.Text;
+				newExpert.Postcode = textBoxExternPostcode.Text;
+				newExpert.Telephone = textBoxExternTelefoonnummer.Text;
+				newExpert.City = textBoxExpertCity.Text;
+
+				//Send to the database
+				_controller.ExpertMapper.Save(newExpert);
+				MessageBox.Show("Expert toegevoegd");
+				textBoxExternVoornaam.Text = "";
+				textBoxExternAchternaam.Text = "";
+				textBoxExternEmail.Text = "";
+				textBoxExternBedrijf.Text = "";
+				textBoxExternAdres.Text = "";
+				textBoxExternPostcode.Text = "";
+				textBoxExternTelefoonnummer.Text = "";
+				textBoxExpertCity.Text = "";
+			}
+		}
+
+		private void stageBegeleiderComboBoxMouseDown(object sender, MouseButtonEventArgs e)
+		{
+
+		}
+
+		private void docentComboBoxMouseDown(object sender, MouseButtonEventArgs e)
+		{
+
+		}
+
+		private void stageBegeleiderVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+		{
+			comboBoxSelecteerstageBegeleider.Items.Clear();
+			List<Expert> experts = _controller.ExpertMapper.FindAll();
+			ComboBoxItem comboboxItem;
+
+			foreach (Expert expert in experts)
+			{
+				comboboxItem = new ComboBoxItem();
+				comboboxItem.Content = expert.Firstname + " " + expert.Surname;
+				comboboxItem.Tag = expert.Id;
+				comboBoxSelecteerstageBegeleider.Items.Add(comboboxItem);
+			}
+		}
+
+		private void docentVisibilityChanged(object sender, DependencyPropertyChangedEventArgs e)
+		{
+			comboBoxSelecteerLeraar1.Items.Clear();
+			List<Teacher> teachers = _controller.TeacherMapper.FindAll();
+			ComboBoxItem comboboxItem;
+
+			foreach (Teacher teacher in teachers)
+			{
+				comboboxItem = new ComboBoxItem();
+				comboboxItem.Content = teacher.Firstname + " " + teacher.Surname;
+				comboboxItem.Tag = teacher.Id;
+				comboBoxSelecteerLeraar1.Items.Add(comboboxItem);
+			}
+		}
+
+		private void onStudentAddClicked(object sender, RoutedEventArgs e)
+		{
+			//Use this for input errors
+			bool hasInputError = false;
+			
+			//Check student number
+			if (textBoxStudentennummer.Text.Equals(String.Empty))
+			{
+				textBoxStudentennummer.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxStudentennummer.BorderBrush = Brushes.Gray;
+			}
+
+			//Check first name
+			if (textBoxExternVoornaam.Text.Equals(String.Empty))
+			{
+				textBoxExternVoornaam.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternVoornaam.BorderBrush = Brushes.Gray;
+			}
+
+			//Check surname
+			if (textBoxExternAchternaam.Text.Equals(String.Empty))
+			{
+				textBoxExternAchternaam.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternAchternaam.BorderBrush = Brushes.Gray;
+			}
+
+			//Check email adress
+			if (textBoxExternEmail.Text.Equals(String.Empty))
+			{
+				textBoxExternEmail.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternEmail.BorderBrush = Brushes.Gray;
+			}
+			if (!textBoxExternEmail.Text.IsValidEmailAddress())
+			{
+				textBoxExternEmail.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxExternEmail.BorderBrush = Brushes.Gray;
+			}
+
+
+			//Used for date validation
+			DateTime dateValue;
+
+			//Check blocked timeslot
+			if (datePickerBlockedDay.Text.Equals(String.Empty))
+			{
+				datePickerBlockedDay.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else if (!DateTime.TryParse(datePickerBlockedDay.Text, out dateValue))
+			{
+				datePickerBlockedDay.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				datePickerBlockedDay.BorderBrush = Brushes.Gray;
+				hasInputError = false;
+			}
+
+			if (hasInputError == false)
+			{
+				//Create expert object and add values
+				Student newStudent = new Student();
+				newStudent.Firstname = textBoxVoornaam.Text;
+				newStudent.Surname = textBoxAchternaam.Text;
+				newStudent.Email = EmailLeering1.Text;
+				newStudent.Studentnumber = Convert.ToInt32(textBoxStudentennummer.Text);
+				//TODO: Blocked Timeslots
+				//TODO: Teachers
+				//TODO: Experts
+				//TODO: Study
+				//TODO: Pairing?
+
+				//Send to the database
+				_controller.StudentMapper.Save(newStudent);
+				MessageBox.Show("Student toegevoegd");
+				textBoxVoornaam.Text = "";
+				textBoxAchternaam.Text = "";
+				EmailLeering1.Text = "";
+				textBoxStudentennummer.Text = "";
+			}
+		}
+
+        private void buttonZittingenGenereren_Click(object sender, RoutedEventArgs e)
+        {
+            Planner planner = new Planner();
+            //@MarkM: Schermpje dat ie bezig is laten zien aub
+            planner.Plan(_controller.PairMapper.FindAll());
         }
     }
 

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PAZMySQL
 {
-    class Mapper
+    public class Mapper
     {
         protected MysqlDb _db;
 

@@ -1,15 +1,14 @@
 ﻿<Window x:Class="PAZ.View.UnPlannedPairs"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title=" " Height="300" Width="279">
-    <Grid Background="#FFD51D53" DataContext="{Binding}" ShowGridLines="False" ClipToBounds="True">
+        Title="Nog te plannen" Height="696" Width="279" Icon="/PAZ;component/Resources/paz.ico">
+    <Grid Background="#FFD51D53" ShowGridLines="False" ClipToBounds="True">
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
+            <RowDefinition Height="10" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-        <Grid Grid.Row="1" Background="White" Margin="5,0,5,5"></Grid>
+        <Grid Name="GridPairs"  Grid.Row="1" Background="White" Margin="5,0,5,5"></Grid>
         </ScrollViewer>
-        <Label Content="Nog te plannen" Height="28" HorizontalAlignment="Left" Margin="5,2,0,0" Name="lblTitle" VerticalContentAlignment="Top" Foreground="White" FontWeight="Bold" />
     </Grid>
 </Window>

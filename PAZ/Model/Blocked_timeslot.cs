@@ -6,7 +6,7 @@ using PAZMySQL;
 
 namespace PAZ.Model
 {
-    class Blocked_timeslot
+    public class Blocked_timeslot
     {
         public int Daytime_id { get; set; }
         private Daytime _daytime;

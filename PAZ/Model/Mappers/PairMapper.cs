@@ -7,7 +7,7 @@ using MySql.Data.MySqlClient;
 
 namespace PAZ.Model.Mappers
 {
-    class PairMapper : Mapper
+    public class PairMapper : Mapper
     {
         public PairMapper(MysqlDb db)
             : base(db)
@@ -35,6 +35,36 @@ namespace PAZ.Model.Mappers
             Reader.Read();//Only 1 row
             this._db.CloseConnection();
             return this.ProcessRow(new Pair(), Reader);
+        }
+
+        public List<Pair> FindAll()
+        {
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "SELECT id, number_of_guests, student1, student2 FROM pair";
+            MySqlDataReader Reader = this._db.ExecuteCommand(command);
+            List<Pair> result = new List<Pair>();
+            while (Reader.Read())
+            {
+                result.Add(this.ProcessRow(new Pair(), Reader));
+            }
+            this._db.CloseConnection();
+            return result;
+        }
+
+        public List<Pair> FindAllUnplanned()
+        {
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "SELECT id, number_of_guests, student1, student2 FROM pair WHERE id NOT IN ( SELECT pair_id FROM SESSION )";
+            MySqlDataReader Reader = this._db.ExecuteCommand(command);
+            List<Pair> result = new List<Pair>();
+            while (Reader.Read())
+            {
+                result.Add(this.ProcessRow(new Pair(), Reader));
+            }
+            this._db.CloseConnection();
+            return result;
         }
 
         public Dictionary<int, string> FindAttachments(int pairId)

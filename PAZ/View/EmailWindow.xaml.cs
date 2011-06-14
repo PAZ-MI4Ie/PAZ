@@ -482,7 +482,7 @@ namespace PAZ
             if (!btnSave.IsEnabled)
                 return;
 
-            MessageBoxResult result = MessageBox.Show("Wilt u de wijzigingen opslaan?", "Bevestiging", MessageBoxButton.YesNoCancel);
+            MessageBoxResult result = MessageBox.Show("Wilt u de wijzigingen opslaan?", "Bevestiging", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
                 Save();
             else if (result == MessageBoxResult.Cancel)

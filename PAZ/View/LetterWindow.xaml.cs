@@ -159,6 +159,12 @@ namespace PAZ
 
         private void bntMaken_Click(object sender, RoutedEventArgs e)
         {
+            if (_receivers.Count == 0)
+            {
+                MessageBox.Show("U heeft geen geadresseerden geselecteerd, selecteer op zijn minst een persoon uit de lijst voor u probeert een brief aan te maken.", "Opmerking", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
             _controller.BriefMakenBevestigingClicked(_receivers, this);
         }
 
@@ -210,7 +216,7 @@ namespace PAZ
             if (!btnSave.IsEnabled)
                 return;
 
-            MessageBoxResult result = MessageBox.Show("Wilt u de wijzigingen opslaan?", "Bevestiging", MessageBoxButton.YesNoCancel);
+            MessageBoxResult result = MessageBox.Show("Wilt u de wijzigingen opslaan?", "Bevestiging", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
                 Save();
             else if (result == MessageBoxResult.Cancel)

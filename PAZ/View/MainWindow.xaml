@@ -244,9 +244,9 @@
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="Verwijder gebruikers" Height="82" Margin="10,182,5,0" Name="groupBoxVerwijderGebruikers" VerticalAlignment="Top">
+                    <GroupBox Header="Verwijder persoonsdata" Height="82" Margin="10,182,5,0" Name="groupBoxVerwijderGebruikers" VerticalAlignment="Top">
                         <Grid>
-                            <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockVerwijderGebruikers" Text="Deze actie verwijderd alle gebruikers, behalve de administratoren." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
+                            <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockVerwijderGebruikers" Text="Deze actie verwijderd alle persoondata van studenten, docenten en experts." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
                             <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonVerwijderGebruikers" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonVerwijderGebruikers_Click" />
                         </Grid>
                     </GroupBox>

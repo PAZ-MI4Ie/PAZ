@@ -1,7 +1,7 @@
 ﻿<Window x:Class="PAZ.EmailWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="E-mail versturen" Height="549" Width="708" WindowStartupLocation="CenterOwner" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" Closing="Window_Closing">
+        Title="E-mail versturen" Height="549" Width="708" WindowStartupLocation="CenterOwner" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" Closing="Window_Closing" Background="#FFD51D53">
     <Grid>
         <TabControl HorizontalAlignment="Left" Name="tcGeadresseerden" VerticalAlignment="Top" Width="662" UseLayoutRounding="False" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Height="441" Margin="12,12,0,0">
             <TabItem Header="Bericht aanpassen" Name="tiBericht">

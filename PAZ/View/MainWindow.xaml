@@ -58,17 +58,17 @@
                             <ComboBox Height="23" HorizontalAlignment="Left" Margin="293,15,0,0" Name="comboBoxSelecteerType" Background="#FFEFEFEF" Foreground="#FF595959" VerticalAlignment="Top" Width="246" SelectedIndex="0" SelectionChanged="comboBoxSelecteerType_SelectionChanged">
                                 <ComboBoxItem Content="Selecteer een actie" />
                                 <ComboBoxItem Content="Lokaal" />
-                                <ComboBoxItem Content="Leerling" />
+                                <ComboBoxItem Content="Student" />
                                 <ComboBoxItem Content="Bedrijfsbegeleider" />
                                 <ComboBoxItem Content="Externe Deskundige" />
-                                <ComboBoxItem Content="Leraren" />
+                                <ComboBoxItem Content="Docent" />
                             </ComboBox>
                             <TextBlock Height="23" HorizontalAlignment="Left" Margin="24,15,0,0" Name="textBlockSelecteerType" Text="Wat wilt u toevoegen?" Foreground="#FF5E5353" FontStyle="Italic" VerticalAlignment="Top" Width="152" TextWrapping="Wrap" />
                         </Grid>
                     </GroupBox>
                     
                     <!-- groupboxes, bij default hidden-->
-                    <GroupBox Header="Leerling gegevens" Height="397" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxGebruikerGegevens" VerticalAlignment="Top" Width="757" Visibility="Hidden">
+                    <GroupBox Header="Student gegevens" Height="397" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxGebruikerGegevens" VerticalAlignment="Top" Width="757" Visibility="Hidden">
                         <Grid Height="376" Visibility="Visible">
                             <Label Content="Studentennummer" Height="28" HorizontalAlignment="Left" Margin="24,19,0,0" Name="labelStudentenNummer" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,21,0,0" Name="textBoxStudentennummer" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
@@ -225,9 +225,9 @@
             <TabItem Header="Acties" Name="tabItemActies" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">
                 <Grid Name="GridActies">
                     
-                    <GroupBox Header="Importeer gebruikers" Height="82" Margin="10,2,5,0" Name="groupBoxImport" VerticalAlignment="Top">
+                    <GroupBox Header="Importeer studenten" Height="82" Margin="10,2,5,0" Name="groupBoxImport" VerticalAlignment="Top">
                         <Grid>
-                            <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockImport" Text="Deze actie kan een .csv-bestand importeren die gebruikers bevat." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
+                            <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockImport" Text="Deze actie kan een .csv-bestand importeren die studenten bevat." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
                             <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonImport" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonImport_Click" />
                         </Grid>
                     </GroupBox>

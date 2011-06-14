@@ -43,7 +43,7 @@ namespace PAZMySQL
             }
             this._db.CloseConnection();
 
-			// dummy data
+			/* dummy data
 			Daytime daytime = new Daytime(1, new DateTime(2011, 5, 10), 1);
 			Classroom classroom = new Classroom(1, "OB002");
             Student student1 = new Student("Jan", "Piet", 0000000, "Management en Bestuur");
@@ -55,9 +55,9 @@ namespace PAZMySQL
 			Pair pair = new Pair(1, student1, student2, 12);
 
 			result.Add(new Session(daytime, classroom, pair, teacher1, teacher2, expert1, expert2));
-			// end dummy data
+			 end dummy data */
 
-            return result;
+			return result;
 		}
 
         public Session Find(int id)

@@ -28,8 +28,6 @@ namespace PAZMySQL
 			return session;
 		}
 
-		// 6/6/2011 Mark Bos: Uiteindelijk zou deze functie alle sessies uit de database halen, maar voordat dat werkt, staat er nu dummy data in om te zorgen dat er iets in het overzicht staat.
-		//De ProcessRow functie hierboven moet dus uitgewerkt worden, maar ik denk dat alleen Teun weet hoe dat moet.
         public List<Session> FindAll()
 		{
             this._db.OpenConnection();
@@ -55,7 +53,7 @@ namespace PAZMySQL
 			Pair pair = new Pair(1, student1, student2, 12);
 
 			result.Add(new Session(daytime, classroom, pair, teacher1, teacher2, expert1, expert2));
-			// end dummy data*/
+			end dummy data*/
 
 			return result;
 		}

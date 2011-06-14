@@ -28,8 +28,6 @@ namespace PAZMySQL
 			return session;
 		}
 
-		// 6/6/2011 Mark Bos: Uiteindelijk zou deze functie alle sessies uit de database halen, maar voordat dat werkt, staat er nu dummy data in om te zorgen dat er iets in het overzicht staat.
-		//De ProcessRow functie hierboven moet dus uitgewerkt worden, maar ik denk dat alleen Teun weet hoe dat moet.
         public List<Session> FindAll()
 		{
             this._db.OpenConnection();
@@ -42,7 +40,6 @@ namespace PAZMySQL
                 result.Add(this.ProcessRow(new Session(), Reader));
             }
             this._db.CloseConnection();
-
             return result;
 		}
 
@@ -54,9 +51,9 @@ namespace PAZMySQL
             command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             Reader.Read();//Only 1 row
-            Session result =  this.ProcessRow(new Session(), Reader);
             this._db.CloseConnection();
-            return result;
+            return this.ProcessRow(new Session(), Reader);
+            
         }
 
         public void Save(Session session)

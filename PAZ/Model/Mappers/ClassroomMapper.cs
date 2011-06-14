@@ -88,6 +88,11 @@ namespace PAZMySQL
          */
         public bool Delete()
         {
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "DELETE FROM classroom WHERE 1=1";
+            this._db.ExecuteCommand(command);
+            this._db.CloseConnection();
             return true;
         }
     }

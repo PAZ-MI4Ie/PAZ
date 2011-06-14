@@ -44,6 +44,9 @@ namespace PAZ
             _controller = PAZController.GetInstance();
             _controller.Init(this);
 
+            textBoxDeadlineStart.Text = _controller.IniReader["DATES"]["startdate"];
+            textBoxDeadlineEind.Text = _controller.IniReader["DATES"]["enddate"];
+
             //TEST CODE:
             List<Session> tempSessions = _controller.SessionMapper.FindAll();
             Console.WriteLine(tempSessions);
@@ -229,7 +232,7 @@ namespace PAZ
 
             Sessions = CollectionViewSource.GetDefaultView(_master);
             GridOverzichtList.ItemsSource = Sessions;
-
+           
             _classrooms = _controller.ClassroomMapper.FindAll();
             _pairs = _controller.PairMapper.FindAll();
             //Test CODE
@@ -260,6 +263,7 @@ namespace PAZ
             unPlannedPairs.loadAllPairs(_controller.PairMapper);
             unPlannedPairs.Show();
             tabCalender.Focus();
+            
         }
 
 
@@ -396,39 +400,48 @@ namespace PAZ
                     try 
                     {
                         file = new StreamReader( filename );
+						int a = 0;
                         while ((line = file.ReadLine()) != null)
                         {
 
                             string[] csvResult = line.Split(new Char[] { ',' });
+							if(a != 0)
+							{
+								Student student = new Student();
+								for (int i = 0; i < csvResult.Length; i++)
+								{
+									Console.WriteLine(csvResult[4]);
+									switch (i)
+									{
+										case 0: student.Firstname = csvResult[0]; break;
+										case 1: student.Surname = csvResult[1]; break;
+										case 2: student.Studentnumber = Convert.ToInt32(csvResult[2]); break;
+										case 3: student.Study = csvResult[3]; break;
+										case 4: student.Email = csvResult[4]; break;
+									}
 
-                            for (int i = 0; i < csvResult.Length; i++)
-                            {
 
-                                /*
-                                 * ADD THE RESULTS TO THE DATABASE OVER HERE,
-                                 * 
-                                 * I SAID, OVER HERE DAMNED!
-                                 * 
-                                 * FIRST 12 ITEMS ARE THE COLUMS!!!!!
-                                 * this way you can easily add them.. naaisssss!
-                                 */
+									/*
+									 * ADD THE RESULTS TO THE DATABASE OVER HERE,
+									 * 
+									 * I SAID, OVER HERE DAMNED!
+									 * 
+									 * FIRST 12 ITEMS ARE THE COLUMS!!!!!
+									 * this way you can easily add them.. naaisssss!
+									 */
 
 
-                                /*
-                                 * test to show each item
-                                 * 
-                                 *  MessageBox.Show(csvResult[i]);
-                                 *  Console.WriteLine(csvResult[i]);
-                                 *  
-                                 */
-                            }
-
-                            /*
-                             * test to show each line
-                             * 
-                             *  MessageBox.Show(line);
-                             */
-
+									/*
+									 * test to show each item
+									 * 
+									 MessageBox.Show(csvResult[i] + "" + i);
+									 *  Console.WriteLine(csvResult[i]);
+									 *  
+									 */
+								}
+								_controller.StudentMapper.Save(student);
+							}
+							a++;
                         }
                     }
                     finally
@@ -1049,9 +1062,73 @@ namespace PAZ
 
         private void buttonZittingenGenereren_Click(object sender, RoutedEventArgs e)
         {
-            Planner planner = new Planner();
+            
             //@MarkM: Schermpje dat ie bezig is laten zien aub
+            // editted by MarkM
+            StartWork();
+            //Planner planner = new Planner();
+            //planner.Plan(_controller.PairMapper.FindAll());
+            
+            
+        }
+
+        private bool ZittingGen()
+        {
+            Planner planner = new Planner();
             planner.Plan(_controller.PairMapper.FindAll());
+            return true;
+        }
+
+
+        /*
+         * 
+         * 
+         * 
+         */
+        private bool succesfull;
+        private void DoWork(object sender, DoWorkEventArgs e)
+        {
+            succesfull = ZittingGen();
+        }
+
+        private void WorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            gridLoadingSreenGen.Visibility = Visibility.Hidden;
+            GridActies.Cursor = Cursors.Arrow;
+
+            if (succesfull)
+            {
+
+                MessageBox.Show("Zittingen zijn gegenereerd.", "Actie succesvol"); 
+
+                /*
+                 *  HIER IETS DOEN ALS HET SUCCESVOL IS
+                 */
+            }
+        }
+
+        private void StartWork()
+        {
+            gridLoadingSreenGen.Visibility = Visibility.Visible;
+            GridActies.Cursor = Cursors.Wait;
+
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += DoWork;
+            worker.RunWorkerCompleted += WorkerCompleted;
+            worker.RunWorkerAsync();
+        }
+        /*
+         * 
+         * 
+         * 
+         */
+
+
+
+        private void GridOverzichtList_Loaded(object sender, RoutedEventArgs e)
+        {
+            GridOverzichtList.Columns[0].SortDirection = ListSortDirection.Ascending;
+            GridOverzichtList.Columns[1].SortDirection = ListSortDirection.Ascending;
         }
     }
 

@@ -46,7 +46,7 @@
                         </Grid>
                     </GroupBox>
 
-                    <DataGrid Name="GridOverzichtList" RowHeight="50" Margin="0, 70, 0, 0" RowEditEnding="GridOverzichtList_RowEditEnding" ColumnWidth="105" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="#FFDEDEDE" Foreground="#FF6F6F6F" AlternatingRowBackground="#FFF8F8F8">
+                    <DataGrid Name="GridOverzichtList" RowHeight="50" Margin="0, 70, 0, 0" RowEditEnding="GridOverzichtList_RowEditEnding" ColumnWidth="105" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="#FFDEDEDE" Foreground="#FF6F6F6F" AlternatingRowBackground="#FFF8F8F8" Loaded="GridOverzichtList_Loaded">
                     </DataGrid>
                 </Grid>
             </TabItem>
@@ -58,17 +58,17 @@
                             <ComboBox Height="23" HorizontalAlignment="Left" Margin="293,15,0,0" Name="comboBoxSelecteerType" Background="#FFEFEFEF" Foreground="#FF595959" VerticalAlignment="Top" Width="246" SelectedIndex="0" SelectionChanged="comboBoxSelecteerType_SelectionChanged">
                                 <ComboBoxItem Content="Selecteer een actie" />
                                 <ComboBoxItem Content="Lokaal" />
-                                <ComboBoxItem Content="Leerling" />
+                                <ComboBoxItem Content="Student" />
                                 <ComboBoxItem Content="Bedrijfsbegeleider" />
                                 <ComboBoxItem Content="Externe Deskundige" />
-                                <ComboBoxItem Content="Leraren" />
+                                <ComboBoxItem Content="Docent" />
                             </ComboBox>
                             <TextBlock Height="23" HorizontalAlignment="Left" Margin="24,15,0,0" Name="textBlockSelecteerType" Text="Wat wilt u toevoegen?" Foreground="#FF5E5353" FontStyle="Italic" VerticalAlignment="Top" Width="152" TextWrapping="Wrap" />
                         </Grid>
                     </GroupBox>
                     
                     <!-- groupboxes, bij default hidden-->
-                    <GroupBox Header="Leerling gegevens" Height="397" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxGebruikerGegevens" VerticalAlignment="Top" Width="757" Visibility="Hidden">
+                    <GroupBox Header="Student gegevens" Height="397" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxGebruikerGegevens" VerticalAlignment="Top" Width="757" Visibility="Hidden">
                         <Grid Height="376" Visibility="Visible">
                             <Label Content="Studentennummer" Height="28" HorizontalAlignment="Left" Margin="24,19,0,0" Name="labelStudentenNummer" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,21,0,0" Name="textBoxStudentennummer" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
@@ -220,14 +220,19 @@
 
                 </Grid>
             </TabItem>
+
+            <TabItem Header="Wijzigen" Name="tabItemWijzigen" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">
+                <Grid Name="GridWijzigen">
+                </Grid>
+            </TabItem>
             
             <!-- ACTIES-->
             <TabItem Header="Acties" Name="tabItemActies" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">
                 <Grid Name="GridActies">
                     
-                    <GroupBox Header="Importeer gebruikers" Height="82" Margin="10,2,5,0" Name="groupBoxImport" VerticalAlignment="Top">
+                    <GroupBox Header="Importeer studenten" Height="82" Margin="10,2,5,0" Name="groupBoxImport" VerticalAlignment="Top">
                         <Grid>
-                            <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockImport" Text="Deze actie kan een .csv-bestand importeren die gebruikers bevat." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
+                            <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockImport" Text="Deze actie kan een .csv-bestand importeren die studenten bevat." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
                             <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonImport" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonImport_Click" />
                         </Grid>
                     </GroupBox>
@@ -254,19 +259,17 @@
                     </GroupBox>
                     <GroupBox Header="Email versturen" Height="82" Margin="10,362,5,0" Name="groupBoxEmailVersturen" VerticalAlignment="Top">
                             <Grid>
-                                <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockEmailVersturen" Text="Deze actie verstuurt alle emails naar de personen." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
+                                <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockEmailVersturen" Text="Deze actie helpt u om e-mail berichten te maken en versturen naar studenten en docenten." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
                                 <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonEmailVersturen" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonEmailVersturen_Click" />
                             </Grid>
                         </GroupBox>
 
                         <GroupBox Header="Brief maken" Height="82" Margin="10,452,5,0" Name="groupBoxBriefMaken" VerticalAlignment="Top">
                                 <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="82*" />
-                                <ColumnDefinition Width="660*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockBriefMaken" Text="Deze actie maakt een afstudeerscriptie brief in PDF formaat om te printen en te versturen naar de experts." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" Grid.ColumnSpan="2" />
-                                    <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="556,28,0,0" Name="buttonBriefMaken" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonBriefMaken_Click" Grid.Column="1" />
+
+                            <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockBriefMaken" Text="Deze actie helpt u om afstudeerscriptiebrieven in PDF formaat te maken om te printen en te versturen naar de externe deskundigen." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic"/>
+                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonBriefMaken" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonBriefMaken_Click" />
+
                         </Grid>
                         
                         </GroupBox>
@@ -276,7 +279,22 @@
                             <Button Background="#FFEFEFEF" Content="Bevestig actie" Foreground="#FF595959" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonZittingenGenereren" VerticalAlignment="Top" Width="98" Click="buttonZittingenGenereren_Click" />
                         </Grid>
                     </GroupBox>
+                    <Grid Height="137" HorizontalAlignment="Left" Margin="179,182,0,0" Name="gridLoadingSreenGen" Visibility="Hidden"  VerticalAlignment="Top" Width="392" Background="White">
+                        <Border
+                            BorderThickness="5"
+                            BorderBrush="Black"
+                            Width="392"
+                            Height="137"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            >
+                        </Border>
+                        <Label Content="Zittingen genereren. Moment geduld aub." Height="28" HorizontalAlignment="Left" Margin="53,56,0,0" Name="labelLoadingGen" VerticalAlignment="Top" Width="293" FontWeight="Bold" FontFamily="Verdana" Foreground="#FFC44E4E" />
+                        <Label Content="Gebruik of sluit de applicatie niet af." Height="28" HorizontalAlignment="Left" Margin="145,73,0,0" Name="labelLoadingGenExtra" VerticalAlignment="Top" Width="197" Foreground="#FF939393" FontStyle="Italic" />
+                        
+                        </Grid>
                 </Grid>
+                
             </TabItem>
 
 
@@ -288,9 +306,9 @@
                 <Grid Name="GridOpties">
 
 
-                    <GroupBox Header="Deadlines" Height="200" Margin="10,2,5,0" Name="groupBoxDeadlines" VerticalAlignment="Top">
+                    <GroupBox Header="Planning Datums" Height="200" Margin="10,2,5,0" Name="groupBoxDeadlines" VerticalAlignment="Top">
                         <Grid>
-                            <TextBlock Height="27" HorizontalAlignment="Left" Margin="24,15,0,0" Name="textBlockDeadlineBeschrijving" Text="Hier kunt u de deadline instellen, van en tot wanneer er voor de planning ingeschreven kan worden." VerticalAlignment="Top" Width="520" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
+                            <TextBlock Height="27" HorizontalAlignment="Left" Margin="24,15,0,0" Name="textBlockDeadlineBeschrijving" Text="Hier kunt u de begin- en einddatum van de agenda instellen." VerticalAlignment="Top" Width="520" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
                             <TextBlock Height="27" HorizontalAlignment="Left" Margin="24,55,0,0" Name="textBlockDeadlineStart" Text="Start datum" VerticalAlignment="Top" Width="172" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,55,0,0" Name="textBoxDeadlineStart" VerticalAlignment="Top" Width="252" />
 
@@ -300,21 +318,6 @@
                             <Button Content="Opslaan" Height="23" HorizontalAlignment="Left" Margin="447,148,0,0" Name="buttonOptiesOpslaan" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonOptiesOpslaan_Click" />
                             </Grid>
                     </GroupBox>
-
-
-                    <GroupBox Header="E-mail instellingen" Height="220" Margin="10,220,5,0" Name="groupBoxEmailInstellingen" VerticalAlignment="Top">
-                        <Grid>
-                            <TextBlock Height="35" HorizontalAlignment="Left" Margin="24,15,0,0" Name="textBlockEmailInstellingenBeschrijving" Text="Hier kunt u e-mail instellingen wijzigen, de informatie die wordt weergeven als er een e-mail wordt onvangen door een extern persoon. Deze externe persoon zal dan zien dat de e-mail afkomstig is van de onderstaande gegevens." VerticalAlignment="Top" Width="692" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
-                            <TextBlock Height="27" HorizontalAlignment="Left" Margin="24,65,0,0" Name="textBlockEmailAfzender" Text="Naam afzender" VerticalAlignment="Top" Width="172" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
-                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,65,0,0" Name="textBoxEmailAfzender" VerticalAlignment="Top" Width="252" Text="Avans Planner" />
-
-                            <TextBlock Height="27" HorizontalAlignment="Left" Margin="24,115,0,0" Name="textBlockEmail" Text="E-mail afzender" VerticalAlignment="Top" Width="172" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
-                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,115,0,0" Name="textBoxEmail" VerticalAlignment="Top" Width="252" Text="planner@avans.nl" />
-
-                            <Button Content="Opslaan" Height="23" HorizontalAlignment="Left" Margin="447,158,0,0" Name="buttonEmailOpslaan" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" />
-                        </Grid>
-                    </GroupBox>
-
                 </Grid>
             </TabItem>
         </TabControl>

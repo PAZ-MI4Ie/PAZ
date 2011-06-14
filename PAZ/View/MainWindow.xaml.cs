@@ -1053,10 +1053,68 @@ namespace PAZ
 
         private void buttonZittingenGenereren_Click(object sender, RoutedEventArgs e)
         {
-            Planner planner = new Planner();
+            
             //@MarkM: Schermpje dat ie bezig is laten zien aub
-            planner.Plan(_controller.PairMapper.FindAll());
+            // editted by MarkM
+            StartWork();
+            //Planner planner = new Planner();
+            //planner.Plan(_controller.PairMapper.FindAll());
+            
+            
         }
+
+        private bool ZittingGen()
+        {
+            Planner planner = new Planner();
+            planner.Plan(_controller.PairMapper.FindAll());
+            return true;
+        }
+
+
+        /*
+         * 
+         * 
+         * 
+         */
+        private bool succesfull;
+        private void DoWork(object sender, DoWorkEventArgs e)
+        {
+            succesfull = ZittingGen();
+        }
+
+        private void WorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            gridLoadingSreenGen.Visibility = Visibility.Hidden;
+            GridActies.Cursor = Cursors.Arrow;
+
+            if (succesfull)
+            {
+
+                MessageBox.Show("Zittingen zijn gegenereerd.", "Actie succesvol"); 
+
+                /*
+                 *  HIER IETS DOEN ALS HET SUCCESVOL IS
+                 */
+            }
+        }
+
+        private void StartWork()
+        {
+            gridLoadingSreenGen.Visibility = Visibility.Visible;
+            GridActies.Cursor = Cursors.Wait;
+
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += DoWork;
+            worker.RunWorkerCompleted += WorkerCompleted;
+            worker.RunWorkerAsync();
+        }
+        /*
+         * 
+         * 
+         * 
+         */
+
+
 
         private void GridOverzichtList_Loaded(object sender, RoutedEventArgs e)
         {

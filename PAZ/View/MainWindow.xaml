@@ -261,12 +261,10 @@
 
                         <GroupBox Header="Brief maken" Height="82" Margin="10,452,5,0" Name="groupBoxBriefMaken" VerticalAlignment="Top">
                                 <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="82*" />
-                                <ColumnDefinition Width="660*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockBriefMaken" Text="Deze actie maakt een afstudeerscriptie brief in PDF formaat om te printen en te versturen naar de experts." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" Grid.ColumnSpan="2" />
-                                    <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="556,28,0,0" Name="buttonBriefMaken" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonBriefMaken_Click" Grid.Column="1" />
+
+                            <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockBriefMaken" Text="Deze actie maakt een afstudeerscriptie brief in PDF formaat om te printen en te versturen naar de experts." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic"/>
+                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonBriefMaken" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonBriefMaken_Click" />
+
                         </Grid>
                         
                         </GroupBox>
@@ -276,7 +274,22 @@
                             <Button Background="#FFEFEFEF" Content="Bevestig actie" Foreground="#FF595959" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonZittingenGenereren" VerticalAlignment="Top" Width="98" Click="buttonZittingenGenereren_Click" />
                         </Grid>
                     </GroupBox>
+                    <Grid Height="137" HorizontalAlignment="Left" Margin="179,182,0,0" Name="gridLoadingSreenGen" Visibility="Hidden"  VerticalAlignment="Top" Width="392" Background="White">
+                        <Border
+                            BorderThickness="5"
+                            BorderBrush="Black"
+                            Width="392"
+                            Height="137"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            >
+                        </Border>
+                        <Label Content="Zittingen genereren. Moment geduld aub." Height="28" HorizontalAlignment="Left" Margin="53,56,0,0" Name="labelLoadingGen" VerticalAlignment="Top" Width="293" FontWeight="Bold" FontFamily="Verdana" Foreground="#FFC44E4E" />
+                        <Label Content="Gebruik of sluit de applicatie niet af." Height="28" HorizontalAlignment="Left" Margin="145,73,0,0" Name="labelLoadingGenExtra" VerticalAlignment="Top" Width="197" Foreground="#FF939393" FontStyle="Italic" />
+                        
+                        </Grid>
                 </Grid>
+                
             </TabItem>
 
 

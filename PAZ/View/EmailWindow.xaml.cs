@@ -315,7 +315,7 @@ namespace PAZ
         * 
         * Auteur: Gökhan 
         */
-        private void btnAnnuleren_Click(object sender, RoutedEventArgs e)
+        private void btnSluiten_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
@@ -479,14 +479,26 @@ namespace PAZ
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // TO DO: Waarschuwing popup, vraag om op te slaan indien er wijzigingen waren
+            if (!btnSave.IsEnabled)
+                return;
+
+            MessageBoxResult result = MessageBox.Show("Wilt u de wijzigingen opslaan?", "Bevestiging", MessageBoxButton.YesNoCancel);
+            if (result == MessageBoxResult.Yes)
+                Save();
+            else if (result == MessageBoxResult.Cancel)
+                e.Cancel = true;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            _controller.EmailWindowSaveClicked(new EmailTemplate(_emailTemplate.Id, tbAfzender.Text, tbInleiding.Text, tbInformatie.Text, tbAfsluiting.Text, tbAfzenders.Text));
+            Save();
 
             btnSave.IsEnabled = false;
+        }
+
+        private void Save()
+        {
+            _controller.EmailWindowSaveClicked(new EmailTemplate(_emailTemplate.Id, tbAfzender.Text, tbInleiding.Text, tbInformatie.Text, tbAfsluiting.Text, tbAfzenders.Text));
         }
 
         private void textBox_TextChanged(object sender, TextChangedEventArgs e)

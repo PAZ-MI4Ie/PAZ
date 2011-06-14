@@ -58,7 +58,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button Content="Annuleren" Height="29" HorizontalAlignment="Left" Margin="399,459,0,0" Name="btnAnnuleren" VerticalAlignment="Top" Width="90" Click="btnAnnuleren_Click" />
+        <Button Content="Sluiten" Height="29" HorizontalAlignment="Left" Margin="399,459,0,0" Name="btnSluiten" VerticalAlignment="Top" Width="90" Click="btnSluiten_Click" />
         <Button Content="Maken" Height="29" HorizontalAlignment="Left" Margin="579,459,0,0" Name="btnMaken" VerticalAlignment="Top" Width="78" Click="bntMaken_Click" />
         <Button Content="Toepassen" Height="29" HorizontalAlignment="Left" Margin="495,459,0,0" Name="btnSave" VerticalAlignment="Top" Width="78" Click="btnSave_Click" IsEnabled="False" />
     </Grid>

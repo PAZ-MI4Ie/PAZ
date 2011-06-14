@@ -254,7 +254,7 @@
                     </GroupBox>
                     <GroupBox Header="Email versturen" Height="82" Margin="10,362,5,0" Name="groupBoxEmailVersturen" VerticalAlignment="Top">
                             <Grid>
-                                <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockEmailVersturen" Text="Deze actie verstuurt alle emails naar de personen." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
+                                <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockEmailVersturen" Text="Deze actie helpt u om e-mail berichten te maken en versturen naar studenten en docenten." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
                                 <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonEmailVersturen" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonEmailVersturen_Click" />
                             </Grid>
                         </GroupBox>
@@ -262,7 +262,7 @@
                         <GroupBox Header="Brief maken" Height="82" Margin="10,452,5,0" Name="groupBoxBriefMaken" VerticalAlignment="Top">
                                 <Grid>
 
-                            <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockBriefMaken" Text="Deze actie maakt een afstudeerscriptie brief in PDF formaat om te printen en te versturen naar de experts." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic"/>
+                            <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockBriefMaken" Text="Deze actie helpt u om afstudeerscriptiebrieven in PDF formaat te maken om te printen en te versturen naar de externe deskundigen." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic"/>
                             <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonBriefMaken" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonBriefMaken_Click" />
 
                         </Grid>

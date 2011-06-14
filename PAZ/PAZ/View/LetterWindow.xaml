@@ -1,7 +1,7 @@
 ﻿<Window x:Class="PAZ.LetterWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Brief exporteren" Height="549" Width="708" WindowStartupLocation="CenterOwner" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" Closing="Window_Closing">
+        Title="Brief maken" Height="549" Width="708" WindowStartupLocation="CenterOwner" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" Closing="Window_Closing">
     <Grid>
         <TabControl HorizontalAlignment="Left" Name="tcGeadresseerden" VerticalAlignment="Top" Width="662" UseLayoutRounding="False" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Height="441" Margin="12,12,0,0">
             <TabItem Header="Brief aanpassen" Name="tiBrief">
@@ -20,7 +20,7 @@
                     <Label Content="Verdere informatie:" FlowDirection="LeftToRight" Height="28" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="6,264,0,0" Name="lblVerdereInformatie" VerticalAlignment="Top" Width="129" />
                 </Grid>
             </TabItem>
-            <TabItem Header="Brief informatie aan passen" Name="tiInformatie">
+            <TabItem Header="Brief informatie aanpassen" Name="tiInformatie">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="80*" />

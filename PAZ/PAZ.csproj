@@ -62,11 +62,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Control\ControllerIO.cs" />
     <Compile Include="Control\PAZController.cs" />
-    <Compile Include="IniReader\IniFile.cs" />
-    <Compile Include="IniReader\IniSection.cs" />
-    <Compile Include="Model\Emailer.cs" />
+    <Compile Include="Control\IniReader\IniFile.cs" />
+    <Compile Include="Control\IniReader\IniSection.cs" />
+    <Compile Include="Control\Planner.cs" />
+    <Compile Include="Model\Email.cs" />
+    <Compile Include="Control\Emailer.cs" />
+    <Compile Include="Model\EmailTemplate.cs" />
+    <Compile Include="Model\LetterTemplate.cs" />
+    <Compile Include="Model\Mappers\BlockedTimeslotMapper.cs" />
+    <Compile Include="Model\Mappers\EmailTemplateMapper.cs" />
+    <Compile Include="Model\Mappers\LetterTemplateMapper.cs" />
     <Compile Include="Model\Mappers\PairAttachmentMapper.cs" />
     <Compile Include="Model\Mappers\ClassroomMapper.cs" />
     <Compile Include="Model\Mappers\SessionMapper.cs" />
@@ -82,13 +88,19 @@
     <Compile Include="Model\login.cs" />
     <Compile Include="Model\Mappers\StudentMapper.cs" />
     <Compile Include="Model\Mappers\TeacherMapper.cs" />
+    <Compile Include="Model\Mappers\TimeslotMapper.cs" />
     <Compile Include="Model\Pair.cs" />
-    <Compile Include="Model\PDFExport.cs" />
+    <Compile Include="Control\PDFExporter.cs" />
     <Compile Include="Model\Planning.cs" />
     <Compile Include="Model\Session.cs" />
     <Compile Include="Model\Student.cs" />
     <Compile Include="Model\Teacher.cs" />
+    <Compile Include="Model\Timeslot.cs" />
     <Compile Include="Model\User.cs" />
+    <Compile Include="View\LetterWindow.xaml.cs">
+      <DependentUpon>LetterWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CustomLabel.cs" />
     <Compile Include="View\SessionRow.cs" />
     <Compile Include="Model\Mappers\MysqlDb.cs" />
     <Compile Include="Model\Mappers\UserMapper.cs" />
@@ -108,6 +120,13 @@
     <Compile Include="View\SessionWindow.xaml.cs">
       <DependentUpon>SessionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\UnPlannedPairs.xaml.cs">
+      <DependentUpon>UnPlannedPairs.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\LetterWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\EmailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -129,6 +148,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\SessionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UnPlannedPairs.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -177,6 +200,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\UnplannedWindowButtonBg.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

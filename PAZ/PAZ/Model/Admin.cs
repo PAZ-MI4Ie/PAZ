@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PAZ.Control
+namespace PAZ.Model
 {
-    class ControllerIO
+    public class Admin : User
     {
+        public string Password { get; set; }
     }
 }

@@ -6,7 +6,7 @@
         <TabControl HorizontalAlignment="Left" Name="tcGeadresseerden" VerticalAlignment="Top" Width="662" UseLayoutRounding="False" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Height="441" Margin="12,12,0,0">
             <TabItem Header="Brief aanpassen" Name="tiBrief">
                 <Grid>
-                    <TextBox HorizontalAlignment="Left" Margin="141,118.723,0,151.04" Name="tbReisInformatie" Width="385" Text="" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" />
+                    <TextBox HorizontalAlignment="Left" Margin="141,118.723,0,186.04" Name="tbReisInformatie" Width="385" Text="" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" />
                     <TextBox AcceptsReturn="True" AcceptsTab="True" Height="68.723" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="141,44,0,0" Name="tbBeginKern" Text="" TextWrapping="Wrap" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto" Width="385" />
                     <TextBox AcceptsReturn="True" AcceptsTab="True" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="141,298,0,85.04" Name="tbAfzenders" Text="" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Width="385" />
                     <Label Content="Avans locatie:" FlowDirection="LeftToRight" Height="28" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="10,10,0,0" Name="lblAvansLocatie" VerticalAlignment="Top" Width="125" />
@@ -16,8 +16,8 @@
                     <TextBox AcceptsReturn="True" AcceptsTab="True" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="141,330,0,24.723" Name="tbBijlagen" Text="" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Width="385" />
                     <Label Content="Bijlagen:" FlowDirection="LeftToRight" Height="28" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="10,330,0,0" Name="lblBijlagen" VerticalAlignment="Top" Width="125" />
                     <TextBox AcceptsReturn="True" AcceptsTab="True" Height="26" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="141,12,0,0" Name="tbAvansLocatie" Text="" TextWrapping="Wrap" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto" Width="385" />
-                    <TextBox AcceptsReturn="True" AcceptsTab="True" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="141,264,0,117.04" Name="tbVerdereInformatie" Text="" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Width="385" />
-                    <Label Content="Verdere informatie:" FlowDirection="LeftToRight" Height="28" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="6,264,0,0" Name="lblVerdereInformatie" VerticalAlignment="Top" Width="129" />
+                    <TextBox AcceptsReturn="True" AcceptsTab="True" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled" Margin="141,230,0,119.04" Name="tbVerdereInformatie" Text="" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Width="385" />
+                    <Label Content="Verdere informatie:" FlowDirection="LeftToRight" Height="28" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="6,230,0,0" Name="lblVerdereInformatie" VerticalAlignment="Top" Width="129" />
                 </Grid>
             </TabItem>
             <TabItem Header="Brief informatie aanpassen" Name="tiInformatie">

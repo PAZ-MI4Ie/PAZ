@@ -19,7 +19,7 @@ namespace PAZ
     public partial class LetterWindow : Window
     {
         private List<Expert> _experts;
-        private List<User> _receivers;
+        private List<Expert> _receivers;
         private List<SessionRow> _sessions;
         private List<CheckBox> _expertBoxes;
 
@@ -48,7 +48,7 @@ namespace PAZ
             tbVoettekstRechts.Text = letterTemplate.VoettekstRechts;
 
             _experts = new List<Expert>();
-            _receivers = new List<User>();
+            _receivers = new List<Expert>();
             _sessions = sessions;
 
             foreach (SessionRow session in sessions)
@@ -106,7 +106,7 @@ namespace PAZ
         {
             CheckBox cb = (CheckBox)sender;
             // verwijder de gekoppelde object van de _receivers lijst
-            _receivers.Remove((User)cb.Tag);
+            _receivers.Remove((Expert)cb.Tag);
 
             HandleSelectorUnchecking(cb, cbxExpertSelector, _expertBoxes);
         }
@@ -133,7 +133,7 @@ namespace PAZ
         {
             CheckBox cb = (CheckBox)sender;
             // voeg de gekoppelde object toe aan de _receivers lijst
-            _receivers.Add((User) cb.Tag);
+            _receivers.Add((Expert) cb.Tag);
 
             if (CheckAllChecked(_expertBoxes))
                 cbxExpertSelector.IsChecked = true;
@@ -157,8 +157,7 @@ namespace PAZ
 
         private void bntMaken_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Tijdelijk buiten werking tot Teun de mappers update.");
-            //_controller.BriefMakenBevestigingClicked();
+            _controller.BriefMakenBevestigingClicked(_receivers);
         }
 
         /**

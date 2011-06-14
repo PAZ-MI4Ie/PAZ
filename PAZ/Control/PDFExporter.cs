@@ -147,7 +147,7 @@ namespace PAZ.Control
          * Dit maakt de brieven om te versturen naar de experts in zijn geheel en zet ze in een PDF document
          * Auteur: Yorg 
          */
-        public void CreateLetterPDF(String filename)
+        public void CreateLetterPDF(String filename, List<Expert> receivers)
         {
             // het document(standaard A4-formaat) maken
             iTextSharp.text.Document document = new iText.Document(PageSize.A4, 75.0f, 75.0f, 0.0f, 0.0f);
@@ -176,15 +176,10 @@ namespace PAZ.Control
                     for (int iExpert = 0; iExpert < experts.Length; ++iExpert)
                     {
                         Expert expert = experts[iExpert];
+                        if (expert == null || !receivers.Contains(expert) || ignoreList.Contains(expert))
+                            continue;
 
                         bool bIgnore = false;
-
-                        // Controleer of er een brief gemaakt moet worden voor deze expert
-                        for (int i = 0; i < ignoreList.Count; ++i)
-                        {
-                            if(expert == ignoreList[i])
-                                bIgnore = true;
-                        }
 
                         if(bIgnore)
                             continue;

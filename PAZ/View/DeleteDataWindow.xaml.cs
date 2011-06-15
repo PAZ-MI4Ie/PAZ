@@ -111,6 +111,8 @@ namespace PAZ
 
                 top += 20;
             }
+
+            canvasClassrooms.Height += top;
             scrollViewerLokalen.Content = canvasClassrooms;
         }
 
@@ -160,7 +162,7 @@ namespace PAZ
                 if (isUser)
                     cbxPersoonSelector.IsChecked = true;
                 else
-                    cbxLokaalSelector.IsChecked = true;
+                    cbxLokaalSelector.IsChecked = true;          
             }
         }
 
@@ -207,24 +209,24 @@ namespace PAZ
             this.Close();
         }
 
-        private void cbxStudentSelector_Checked(object sender, RoutedEventArgs e)
-        {
-            HandleCheck(_classroomBoxes);
-        }
-
-        private void cbxStudentSelector_Unchecked(object sender, RoutedEventArgs e)
-        {
-            HandleUncheck(_classroomBoxes);
-        }
-
-        private void cbxTeacherSelector_Checked(object sender, RoutedEventArgs e)
+        private void cbxPersoonSelector_Checked(object sender, RoutedEventArgs e)
         {
             HandleCheck(_userBoxes);
         }
 
-        private void cbxTeacherSelector_Unchecked(object sender, RoutedEventArgs e)
+        private void cbxPersoonSelector_Unchecked(object sender, RoutedEventArgs e)
         {
             HandleUncheck(_userBoxes);
+        }
+
+        private void cbxLokalenSelector_Checked(object sender, RoutedEventArgs e)
+        {
+            HandleCheck(_classroomBoxes);
+        }
+
+        private void cbxLokalenSelector_Unchecked(object sender, RoutedEventArgs e)
+        {
+            HandleUncheck(_classroomBoxes);
         }
 
         /**

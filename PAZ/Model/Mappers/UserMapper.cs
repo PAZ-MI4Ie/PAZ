@@ -47,6 +47,8 @@ namespace PAZMySQL
         {
             this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
+
+            // Verzoekje van Yorg aan Teun, deze sorteren op naam, gewoon een extra-tje
             command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status FROM user";
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             List<User> result = new List<User>();

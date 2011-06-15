@@ -72,7 +72,12 @@ namespace PAZ
                 CheckBox cb = new CheckBox();
                 cb.Checked += new RoutedEventHandler(cb_Checked);
                 cb.Unchecked += new RoutedEventHandler(cb_Unchecked);
-                cb.Content = " " + user.Firstname + " " + user.Surname + " (" + user.Email + ") : " + user.User_type;
+
+                string gebruikerType = user.User_type;
+                if(gebruikerType == "teacher")
+                    gebruikerType = "docent";
+
+                cb.Content = " " + user.Firstname + " " + user.Surname + " (" + user.Email + ") : " + gebruikerType;
                 cb.Tag = user; // koppelt object aan checkbox
 
                 Canvas.SetLeft(cb, left);

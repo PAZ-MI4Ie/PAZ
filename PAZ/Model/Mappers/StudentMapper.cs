@@ -24,8 +24,8 @@ namespace PAZMySQL
         {
             base.ProcessRow(student, Reader, offset);
             //student data
-            student.Studentnumber = Reader.GetInt32(7 + offset);
-            student.Study = Reader.GetString(8 + offset);
+            student.Studentnumber = Reader.GetInt32(8 + offset);
+            student.Study = Reader.GetString(9 + offset);
             return student;
         }
 
@@ -33,7 +33,7 @@ namespace PAZMySQL
         {
             this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
-            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, studentnumber, study FROM user, student WHERE user.id = student.user_id AND user.id = ?id";
+            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, was_changed, studentnumber, study FROM user, student WHERE user.id = student.user_id AND user.id = ?id";
             command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             Reader.Read();//Only 1 row
@@ -45,7 +45,7 @@ namespace PAZMySQL
         {
             this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
-            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, studentnumber, study FROM user, student WHERE user.id = student.user_id";
+            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, was_changed, studentnumber, study FROM user, student WHERE user.id = student.user_id";
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             List<Student> result = new List<Student>();
             while (Reader.Read())

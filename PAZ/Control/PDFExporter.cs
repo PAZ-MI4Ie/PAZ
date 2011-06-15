@@ -267,6 +267,8 @@ namespace PAZ.Control
 
                         // We hebben nu een brief gemaakt voor deze expert, als deze meermaals in het systeem voorkomt, negeer die dan
                         ignoreList.Add(expert);
+
+                        expert.WasChanged = false;
                     }
                 }
 

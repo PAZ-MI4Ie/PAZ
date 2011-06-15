@@ -33,7 +33,7 @@ namespace PAZMySQL
         {
             this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
-            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status FROM user, admin WHERE user.id = admin.user_id AND id = ?id";
+            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, was_changed FROM user, admin WHERE user.id = admin.user_id AND id = ?id";
             command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             Reader.Read();//Only 1 row
@@ -45,7 +45,7 @@ namespace PAZMySQL
         {
             this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
-            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status FROM user, admin WHERE user.id = admin.user_id";
+            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, was_changed FROM user, admin WHERE user.id = admin.user_id";
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             List<Admin> result = new List<Admin>();
             while (Reader.Read())

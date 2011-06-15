@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using PAZ.Control;
 using PAZ.Model.Mappers;
 using PAZMySQL;
 
@@ -16,6 +14,21 @@ namespace PAZ.Model
         public string Email { get; set; }
         public string User_type { get; set; }
         public string Status { get; set; }
+
+        private bool _wasChanged;
+        public bool WasChanged
+        {
+            get { return _wasChanged; }
+            set 
+            {
+                if (value != _wasChanged)
+                {
+                    _wasChanged = value;
+                    PAZController.GetInstance().UserMapper.Save(this);
+                }
+            }
+        }
+
         private List<Blocked_timeslot> _blockedTimeslots;
         public List<Blocked_timeslot> BlockedTimeslots
         {

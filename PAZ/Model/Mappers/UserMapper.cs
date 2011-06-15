@@ -28,6 +28,7 @@ namespace PAZMySQL
             user.Email = Reader.GetString(4 + offset);
             user.User_type = Reader.GetString(5 + offset);
             user.Status = Reader.GetString(6 + offset);
+            user.WasChanged = Convert.ToBoolean(Reader.GetInt32(7 + offset));
             return user;
         }
 
@@ -35,7 +36,7 @@ namespace PAZMySQL
         {
             this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
-            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status FROM user WHERE id = ?id";
+            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, was_changed FROM user WHERE id = ?id";
             command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             Reader.Read();//Only 1 row
@@ -49,7 +50,7 @@ namespace PAZMySQL
             MySqlCommand command = this._db.CreateCommand();
 
             // Verzoekje van Yorg aan Teun, deze sorteren op naam, gewoon een extra-tje
-            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status FROM user";
+            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, was_changed FROM user";
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             List<User> result = new List<User>();
             while (Reader.Read())
@@ -66,14 +67,13 @@ namespace PAZMySQL
             MySqlCommand command = this._db.CreateCommand();
             if (user.Id != 0)
             {
-                command.CommandText = "UPDATE user (username, firstname, surname, email, user_type, status) VALUES " +
-                "(?username, ?firstname, ?surname, ?email, ?user_type, ?status) WHERE id = ?id";
+                command.CommandText = "UPDATE user SET username=?username, firstname=?firstname, surname=?surname, email=?email, user_type=?user_type, status=?status, was_changed=?was_changed WHERE id = ?id";
                 command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = user.Id;
             }
             else
             {
-                command.CommandText = "INSERT INTO user (username, firstname, surname, email, user_type, status) VALUES "+
-                "(?username, ?firstname, ?surname, ?email, ?user_type, ?status)";
+                command.CommandText = "INSERT INTO user (username, firstname, surname, email, user_type, status, was_changed) VALUES "+
+                "(?username, ?firstname, ?surname, ?email, ?user_type, ?status, ?was_changed)";
             }
             command.Parameters.Add(new MySqlParameter("?username", MySqlDbType.String)).Value = user.Username;
             command.Parameters.Add(new MySqlParameter("?firstname", MySqlDbType.String)).Value = user.Firstname;
@@ -81,6 +81,7 @@ namespace PAZMySQL
             command.Parameters.Add(new MySqlParameter("?email", MySqlDbType.String)).Value = user.Email;
             command.Parameters.Add(new MySqlParameter("?user_type", MySqlDbType.String)).Value = user.User_type;
             command.Parameters.Add(new MySqlParameter("?status", MySqlDbType.String)).Value = user.Status;
+            command.Parameters.Add(new MySqlParameter("?was_changed", MySqlDbType.Int32)).Value = user.WasChanged;
             this._db.ExecuteCommand(command);
             this._db.CloseConnection();
             this._db.OpenConnection();

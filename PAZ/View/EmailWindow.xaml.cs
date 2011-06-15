@@ -91,6 +91,9 @@ namespace PAZ
                 cb.Content = " " + teacher.Firstname + " " + teacher.Surname + " (" + teacher.Email + ")"; ;
                 cb.Tag = teacher; // koppelt object aan checkbox
 
+                if (teacher.WasChanged)
+                    cb.IsChecked = true;
+
                 Canvas.SetLeft(cb, left);
                 Canvas.SetTop(cb, top);
                 canvasDocenten.Children.Add(cb);
@@ -132,6 +135,9 @@ namespace PAZ
                 cb.Unchecked += new RoutedEventHandler(cb_Unchecked);
                 cb.Content = " " + student.Firstname + " " + student.Surname + " (" + student.Email + ")";
                 cb.Tag = student; // koppelt object aan checkbox
+
+                if (student.WasChanged)
+                    cb.IsChecked = true;
 
                 Canvas.SetLeft(cb, left);
                 Canvas.SetTop(cb, top);
@@ -256,12 +262,13 @@ namespace PAZ
                     try
                     {
                         emailer.SendEmail();
+                        user.WasChanged = false;
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show("Error:" + ex.ToString());
                         return;
-                    }                            
+                    }                
                 }
                 MessageBox.Show("E-mailberichten zijn verzonden.", "Succesvol");
             }          

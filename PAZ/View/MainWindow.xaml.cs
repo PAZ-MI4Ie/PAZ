@@ -275,16 +275,12 @@ namespace PAZ
             _controller.ExportRoosterClicked();
         }
 
-        private void buttonVerwijderGebruikers_Click(object sender, RoutedEventArgs e)
+        private void buttonVerwijderGegevens_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Weet u zeker dat u alle gebruikers wilt verwijderen? \n\nLet op: deze actie kan niet ongedaan worden.", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                MessageBox.Show(_controller.UserMapper.Delete() ? "Succesvol. Alle gebruikers zijn verwijderd." : "Mislukt, de gebruikers konden niet verwijderd worden.", "Gebruikers verwijderen");
-        }
+            _controller.VerwijderGegegevensClicked();
 
-        private void buttonVerwijderLokalen_Click(object sender, RoutedEventArgs e)
-        {
-            if (MessageBox.Show("Weet u zeker dat u alle lokalen wilt verwijderen? \n\nLet op: deze actie kan niet ongedaan worden.", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                MessageBox.Show(_controller.ClassroomMapper.Delete() ? "Succesvol. Alle lokalen zijn verwijderd." : "Mislukt, de lokalen konden niet verwijderd worden.", "Lokalen verwijderen");
+            //if (MessageBox.Show("Weet u zeker dat u alle gebruikers wilt verwijderen? \n\nLet op: deze actie kan niet ongedaan worden.", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            //    MessageBox.Show(_controller.UserMapper.Delete() ? "Succesvol. Alle gebruikers zijn verwijderd." : "Mislukt, de gebruikers konden niet verwijderd worden.", "Gebruikers verwijderen");
         }
 
         private void comboBoxSelecteerType_SelectionChanged(object sender, SelectionChangedEventArgs e)

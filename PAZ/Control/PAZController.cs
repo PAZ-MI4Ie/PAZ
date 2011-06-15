@@ -118,6 +118,11 @@ namespace PAZ.Control
             LetterTemplateMapper.Save(updatedTemplate);
         }
 
+        public void VerwijderGegegevensClicked()
+        {
+
+        }
+
         public IniFile ReadIni()
         {
             IniFile ini = new Ini.IniFile("sys.ini");

@@ -19,7 +19,7 @@ namespace PAZ
     public partial class LetterWindow : Window
     {
         private List<Expert> _experts;
-        private List<User> _receivers;
+        private List<Expert> _receivers;
         private List<SessionRow> _sessions;
         private List<CheckBox> _expertBoxes;
 
@@ -48,7 +48,7 @@ namespace PAZ
             tbVoettekstRechts.Text = letterTemplate.VoettekstRechts;
 
             _experts = new List<Expert>();
-            _receivers = new List<User>();
+            _receivers = new List<Expert>();
             _sessions = sessions;
 
             foreach (SessionRow session in sessions)
@@ -66,6 +66,8 @@ namespace PAZ
             _controller = PAZController.GetInstance();
             _ini = _controller.IniReader;
             _letterTemplate = letterTemplate;
+
+            btnSave.IsEnabled = false;
         }
 
 
@@ -106,7 +108,7 @@ namespace PAZ
         {
             CheckBox cb = (CheckBox)sender;
             // verwijder de gekoppelde object van de _receivers lijst
-            _receivers.Remove((User)cb.Tag);
+            _receivers.Remove((Expert)cb.Tag);
 
             HandleSelectorUnchecking(cb, cbxExpertSelector, _expertBoxes);
         }
@@ -133,7 +135,7 @@ namespace PAZ
         {
             CheckBox cb = (CheckBox)sender;
             // voeg de gekoppelde object toe aan de _receivers lijst
-            _receivers.Add((User) cb.Tag);
+            _receivers.Add((Expert) cb.Tag);
 
             if (CheckAllChecked(_expertBoxes))
                 cbxExpertSelector.IsChecked = true;
@@ -157,8 +159,13 @@ namespace PAZ
 
         private void bntMaken_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Tijdelijk buiten werking tot Teun de mappers update.");
-            //_controller.BriefMakenBevestigingClicked();
+            if (_receivers.Count == 0)
+            {
+                MessageBox.Show("U heeft geen geadresseerden geselecteerd, selecteer op zijn minst een persoon uit de lijst voor u probeert een brief aan te maken.", "Opmerking", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
+            _controller.BriefMakenBevestigingClicked(_receivers, this);
         }
 
         /**
@@ -166,7 +173,7 @@ namespace PAZ
         * 
         * Auteur: Gökhan 
         */
-        private void btnAnnuleren_Click(object sender, RoutedEventArgs e)
+        private void btnSluiten_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
@@ -206,14 +213,32 @@ namespace PAZ
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // TO DO: Move to a Save button?
-            _controller.LetterWindowClosed(new LetterTemplate(
-                                            _letterTemplate.Id, 
-                                            tbKenmerk.Text, 
-                                            tbContactpersonen.Text, 
-                                            tbTelefoon.Text, 
-                                            tbEmail.Text, 
-                                            tbAvansLocatie.Text, 
+            if (!btnSave.IsEnabled)
+                return;
+
+            MessageBoxResult result = MessageBox.Show("Wilt u de wijzigingen opslaan?", "Bevestiging", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+                Save();
+            else if (result == MessageBoxResult.Cancel)
+                e.Cancel = true;
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            Save();
+
+            btnSave.IsEnabled = false;
+        }
+
+        private void Save()
+        {
+            _controller.LetterWindowSaveClicked(new LetterTemplate(
+                                            _letterTemplate.Id,
+                                            tbKenmerk.Text,
+                                            tbContactpersonen.Text,
+                                            tbTelefoon.Text,
+                                            tbEmail.Text,
+                                            tbAvansLocatie.Text,
                                             tbBeginKern.Text,
                                             tbReisInformatie.Text,
                                             tbVerdereInformatie.Text,
@@ -222,6 +247,11 @@ namespace PAZ
                                             tbVoettekstLinks.Text,
                                             tbVoettekstMidden.Text,
                                             tbVoettekstRechts.Text));
+        }
+
+        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            btnSave.IsEnabled = true;
         }
     }
 }

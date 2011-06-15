@@ -87,7 +87,7 @@ namespace PAZ.Control
             letterWindow.ShowDialog();
         }
 
-        public void BriefMakenBevestigingClicked()
+        public void BriefMakenBevestigingClicked(List<Expert> receivers, LetterWindow letterWindow)
         {
             // dit zorgt ervoor dat er geen filters worden toegepast in de PDF uitdraai
             _mainWindow.textboxSearch.Text = "";
@@ -96,7 +96,7 @@ namespace PAZ.Control
             if (_mainWindow.OpenNewSaveDialog("Bevestigingsbrieven PAZ", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
             {
                 // maak en exporteer als pdf
-                PDFexporter.CreateLetterPDF(fileName);
+                PDFexporter.CreateLetterPDF(fileName, receivers, letterWindow);
             }
         }
 
@@ -108,12 +108,12 @@ namespace PAZ.Control
             emailWindow.ShowDialog();
         }
 
-        public void EmailWindowClosed(EmailTemplate updatedTemplate)
+        public void EmailWindowSaveClicked(EmailTemplate updatedTemplate)
         {
             EmailTemplateMapper.Save(updatedTemplate);
         }
 
-        public void LetterWindowClosed(LetterTemplate updatedTemplate)
+        public void LetterWindowSaveClicked(LetterTemplate updatedTemplate)
         {
             LetterTemplateMapper.Save(updatedTemplate);
         }

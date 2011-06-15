@@ -929,41 +929,23 @@ namespace PAZ
 
 		}
 
-		private void stageBegeleiderVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-		{
-			comboBoxSelecteerstageBegeleider.Items.Clear();
-			List<Expert> experts = _controller.ExpertMapper.FindAll();
-			ComboBoxItem comboboxItem;
-
-			foreach (Expert expert in experts)
-			{
-				comboboxItem = new ComboBoxItem();
-				comboboxItem.Content = expert.Firstname + " " + expert.Surname;
-				comboboxItem.Tag = expert.Id;
-				comboBoxSelecteerstageBegeleider.Items.Add(comboboxItem);
-			}
-		}
-
-		private void docentVisibilityChanged(object sender, DependencyPropertyChangedEventArgs e)
-		{
-			comboBoxSelecteerLeraar1.Items.Clear();
-			List<Teacher> teachers = _controller.TeacherMapper.FindAll();
-			ComboBoxItem comboboxItem;
-
-			foreach (Teacher teacher in teachers)
-			{
-				comboboxItem = new ComboBoxItem();
-				comboboxItem.Content = teacher.Firstname + " " + teacher.Surname;
-				comboboxItem.Tag = teacher.Id;
-				comboBoxSelecteerLeraar1.Items.Add(comboboxItem);
-			}
-		}
-
 		private void onStudentAddClicked(object sender, RoutedEventArgs e)
 		{
 			//Use this for input errors
 			bool hasInputError = false;
-			
+
+			//Check study
+			if (textBoxStudy.Text.Equals(String.Empty))
+			{
+				textBoxStudy.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxStudy.BorderBrush = Brushes.Gray;
+			}
+
+
 			//Check student number
 			if (textBoxStudentennummer.Text.Equals(String.Empty))
 			{
@@ -1046,11 +1028,9 @@ namespace PAZ
 				newStudent.Surname = textBoxAchternaam.Text;
 				newStudent.Email = EmailLeering1.Text;
 				newStudent.Studentnumber = Convert.ToInt32(textBoxStudentennummer.Text);
+				newStudent.Study = textBoxStudy.Text;
 				//TODO: Blocked Timeslots
-				//TODO: Teachers
-				//TODO: Experts
-				//TODO: Study
-				//TODO: Pairing?
+
 
 				//Send to the database
 				_controller.StudentMapper.Save(newStudent);

@@ -82,23 +82,8 @@
                             <Label Content="Geblokkeerde dag" Height="28" HorizontalAlignment="Left" Margin="24,139,0,0" Name="labelBlockedDay" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <DatePicker Height="23" HorizontalAlignment="Left" Margin="293,141,0,0" Name="datePickerBlockedDay" VerticalAlignment="Top" Width="246" Foreground="#FF595959" SelectedDateFormat="Short" />
 
-                            <Label Content="Docent" Height="28" HorizontalAlignment="Left" Margin="24,179,0,0" Name="labelLeraar1" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
-                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="293,181,0,0" Name="comboBoxSelecteerLeraar1" Background="#FFEFEFEF" Foreground="#FF595959" VerticalAlignment="Top" Width="246" SelectedIndex="0" MouseDown="docentComboBoxMouseDown" IsVisibleChanged="docentVisibilityChanged">
-                                <ComboBoxItem Content="Selecteer een docent" />
-                                <ComboBoxItem Content="Jan Jansen" />
-                                <ComboBoxItem Content="Piet groothuizen" />
-                                <ComboBoxItem Content="Abraham Groot" />
-                                <ComboBoxItem Content="Chris Hansen" />
-                            </ComboBox>
-
-                            <Label Content="Stage Begeleider" Height="28" HorizontalAlignment="Left" Margin="24,219,0,0" Name="labelLeraar2" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
-                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="293,221,0,0" Name="comboBoxSelecteerstageBegeleider" Background="#FFEFEFEF" Foreground="#FF595959" VerticalAlignment="Top" Width="246" SelectedIndex="0" MouseDown="stageBegeleiderComboBoxMouseDown" IsVisibleChanged="stageBegeleiderVisibleChanged">
-                                <ComboBoxItem Content="Selecteer een begeleider" />
-                                <ComboBoxItem Content="Jan Jansen" />
-                                <ComboBoxItem Content="Piet groothuizen" />
-                                <ComboBoxItem Content="Abraham Groot" />
-                                <ComboBoxItem Content="Chris Hansen" />
-                            </ComboBox>
+                            <Label Content="Opleiding" Height="28" HorizontalAlignment="Left" Margin="24,179,0,0" Name="labelStudy1" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,179,0,0" Name="textBoxStudy" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
                             <Label Content="Email" Height="28" HorizontalAlignment="Left" Margin="24,259,0,0" Name="EmailLeerling" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,261,0,0" Name="EmailLeering1" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>

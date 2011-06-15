@@ -80,7 +80,9 @@ namespace PAZ
         {
             _teacherBoxes = new List<CheckBox>();
             Canvas canvasDocenten = new Canvas();
+
             int left = 0, top = 0;
+            double rightMost = 0.0;
             foreach (Teacher teacher in _teachers)
             {
                 CheckBox cb = new CheckBox();
@@ -96,7 +98,17 @@ namespace PAZ
                 _teacherBoxes.Add(cb);
 
                 top += 20;
+
+                double newRightMost = left + cb.Width;
+                if (rightMost < newRightMost)
+                    rightMost = newRightMost;
             }
+            canvasDocenten.Width = rightMost;
+            canvasDocenten.Height = top;
+
+            canvasDocenten.HorizontalAlignment = HorizontalAlignment.Left;
+            canvasDocenten.VerticalAlignment = VerticalAlignment.Top;
+
             scrollViewerDocenten.Content = canvasDocenten;
         }
 
@@ -110,7 +122,9 @@ namespace PAZ
         {
             _studentBoxes = new List<CheckBox>();
             Canvas canvasStudenten = new Canvas();
+
             int left = 0, top = 0;
+            double rightMost = 0.0;
             foreach (Student student in _students)
             {
                 CheckBox cb = new CheckBox();
@@ -126,7 +140,17 @@ namespace PAZ
                 _studentBoxes.Add(cb);
 
                 top += 20;
+            
+                double newRightMost = left + cb.Width;
+                if (rightMost < newRightMost)
+                    rightMost = newRightMost;
             }
+            canvasStudenten.Width = rightMost;
+            canvasStudenten.Height = top;
+
+            canvasStudenten.HorizontalAlignment = HorizontalAlignment.Left;
+            canvasStudenten.VerticalAlignment = VerticalAlignment.Top;
+
             scrollViewerStudenten.Content = canvasStudenten;
         }
 

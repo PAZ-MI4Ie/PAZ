@@ -80,7 +80,9 @@ namespace PAZ
         {
             _expertBoxes = new List<CheckBox>();
             Canvas canvasExperts = new Canvas();
+
             int left = 0, top = 0;
+            double rightMost = 0.0;
             foreach (Expert expert in _experts)
             {
                 CheckBox cb = new CheckBox();
@@ -96,7 +98,17 @@ namespace PAZ
                 _expertBoxes.Add(cb);
 
                 top += 20;
+
+                double newRightMost = left + cb.Width;
+                if (rightMost < newRightMost)
+                    rightMost = newRightMost;
             }
+            canvasExperts.Width = rightMost;
+            canvasExperts.Height = top;
+
+            canvasExperts.HorizontalAlignment = HorizontalAlignment.Left;
+            canvasExperts.VerticalAlignment = VerticalAlignment.Top;
+
             scrollViewerExperts.Content = canvasExperts;
         }
 

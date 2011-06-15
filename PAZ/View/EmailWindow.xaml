@@ -30,13 +30,13 @@
                                 <ColumnDefinition Width="282*" />
                             </Grid.ColumnDefinitions>
                             <CheckBox Content=" Alles selecteren/deselecteren" Height="16" Name="cbxStudentSelector" Margin="6,5,18,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Checked="cbxStudentSelector_Checked" Unchecked="cbxStudentSelector_Unchecked" />
-                            <ScrollViewer Height="336.08" HorizontalAlignment="Left" Margin="6,32,0,0" Name="scrollViewerStudenten" VerticalAlignment="Top" Width="299" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Grid.ColumnSpan="2"></ScrollViewer>
+                            <ScrollViewer Height="336.08" HorizontalAlignment="Left" Margin="6,32,0,0" Name="scrollViewerStudenten" VerticalAlignment="Top" Width="299" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.ColumnSpan="2"></ScrollViewer>
                             <Separator Name="separator1" Grid.ColumnSpan="2" Margin="6,21,6,351.763" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Docenten: " Height="397.04" HorizontalAlignment="Left" Margin="335,6,0,0" Name="gbDocenten" VerticalAlignment="Top" Width="311">
                         <Grid>
-                            <ScrollViewer HorizontalScrollBarVisibility="Visible" Name="scrollViewerDocenten" VerticalScrollBarVisibility="Visible" Margin="6,32,6,6" />
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto" Name="scrollViewerDocenten" VerticalScrollBarVisibility="Auto" Margin="6,32,6,6" />
                             <CheckBox Content=" Alles selecteren/deselecteren" Height="16" Margin="6,6,6,0" Name="cbxTeacherSelector" VerticalAlignment="Top" Checked="cbxTeacherSelector_Checked" Unchecked="cbxTeacherSelector_Unchecked" />
                             <Separator Height="2" HorizontalAlignment="Left" Margin="6,24,0,0" Name="separator2" VerticalAlignment="Top" Width="287" />
                         </Grid>

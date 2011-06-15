@@ -19,8 +19,8 @@
             </Label.Background>
         </Label>
         <TabControl SelectedIndex="1" Margin="12,53,6,12" Name="tabControl" Background="White" Grid.RowSpan="2"><!-- MaxWidth="1035" HorizontalAlignment="Left">-->
-            <TabItem Header="Calender" Name="tabCalender" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <TabItem Header="Kalender" Name="tabCalender" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" DragOver="ScrollViewer_DragOver">
                     <my:CalendarView x:Name="calendar">
                     </my:CalendarView>
                 </ScrollViewer>
@@ -38,7 +38,7 @@
                                 <ComboBoxItem Content="Datum" />
                                 <ComboBoxItem Content="Tijd" />
                                 <ComboBoxItem Content="Lokaal" />
-                                <ComboBoxItem Content="Leerlingen" />
+                                <ComboBoxItem Content="Studenten" />
                                 <ComboBoxItem Content="Docenten" />
                                 <ComboBoxItem Content="Deskundigen" />
                                 <ComboBoxItem Content="Aantal" />
@@ -85,7 +85,7 @@
                             <Label Content="Opleiding" Height="28" HorizontalAlignment="Left" Margin="24,179,0,0" Name="labelStudy1" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,179,0,0" Name="textBoxStudy" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
-                            <Label Content="Email" Height="28" HorizontalAlignment="Left" Margin="24,259,0,0" Name="EmailLeerling" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <Label Content="E-mail" Height="28" HorizontalAlignment="Left" Margin="24,259,0,0" Name="EmailLeerling" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,261,0,0" Name="EmailLeering1" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
                             <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,301,0,0" Name="buttonGebruikerGegevens" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onStudentAddClicked" />
@@ -124,7 +124,7 @@
                             <Label Content="Telefoonnummer" Height="28" HorizontalAlignment="Left" Margin="24,219,0,0" Name="labelBegeleiderTelefoonnummer" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,221,0,0" Name="textBoxBegeleiderTelefoonnummer" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
-                            <Label Content="Email" Height="28" HorizontalAlignment="Left" Margin="24,259,0,0" Name="labelBegeleiderEmail" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <Label Content="E-mail" Height="28" HorizontalAlignment="Left" Margin="24,259,0,0" Name="labelBegeleiderEmail" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,261,0,0" Name="textBoxBegeleiderEmail" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
                             <Label Content="Stad" Height="28" HorizontalAlignment="Left" Margin="24,301,0,0" Name="labelBegeleiderCity" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
@@ -158,7 +158,7 @@
                             <Label Content="Telefoonnummer" Height="28" HorizontalAlignment="Left" Margin="24,219,0,0" Name="labelExternTelefoonnummer" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,221,0,0" Name="textBoxExternTelefoonnummer" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
-                            <Label Content="Email" Height="28" HorizontalAlignment="Left" Margin="24,259,0,0" Name="labelExternEmail" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <Label Content="E-mail" Height="28" HorizontalAlignment="Left" Margin="24,259,0,0" Name="labelExternEmail" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,261,0,0" Name="textBoxExternEmail" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
                             
                             <Label Content="Stad" Height="28" HorizontalAlignment="Left" Margin="24,301,0,0" Name="labelExpertCity" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
@@ -185,7 +185,7 @@
                             <DatePicker Height="23" HorizontalAlignment="Left" Margin="293,99,0,0" Name="datePickerBlockedDay1" VerticalAlignment="Top" Width="246" Foreground="#FF595959" SelectedDateFormat="Short" />
 
 
-                            <Label Content="Email" Height="28" HorizontalAlignment="Left" Margin="24,142,0,0" Name="EmailLeraar" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <Label Content="E-mail" Height="28" HorizontalAlignment="Left" Margin="24,142,0,0" Name="EmailLeraar" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,149,0,0" Name="EmailLeraar1" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
                             <Label Content="Spreiding" Height="28" HorizontalAlignment="Left" Margin="24,189,0,0" Name="Spreiding" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />

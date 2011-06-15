@@ -1105,6 +1105,25 @@ namespace PAZ
             GridOverzichtList.Columns[0].SortDirection = ListSortDirection.Ascending;
             GridOverzichtList.Columns[1].SortDirection = ListSortDirection.Ascending;
         }
+
+        private void ScrollViewer_DragOver(object sender, DragEventArgs e)
+        {
+            Point position = e.GetPosition(this);
+            ScrollViewer scrollviewer = sender as ScrollViewer;
+            if (position.Y > 0 && position.Y < this.Height)
+            {
+                if (position.Y < 150)
+                    scrollviewer.ScrollToVerticalOffset(scrollviewer.ContentVerticalOffset - 100);
+                if (position.Y > this.Height - 150)
+                    scrollviewer.ScrollToVerticalOffset(scrollviewer.ContentVerticalOffset + 100);
+            } if (position.X > 0 && position.X < this.Width)
+            {
+                if (position.X < 100)
+                    scrollviewer.ScrollToHorizontalOffset(scrollviewer.ContentHorizontalOffset - 20);
+                if (position.X > this.Width - 100)
+                    scrollviewer.ScrollToHorizontalOffset(scrollviewer.ContentHorizontalOffset + 20);
+            }
+        }
     }
 
 	public static class ValidatorExtensions

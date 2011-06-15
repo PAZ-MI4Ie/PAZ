@@ -7,7 +7,7 @@ using PAZ.Model;
 
 namespace PAZMySQL
 {
-    class DaytimeMapper : Mapper
+    public class DaytimeMapper : Mapper
     {
         public DaytimeMapper(MysqlDb db) : base(db)
         {

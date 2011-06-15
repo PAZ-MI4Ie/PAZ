@@ -18,6 +18,7 @@ namespace PAZ.Control
         public UserMapper UserMapper { get; private set; }
         public ClassroomMapper ClassroomMapper { get; private set; }
         public StudentMapper StudentMapper { get; private set; }
+        public DaytimeMapper DaytimeMapper { get; private set; }
         public TeacherMapper TeacherMapper { get; private set; }
         public ExpertMapper ExpertMapper { get; private set; }
         public PairMapper PairMapper { get; private set; }
@@ -55,6 +56,7 @@ namespace PAZ.Control
             UserMapper = new UserMapper(DB);
             ClassroomMapper = new ClassroomMapper(DB);
             StudentMapper = new StudentMapper(DB);
+            DaytimeMapper = new DaytimeMapper(DB);
             TeacherMapper = new TeacherMapper(DB);
             ExpertMapper = new ExpertMapper(DB);
             PairMapper = new PairMapper(DB);

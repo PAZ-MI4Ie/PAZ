@@ -18,7 +18,9 @@ namespace PAZ.View
         //TODO: database data schrijven + verwijderen
         public static Dictionary<string, Grid> dateGrids;
         public static SessionMapper Sessionmapper { get; set; }
-        public static PairMapper  Pairmapper { get; set; }
+        public static PairMapper Pairmapper { get; set; }
+        public static DaytimeMapper Daytimemapper { get; set; }
+        public static ClassroomMapper Classroommapper { get; set; }
         public CalendarView()
             : base()
         {
@@ -54,8 +56,15 @@ namespace PAZ.View
                     {
                         string[] other = dataString.Split(';');
                         string[] users = dataString.Split('\n');
-                        if(removeSessionLabel(other[1],Convert.ToInt32(other[2]),Convert.ToInt32(other[3])))
-                            addSession(Sessionmapper.Find(Convert.ToInt32(other[0])));
+                        if (removeSessionLabel(other[1], Convert.ToInt32(other[2]), Convert.ToInt32(other[3])))
+                        {
+                            Session s = Sessionmapper.Find(Convert.ToInt32(other[0]));
+                            Daytime d = new Daytime(new int(),GetSessionDateTime(session),Grid.GetRow(session));
+                            //Daytimemapper.Save(d);
+                            s.Daytime = d;
+                            s.Classroom = new Classroom(Grid.GetColumn(session), "TEST");//Classroommapper.Find(Grid.GetColumn(session));
+                            addSession(s);
+                        }
                     }
                 }
                 revertCheckAvailability();
@@ -297,7 +306,7 @@ namespace PAZ.View
         {
             foreach (Session session in sessions)
             {
-                addSession(session);
+                addSessionPC(session);
             }
         }
 
@@ -326,9 +335,13 @@ namespace PAZ.View
             }
         }
 
-        
-
         public void addSession(Session session)
+        {
+            //Sessionmapper.Save(session);
+            addSessionPC(session);
+        }
+
+        public void addSessionPC(Session session)
         {
             CustomLabel sessionLabel = dateGrids[session.Daytime.Date.ToShortDateString()].Children[(session.Classroom.Id) + ((session.Daytime.Timeslot) * 8)] as CustomLabel;
             sessionLabel.Id = session.Id;
@@ -373,13 +386,6 @@ namespace PAZ.View
             sessionLabel.ContextMenu = editMenu;
         }
 
-        public void addNewSession(Session session)
-        {
-
-            Sessionmapper.Save(session);
-            addSession(session);
-        }
-
         public Grid HasSession(CustomLabel session)
         {
             foreach (KeyValuePair<string, Grid> pair in dateGrids)
@@ -399,6 +405,22 @@ namespace PAZ.View
             }
             return null;
         }
+
+
+
+        public DateTime GetSessionDateTime(CustomLabel session)
+        {
+            foreach (KeyValuePair<string, Grid> pair in dateGrids)
+            {
+                if (pair.Value.Children.Contains(session))
+                {
+                    string[] time = pair.Key.Split('-');
+                    return new DateTime(Convert.ToInt32(time[2]), Convert.ToInt32(time[1]), Convert.ToInt32(time[0]));
+                }
+            }
+            return new DateTime(1,1,1);
+        }
+
         public bool removeSession(Session session)
         {
             bool succesfull = true;// Sessionmapper.Delete(session);

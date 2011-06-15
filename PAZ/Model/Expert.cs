@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using PAZ.Control;
 
 namespace PAZ.Model
 {
@@ -12,6 +13,24 @@ namespace PAZ.Model
         public string Postcode { get; set; }
 		public string City { get; set; }
 		public string Telephone { get; set; }
+        
+        private List<Pair> _pairs;
+        public List<Pair> Pairs//UNTESTED!!!!!!!!!!!
+        {
+            get
+            {
+                if (this._pairs == null)
+                {
+                    PAZController.GetInstance().PairMapper.FindByAttachment(this.Id);
+                }
+                return this._pairs;
+            }
+
+            set
+            {
+                this._pairs = value;
+            }
+        }
 
 		public Expert()
 		{

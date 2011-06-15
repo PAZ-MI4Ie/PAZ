@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using PAZMySQL;
 using MySql.Data.MySqlClient;
+using PAZ.Control;
 
 namespace PAZ.Model.Mappers
 {
@@ -87,6 +88,26 @@ namespace PAZ.Model.Mappers
                 result.Add(26, "expert");
                 result.Add(27, "expert");
             }
+            return result;
+        }
+
+        /**
+         * UNTESTED!!!!!!!!!!!!!!!!!
+         */
+        public List<Pair> FindByAttachment(int attachmentId)
+        {
+            List<Pair> result = new List<Pair>();
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "SELECT pair_id FROM pair_attachment WHERE user_id = ?id";
+            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = attachmentId;
+            MySqlDataReader Reader = this._db.ExecuteCommand(command);
+            
+            while (Reader.Read())
+            {
+                result.Add(this.Find(Reader.GetInt32(0)));
+            }
+            this._db.CloseConnection();
             return result;
         }
     }

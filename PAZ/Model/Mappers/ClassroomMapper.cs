@@ -95,5 +95,25 @@ namespace PAZMySQL
             this._db.CloseConnection();
             return true;
         }
+
+        public bool Delete(Classroom classroom)
+        {
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "DELETE FROM classroom WHERE id=?id";
+            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = classroom.Id;
+            this._db.ExecuteCommand(command);
+            this._db.CloseConnection();
+            return true;
+        }
+
+        public bool Delete(List<Classroom> classrooms)
+        {
+            foreach (Classroom classroom in classrooms)
+            {
+                this.Delete(classroom);
+            }
+            return true;
+        }
     }
 }

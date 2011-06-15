@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using PAZ.Control;
 
 namespace PAZ.Model
 {
@@ -12,6 +13,24 @@ namespace PAZ.Model
 		public session_spread Session_spread { get; set; }
 		public DateTime blockedTimeslot { get; set; }
 		public int BlockType { get; set; }
+
+        private List<Pair> _pairs;
+        public List<Pair> Pairs//UNTESTED!!!!!!!!!!!
+        {
+            get
+            {
+                if (this._pairs == null)
+                {
+                    PAZController.GetInstance().PairMapper.FindByAttachment(this.Id);
+                }
+                return this._pairs;
+            }
+
+            set
+            {
+                this._pairs = value;
+            }
+        }
 
         private static int tempHack = 0;
 

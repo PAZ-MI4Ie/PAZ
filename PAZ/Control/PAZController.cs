@@ -120,7 +120,24 @@ namespace PAZ.Control
 
         public void VerwijderGegegevensClicked()
         {
+            DeleteDataWindow deleteDataWindow = new DeleteDataWindow();
+            deleteDataWindow.ShowDialog();
+        }
 
+        // TO DO: Voor teun, functionaliteit please :)
+        public bool VerwijderGegevensBevestigingClicked(List<object> deleteList)
+        {
+            foreach (object dataItem in deleteList)
+            {
+                int id;
+
+                if (dataItem is User)
+                    id = ((User)dataItem).Id;
+                else
+                    id = ((Classroom)dataItem).Id;
+            }
+
+            return true;
         }
 
         public IniFile ReadIni()

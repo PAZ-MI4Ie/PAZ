@@ -229,10 +229,10 @@
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="Verwijder persoonsdata en lokalen" Height="82" Margin="10,182,5,0" Name="groupBoxVerwijderGebruikers" VerticalAlignment="Top">
+                    <GroupBox Header="Verwijder gegevens" Height="82" Margin="10,182,5,0" Name="groupBoxVerwijderGegevens" VerticalAlignment="Top">
                         <Grid>
-                            <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockVerwijderGebruikers" Text="Deze actie opent een scherm waarop u te verwijderen persoonsdata van studenten, docenten en externe deskundigen kunt aangeven en laten verwijderen." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
-                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonVerwijderGebruikers" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonVerwijderGegevens_Click" />
+                            <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlockVerwijderGegevens" Text="Deze actie opent een scherm waarop u te verwijderen persoonsdata van studenten, docenten en externe deskundigen kunt aangeven en laten verwijderen." VerticalAlignment="Top" Width="570" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
+                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="638,28,0,0" Name="buttonVerwijderGegevens" VerticalAlignment="Top" Width="98" Background="#FFEFEFEF" Foreground="#FF595959" Click="buttonVerwijderGegevens_Click" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Email versturen" Height="82" Margin="10,272,5,0" Name="groupBoxEmailVersturen" VerticalAlignment="Top">

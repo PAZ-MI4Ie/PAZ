@@ -97,6 +97,9 @@
     <Compile Include="Model\Teacher.cs" />
     <Compile Include="Model\Timeslot.cs" />
     <Compile Include="Model\User.cs" />
+    <Compile Include="View\DeleteDataWindow.xaml.cs">
+      <DependentUpon>DeleteDataWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\LetterWindow.xaml.cs">
       <DependentUpon>LetterWindow.xaml</DependentUpon>
     </Compile>
@@ -119,6 +122,10 @@
     <Compile Include="View\UnPlannedPairs.xaml.cs">
       <DependentUpon>UnPlannedPairs.xaml</DependentUpon>
     </Compile>
+    <Page Include="View\DeleteDataWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\LetterWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

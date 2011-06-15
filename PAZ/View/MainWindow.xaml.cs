@@ -277,10 +277,7 @@ namespace PAZ
 
         private void buttonVerwijderGegevens_Click(object sender, RoutedEventArgs e)
         {
-            _controller.VerwijderGegegevensClicked();
-
-            //if (MessageBox.Show("Weet u zeker dat u alle gebruikers wilt verwijderen? \n\nLet op: deze actie kan niet ongedaan worden.", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            //    MessageBox.Show(_controller.UserMapper.Delete() ? "Succesvol. Alle gebruikers zijn verwijderd." : "Mislukt, de gebruikers konden niet verwijderd worden.", "Gebruikers verwijderen");
+            _controller.VerwijderGegegevensClicked();     
         }
 
         private void comboBoxSelecteerType_SelectionChanged(object sender, SelectionChangedEventArgs e)

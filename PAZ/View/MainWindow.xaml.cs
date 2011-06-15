@@ -1045,8 +1045,6 @@ namespace PAZ
 				newStudent.Email = EmailLeering1.Text;
 				newStudent.Studentnumber = Convert.ToInt32(textBoxStudentennummer.Text);
 				//TODO: Blocked Timeslots
-				//TODO: Teachers
-				//TODO: Experts
 				//TODO: Study
 				//TODO: Pairing?
 

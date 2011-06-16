@@ -15,17 +15,16 @@ namespace PAZ.Model
         public string User_type { get; set; }
         public string Status { get; set; }
 
-        private bool _wasChanged;
-        public bool WasChanged
+        private bool? _wasChanged;
+        public bool? WasChanged
         {
             get { return _wasChanged; }
             set 
             {
-                if (value != _wasChanged)
-                {
-                    _wasChanged = value;
+                if (_wasChanged != null && value != _wasChanged)
                     PAZController.GetInstance().UserMapper.Save(this);
-                }
+
+                _wasChanged = value;
             }
         }
 

@@ -91,7 +91,7 @@ namespace PAZ
                 cb.Content = " " + expert.Firstname + " " + expert.Surname + " (" + expert.Email + ")"; ;
                 cb.Tag = expert; // koppelt object aan checkbox
 
-                if (expert.WasChanged)
+                if (expert.WasChanged == true)
                     cb.IsChecked = true;
 
                 Canvas.SetLeft(cb, left);

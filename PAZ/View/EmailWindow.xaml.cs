@@ -91,7 +91,7 @@ namespace PAZ
                 cb.Content = " " + teacher.Firstname + " " + teacher.Surname + " (" + teacher.Email + ")"; ;
                 cb.Tag = teacher; // koppelt object aan checkbox
 
-                if (teacher.WasChanged)
+                if (teacher.WasChanged == true)
                     cb.IsChecked = true;
 
                 Canvas.SetLeft(cb, left);
@@ -136,7 +136,7 @@ namespace PAZ
                 cb.Content = " " + student.Firstname + " " + student.Surname + " (" + student.Email + ")";
                 cb.Tag = student; // koppelt object aan checkbox
 
-                if (student.WasChanged)
+                if (student.WasChanged == true)
                     cb.IsChecked = true;
 
                 Canvas.SetLeft(cb, left);

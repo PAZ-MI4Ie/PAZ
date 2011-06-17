@@ -141,7 +141,7 @@ namespace PAZ.Control
          * Dit maakt de brieven om te versturen naar de experts in zijn geheel en zet ze in een PDF document
          * Auteur: Yorg 
          */
-        public void CreateLetterPDF(String filename, List<Expert> receivers, LetterWindow letterWindow)
+        public void CreateLetterPDF(String filename, Dictionary<string, Expert> receivers, LetterWindow letterWindow)
         {
             // het document(standaard A4-formaat) maken
             iTextSharp.text.Document document = new iText.Document(PageSize.A4, 75.0f, 75.0f, 0.0f, 0.0f);
@@ -165,12 +165,19 @@ namespace PAZ.Control
                 for (int rowNo = 0; rowNo < _dataGrid.Items.Count; ++rowNo)
                 {
                     SessionRow rowSession = (SessionRow)_dataGrid.Items[rowNo];
-                    Expert[] experts = rowSession.GetSessionModel().GetExperts();
 
-                    for (int iExpert = 0; iExpert < experts.Length; ++iExpert)
+                    List<User> attachments = rowSession.GetSessionModel().Pair.Attachments;
+                    List<Expert> experts = new List<Expert>();
+
+                    foreach (User user in attachments)
                     {
-                        Expert expert = experts[iExpert];
-                        if (expert == null || !receivers.Contains(expert) || ignoreList.Contains(expert))
+                        if (user is Expert)
+                            experts.Add((Expert)user);
+                    }
+
+                    foreach(Expert expert in experts)
+                    {
+                        if (!receivers.ContainsKey(expert.Email) || ignoreList.Contains(expert))
                             continue;
 
                         bool bIgnore = false;

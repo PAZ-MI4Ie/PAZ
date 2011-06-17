@@ -18,8 +18,8 @@ namespace PAZ
     */
     public partial class LetterWindow : Window
     {
-        private List<Expert> _experts;
-        private List<Expert> _receivers;
+        private Dictionary<string, Expert> _experts;
+        private Dictionary<string, Expert> _receivers;
         private List<SessionRow> _sessions;
         private List<CheckBox> _expertBoxes;
 
@@ -47,18 +47,27 @@ namespace PAZ
             tbVoettekstMidden.Text = letterTemplate.VoettekstCenter;
             tbVoettekstRechts.Text = letterTemplate.VoettekstRechts;
 
-            _experts = new List<Expert>();
-            _receivers = new List<Expert>();
+            _experts = new Dictionary<string, Expert>();
+            _receivers = new Dictionary<string, Expert>();
             _sessions = sessions;
 
             foreach (SessionRow session in sessions)
             {
                 Session sessionModel = session.GetSessionModel();
 
-                Expert[] experts = sessionModel.GetExperts();
-                for (int i = 0; i < experts.Length; ++i)
-                    if (experts[i] != null)
-                        _experts.Add(experts[i]);
+                if (sessionModel.Pair.Attachments != null)
+                {
+                    foreach (User user in sessionModel.Pair.Attachments)
+                    {
+                        if (user is Expert)
+                        {
+                            Expert expert = (Expert)user;
+
+                            if(!_experts.ContainsKey(expert.Email))
+                                _experts.Add(expert.Email, expert);
+                        }
+                    }
+                }
             }
 
             ExpertsToevoegen();
@@ -83,8 +92,10 @@ namespace PAZ
 
             int left = 0, top = 0;
             double rightMost = 0.0;
-            foreach (Expert expert in _experts)
+            foreach (KeyValuePair<string, Expert> expertKeyPair in _experts)
             {
+                Expert expert = expertKeyPair.Value;
+
                 CheckBox cb = new CheckBox();
                 cb.Checked += new RoutedEventHandler(cb_Checked);
                 cb.Unchecked += new RoutedEventHandler(cb_Unchecked);
@@ -123,7 +134,7 @@ namespace PAZ
         {
             CheckBox cb = (CheckBox)sender;
             // verwijder de gekoppelde object van de _receivers lijst
-            _receivers.Remove((Expert)cb.Tag);
+            _receivers.Remove(((Expert)cb.Tag).Email);
 
             HandleSelectorUnchecking(cb, cbxExpertSelector, _expertBoxes);
         }
@@ -149,8 +160,10 @@ namespace PAZ
         private void cb_Checked(object sender, RoutedEventArgs e)
         {
             CheckBox cb = (CheckBox)sender;
-            // voeg de gekoppelde object toe aan de _receivers lijst
-            _receivers.Add((Expert) cb.Tag);
+
+            // voeg het gekoppelde object toe aan de _receivers lijst
+            Expert expert = (Expert) cb.Tag;
+            _receivers.Add(expert.Email, expert);
 
             if (CheckAllChecked(_expertBoxes))
                 cbxExpertSelector.IsChecked = true;

@@ -87,7 +87,7 @@ namespace PAZ.Control
             letterWindow.ShowDialog();
         }
 
-        public void BriefMakenBevestigingClicked(List<Expert> receivers, LetterWindow letterWindow)
+        public void BriefMakenBevestigingClicked(Dictionary<string, Expert> receivers, LetterWindow letterWindow)
         {
             // dit zorgt ervoor dat er geen filters worden toegepast in de PDF uitdraai
             _mainWindow.textboxSearch.Text = "";

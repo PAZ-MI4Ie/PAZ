@@ -396,6 +396,8 @@ namespace PAZ
                     {
                         file = new StreamReader( filename );
 						int a = 0;
+						List<Student> duplicates = new List<Student>();
+
                         while ((line = file.ReadLine()) != null)
                         {
 
@@ -403,6 +405,7 @@ namespace PAZ
 							if(a != 0)
 							{
 								Student student = new Student();
+								
 								for (int i = 0; i < csvResult.Length; i++)
 								{
 									Console.WriteLine(csvResult[4]);
@@ -416,28 +419,60 @@ namespace PAZ
 									}
 
 
-									/*
-									 * ADD THE RESULTS TO THE DATABASE OVER HERE,
-									 * 
-									 * I SAID, OVER HERE DAMNED!
-									 * 
-									 * FIRST 12 ITEMS ARE THE COLUMS!!!!!
-									 * this way you can easily add them.. naaisssss!
-									 */
-
-
-									/*
-									 * test to show each item
-									 * 
-									 MessageBox.Show(csvResult[i] + "" + i);
-									 *  Console.WriteLine(csvResult[i]);
-									 *  
-									 */
 								}
-								_controller.StudentMapper.Save(student);
+								if (_controller.UserMapper.FindWithDuplicateCheck(Convert.ToInt32(csvResult[2]), csvResult[4]))
+								{
+									duplicates.Add(student);
+								}
+								else
+								{
+									_controller.StudentMapper.Save(student);
+									MessageBox.Show("Importeren is gelukt. Alle items zijn toegevoegd.");
+								}
 							}
 							a++;
                         }
+
+						if (duplicates.Count > 0)
+						{
+							String dup = "duplicaten.txt";
+							if (!File.Exists(dup))
+							{
+								TextWriter tw = new StreamWriter(dup);
+								
+								foreach (Student duplicate in duplicates)
+								{
+									tw.WriteLine(duplicate.Studentnumber + "," + duplicate.Firstname + "" + duplicate.Surname + "," + duplicate.Email);
+								}
+								MessageBox.Show("Er zijn " + duplicates.Count + " duplicaten gevonden. Deze zijn niet geimporteerd, maar opgeslagen in een tekst-bestand. Dit bestand (duplicaten.txt) kunt u vinden in de map van de applicatie.\n\n De andere items zijn wel toegevoegd.");
+								tw.Close();
+							}
+							else
+							{
+								/*
+								 *  misschien voor later
+								 *  
+								 *  - to add:
+								 *    - check in de duplicaten.txt of die student er
+								 *      al in staat, zo niet add hem. Zo wel, doe niks.
+								 *      
+								 *  voor de rest werkt alles al.
+								 *  
+								 * (C) Mark & Mark (H)
+								 * 
+								 */
+								StreamWriter tw = File.AppendText("duplicaten.txt");
+								foreach (Student duplicate in duplicates)
+								{
+
+									tw.WriteLine(duplicate.Studentnumber + "," + duplicate.Firstname + "" + duplicate.Surname + "," + duplicate.Email);
+									tw.Flush();
+								}
+								MessageBox.Show("Er zijn " + duplicates.Count + " duplicaten gevonden. Deze zijn niet geimporteerd, maar opgeslagen in een tekst-bestand. Dit bestand (duplicaten.txt) kunt u vinden in de map van de applicatie. \n\n De andere items zijn wel toegevoegd.");
+								tw.Close();
+
+							}
+						}
                     }
                     finally
                     {

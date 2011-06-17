@@ -44,6 +44,29 @@ namespace PAZMySQL
             return this.ProcessRow(new User(), Reader);
         }
 
+		public Boolean FindWithDuplicateCheck(int studentnumber, string email)
+		{
+			this._db.OpenConnection();
+			MySqlCommand command = this._db.CreateCommand();
+			command.CommandText = "SELECT email, studentnumber FROM user, student WHERE student.studentnumber = ?studentnumber OR user.email = ?email";
+			command.Parameters.Add(new MySqlParameter("?studentnumber", MySqlDbType.Int32)).Value = studentnumber;
+			command.Parameters.Add(new MySqlParameter("?email", MySqlDbType.String)).Value = email;
+			MySqlDataReader Reader = this._db.ExecuteCommand(command);
+			Reader.Read();//Only 1 row
+			Reader.Close();
+			String strResult = String.Empty;
+			strResult = (String)command.ExecuteScalar();
+
+			Boolean found = false;
+			if (strResult.Length != 0)
+			{
+				found = true;
+			}
+
+			this._db.CloseConnection();
+			return found;
+		}
+
         public List<User> FindAll()
         {
             this._db.OpenConnection();

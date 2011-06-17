@@ -18,7 +18,7 @@ namespace PAZ
     */
     public partial class EmailWindow : Window
     {
-        private Dictionary<int, Teacher> _teachers;
+        private List<Teacher> _teachers;
         private List<Student> _students;
         private List<User> _receivers;
         private List<SessionRow> _sessions;
@@ -42,22 +42,32 @@ namespace PAZ
             tbAfsluiting.Text += emailTemplate.Afsluiting;
             tbAfzenders.Text += emailTemplate.Afzenders;
 
-            _teachers = new Dictionary<int, Teacher>();
+            _teachers = new List<Teacher>();
             _students = new List<Student>();
             _receivers = new List<User>();
             _sessions = sessions;
+
+            // Note: Dit ziet er misschien klote uit, maar een List.Contains check schijnt niet te werken(mogelijk zijn er dubbele teacher objecten?)
+            Dictionary<int, Teacher> teachers = new Dictionary<int, Teacher>();
 
             foreach (SessionRow session in sessions)
             {
                 Session sessionModel = session.GetSessionModel();
 
                 foreach(KeyValuePair<int, Teacher> keyValuePair in sessionModel.Teachers)
-                    if(!_teachers.ContainsKey(keyValuePair.Key))
-                        _teachers.Add(keyValuePair.Key, keyValuePair.Value);
+                    if (!teachers.ContainsKey(keyValuePair.Key))
+                        teachers.Add(keyValuePair.Key, keyValuePair.Value);
 
                 _students.Add(sessionModel.Pair.Student1);
                 _students.Add(sessionModel.Pair.Student2);
             }
+
+            // En nu weer naar een List omdat Dictionary faalt en niet kan sorten
+            foreach (KeyValuePair<int, Teacher> keyValuePair in teachers)
+                _teachers.Add(keyValuePair.Value);
+
+            _students.Sort();
+            _teachers.Sort();
 
             StudentenToevoegen();
             DocentenToevoegen();
@@ -73,7 +83,7 @@ namespace PAZ
         /**
         * Voegt docenten toe en geeft weer als checkboxen
         * 
-        * Auteur: Gökhan 
+        * Auteur: Gökhan en Yorg
         */
         private void DocentenToevoegen()
         {
@@ -82,10 +92,8 @@ namespace PAZ
 
             int left = 0, top = 0;
             double rightMost = 0.0;
-            foreach (KeyValuePair<int, Teacher> keyValuePair in _teachers)
+            foreach (Teacher teacher in _teachers)
             {
-                Teacher teacher = keyValuePair.Value;
-
                 CheckBox cb = new CheckBox();
                 cb.Checked += new RoutedEventHandler(cb_Checked);
                 cb.Unchecked += new RoutedEventHandler(cb_Unchecked);
@@ -120,7 +128,7 @@ namespace PAZ
         /**
         * Voegt studenten toe en geeft weer als checkboxen
         * 
-        * Auteur: Gökhan 
+        * Auteur: Gökhan en Yorg
         */
         private void StudentenToevoegen()
         {

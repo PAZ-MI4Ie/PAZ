@@ -18,7 +18,7 @@ namespace PAZ
     */
     public partial class LetterWindow : Window
     {
-        private Dictionary<int, Expert> _experts;
+        private List<Expert> _experts;
         private Dictionary<int, Expert> _receivers;
         private List<SessionRow> _sessions;
         private List<CheckBox> _expertBoxes;
@@ -47,9 +47,12 @@ namespace PAZ
             tbVoettekstMidden.Text = letterTemplate.VoettekstCenter;
             tbVoettekstRechts.Text = letterTemplate.VoettekstRechts;
 
-            _experts = new Dictionary<int, Expert>();
+            _experts = new List<Expert>();
             _receivers = new Dictionary<int, Expert>();
             _sessions = sessions;
+
+            // Note: Dit ziet er misschien klote uit, maar een List.Contains check schijnt niet te werken(mogelijk zijn er dubbele expert objecten?)
+            Dictionary<int, Expert> experts = new Dictionary<int, Expert>();
 
             foreach (SessionRow session in sessions)
             {
@@ -57,10 +60,16 @@ namespace PAZ
 
                 foreach (KeyValuePair<int, Expert> keyValuePair in sessionModel.Experts)
                 {
-                    if(!_experts.ContainsKey(keyValuePair.Key))
-                        _experts.Add(keyValuePair.Key, keyValuePair.Value);
+                    if(!experts.ContainsKey(keyValuePair.Key))
+                        experts.Add(keyValuePair.Key, keyValuePair.Value);
                 }
             }
+
+            // En nu weer naar een List omdat Dictionary faalt en niet kan sorten
+            foreach (KeyValuePair<int, Expert> keyValuePair in experts)
+                _experts.Add(keyValuePair.Value);
+
+            _experts.Sort();
 
             ExpertsToevoegen();
 
@@ -84,10 +93,8 @@ namespace PAZ
 
             int left = 0, top = 0;
             double rightMost = 0.0;
-            foreach (KeyValuePair<int, Expert> expertKeyPair in _experts)
+            foreach (Expert expert in _experts)
             {
-                Expert expert = expertKeyPair.Value;
-
                 CheckBox cb = new CheckBox();
                 cb.Checked += new RoutedEventHandler(cb_Checked);
                 cb.Unchecked += new RoutedEventHandler(cb_Unchecked);

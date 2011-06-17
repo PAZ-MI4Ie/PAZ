@@ -224,7 +224,7 @@ namespace PAZ
                 return;
             }
 
-            if (MessageBox.Show("Weet u zeker dat u alle gebruikers wilt verwijderen? \n\nLet op: deze actie kan niet ongedaan worden.", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Weet u zeker dat u de geselecteerde gegevens wilt verwijderen? \n\nLet op: deze actie kan niet ongedaan worden.", "Bevestiging", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
             {
                 if (_controller.VerwijderGegevensBevestigingClicked(_deleteList))
                     MessageBox.Show("Succesvol. Alle de gekozen gegevens zijn verwijderd.", "Succes", MessageBoxButton.OK, MessageBoxImage.Information);

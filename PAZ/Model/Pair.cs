@@ -46,24 +46,28 @@ namespace PAZ.Model
         }
         public int Number_of_guests { get; set; }
 
+        private List<User> _attachments;
         public List<User> Attachments
         {
             get
             {
-                List<User> result = new List<User>();
-                foreach (KeyValuePair<int, string> pair in (new PairMapper(MysqlDb.GetInstance())).FindAttachments(this.ID))
+                if(_attachments == null)
                 {
-                    if (pair.Value.Equals("teacher"))
+                    _attachments = new List<User>();
+                    foreach (KeyValuePair<int, string> pair in (new PairMapper(MysqlDb.GetInstance())).FindAttachments(this.ID))
                     {
-                        result.Add((new TeacherMapper(MysqlDb.GetInstance())).Find(pair.Key));
+                        if (pair.Value.Equals("teacher"))
+                        {
+                            _attachments.Add((new TeacherMapper(MysqlDb.GetInstance())).Find(pair.Key));
+                        }
+                        else if (pair.Value.Equals("expert"))
+                        {
+                            _attachments.Add((new ExpertMapper(MysqlDb.GetInstance())).Find(pair.Key));
+                        }
                     }
-                    else if (pair.Value.Equals("expert"))
-                    {
-                        result.Add((new ExpertMapper(MysqlDb.GetInstance())).Find(pair.Key));
-                    }
+                    _attachments.Sort();
                 }
-                result.Sort();
-                return result;
+                return _attachments;
             }
             set
             {

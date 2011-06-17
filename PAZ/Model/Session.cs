@@ -64,37 +64,40 @@ namespace PAZ.Model
             }
         }
 
-        // Dit is de reden dat de PDF brief export niet meer werkte tijdens de presentatie, er wordt dan geen
-        // array aangemaakt waardoor de export een null array kreeg, Teun wil je het regelen dat deze
-        // constructor niet meer nodig is.
-        // Correctie: Eigenlijk moet ervoor gezorgd worden dat de teacher array(en experts array ook denk ik) gevuld worden, lege constructor mag blijven. Dit is nu ook van belang voor de emails en niet alleen de brieven.
-		public Session() { }
-
-		public Session(Daytime daytime, Classroom classroom, Pair pair, Teacher teacher1, Teacher teacher2, Expert expert1, Expert expert2)
-		{
-			_daytime = daytime;
-			_classroom = classroom;
-			_pair = pair;
-            this._temp_experts = new Expert[2];
-            this._temp_experts[0] = expert1;
-            this._temp_experts[1] = expert2;
-            this._temp_teachers = new Teacher[2];
-            this._temp_teachers[0] = teacher1;
-            this._temp_teachers[1] = teacher2;
-		}
-
-        //TEMP CODE:
-        private Expert[] _temp_experts = new Expert[MAX_EXPERTS];
-        private Teacher[] _temp_teachers = new Teacher[MAX_TEACHERS];
-
-        public Expert[] GetExperts()
+        public Dictionary<int, Teacher> Teachers
         {
-            return _temp_experts;
+            get
+            {
+                Dictionary<int, Teacher> result = new Dictionary<int, Teacher>();
+                foreach (User user in Pair.Attachments)
+                {
+                    if (user is Teacher)
+                        result.Add(user.Id, (Teacher) user);
+                }
+
+                return result;
+            }
+            set
+            {
+            }
         }
 
-        public Teacher[] GetTeachers()
+        public Dictionary<int, Expert> Experts
         {
-            return _temp_teachers;
+            get
+            {
+                Dictionary<int, Expert> result = new Dictionary<int, Expert>();
+                foreach (User user in Pair.Attachments)
+                {
+                    if (user is Expert)
+                        result.Add(user.Id, (Expert) user);
+                }
+
+                return result;
+            }
+            set
+            {
+            }
         }
     }
 }

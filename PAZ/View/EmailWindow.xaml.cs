@@ -18,7 +18,7 @@ namespace PAZ
     */
     public partial class EmailWindow : Window
     {
-        private List<Teacher> _teachers;
+        private Dictionary<int, Teacher> _teachers;
         private List<Student> _students;
         private List<User> _receivers;
         private List<SessionRow> _sessions;
@@ -42,7 +42,7 @@ namespace PAZ
             tbAfsluiting.Text += emailTemplate.Afsluiting;
             tbAfzenders.Text += emailTemplate.Afzenders;
 
-            _teachers = new List<Teacher>();
+            _teachers = new Dictionary<int, Teacher>();
             _students = new List<Student>();
             _receivers = new List<User>();
             _sessions = sessions;
@@ -51,10 +51,9 @@ namespace PAZ
             {
                 Session sessionModel = session.GetSessionModel();
 
-                Teacher[] teachers = sessionModel.GetTeachers();
-                for (int i = 0; i < teachers.Length; ++i)
-                    if(teachers[i] != null)
-                        _teachers.Add(teachers[i]);
+                foreach(KeyValuePair<int, Teacher> keyValuePair in sessionModel.Teachers)
+                    if(!_teachers.ContainsKey(keyValuePair.Key))
+                        _teachers.Add(keyValuePair.Key, keyValuePair.Value);
 
                 _students.Add(sessionModel.Pair.Student1);
                 _students.Add(sessionModel.Pair.Student2);
@@ -72,7 +71,7 @@ namespace PAZ
 
 
         /**
-        * Voegt docenten toe en weergeeft als checkboxen
+        * Voegt docenten toe en geeft weer als checkboxen
         * 
         * Auteur: Gökhan 
         */
@@ -83,8 +82,10 @@ namespace PAZ
 
             int left = 0, top = 0;
             double rightMost = 0.0;
-            foreach (Teacher teacher in _teachers)
+            foreach (KeyValuePair<int, Teacher> keyValuePair in _teachers)
             {
+                Teacher teacher = keyValuePair.Value;
+
                 CheckBox cb = new CheckBox();
                 cb.Checked += new RoutedEventHandler(cb_Checked);
                 cb.Unchecked += new RoutedEventHandler(cb_Unchecked);
@@ -117,7 +118,7 @@ namespace PAZ
 
        
         /**
-        * Voegt studenten toe en weergeeft als checkboxen
+        * Voegt studenten toe en geeft weer als checkboxen
         * 
         * Auteur: Gökhan 
         */
@@ -254,9 +255,7 @@ namespace PAZ
                 foreach (User user in _receivers)
                 {
                     // de geadresseerde 
-                    //emailer.To = user.Email;  // let op: e-mailadressen in db zijn fake!
-                    emailer.To = "ymja.kuijs@student.avans.nl";   //(alleen bedoelt voor testdoeleinden)
-
+                    emailer.To = user.Email;
                     emailer.Body = CreateEmailBody(user);
 
                     try
@@ -293,9 +292,8 @@ namespace PAZ
                 Session sessionModel = _sessions[i].GetSessionModel();
 
                 List<User> users = new List<User>();
-                Teacher[] teachers = sessionModel.GetTeachers();
-                for (int j = 0; j < teachers.Length; ++j)
-                    users.Add(teachers[j]);
+                foreach (KeyValuePair<int, Teacher> keyValuePair in sessionModel.Teachers)
+                    users.Add(keyValuePair.Value);
 
                 users.Add(sessionModel.Pair.Student1);
                 users.Add(sessionModel.Pair.Student2);

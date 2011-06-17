@@ -62,6 +62,7 @@ namespace PAZ.Model
                         result.Add((new ExpertMapper(MysqlDb.GetInstance())).Find(pair.Key));
                     }
                 }
+                result.Sort();
                 return result;
             }
             set

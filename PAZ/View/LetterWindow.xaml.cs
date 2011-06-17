@@ -18,8 +18,8 @@ namespace PAZ
     */
     public partial class LetterWindow : Window
     {
-        private Dictionary<string, Expert> _experts;
-        private Dictionary<string, Expert> _receivers;
+        private Dictionary<int, Expert> _experts;
+        private Dictionary<int, Expert> _receivers;
         private List<SessionRow> _sessions;
         private List<CheckBox> _expertBoxes;
 
@@ -47,26 +47,18 @@ namespace PAZ
             tbVoettekstMidden.Text = letterTemplate.VoettekstCenter;
             tbVoettekstRechts.Text = letterTemplate.VoettekstRechts;
 
-            _experts = new Dictionary<string, Expert>();
-            _receivers = new Dictionary<string, Expert>();
+            _experts = new Dictionary<int, Expert>();
+            _receivers = new Dictionary<int, Expert>();
             _sessions = sessions;
 
             foreach (SessionRow session in sessions)
             {
                 Session sessionModel = session.GetSessionModel();
 
-                if (sessionModel.Pair.Attachments != null)
+                foreach (KeyValuePair<int, Expert> keyValuePair in sessionModel.Experts)
                 {
-                    foreach (User user in sessionModel.Pair.Attachments)
-                    {
-                        if (user is Expert)
-                        {
-                            Expert expert = (Expert)user;
-
-                            if(!_experts.ContainsKey(expert.Email))
-                                _experts.Add(expert.Email, expert);
-                        }
-                    }
+                    if(!_experts.ContainsKey(keyValuePair.Key))
+                        _experts.Add(keyValuePair.Key, keyValuePair.Value);
                 }
             }
 
@@ -92,14 +84,14 @@ namespace PAZ
 
             int left = 0, top = 0;
             double rightMost = 0.0;
-            foreach (KeyValuePair<string, Expert> expertKeyPair in _experts)
+            foreach (KeyValuePair<int, Expert> expertKeyPair in _experts)
             {
                 Expert expert = expertKeyPair.Value;
 
                 CheckBox cb = new CheckBox();
                 cb.Checked += new RoutedEventHandler(cb_Checked);
                 cb.Unchecked += new RoutedEventHandler(cb_Unchecked);
-                cb.Content = " " + expert.Firstname + " " + expert.Surname + " (" + expert.Email + ")"; ;
+                cb.Content = " " + expert.Firstname + " " + expert.Surname + " (" + expert.Email + ")";
                 cb.Tag = expert; // koppelt object aan checkbox
 
                 if (expert.WasChanged == true)
@@ -134,7 +126,7 @@ namespace PAZ
         {
             CheckBox cb = (CheckBox)sender;
             // verwijder de gekoppelde object van de _receivers lijst
-            _receivers.Remove(((Expert)cb.Tag).Email);
+            _receivers.Remove(((Expert)cb.Tag).Id);
 
             HandleSelectorUnchecking(cb, cbxExpertSelector, _expertBoxes);
         }
@@ -163,7 +155,7 @@ namespace PAZ
 
             // voeg het gekoppelde object toe aan de _receivers lijst
             Expert expert = (Expert) cb.Tag;
-            _receivers.Add(expert.Email, expert);
+            _receivers.Add(expert.Id, expert);
 
             if (CheckAllChecked(_expertBoxes))
                 cbxExpertSelector.IsChecked = true;
@@ -246,21 +238,21 @@ namespace PAZ
 
             MessageBoxResult result = MessageBox.Show("Wilt u de wijzigingen opslaan?", "Bevestiging", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
-                Save();
+                SaveTemplate();
             else if (result == MessageBoxResult.Cancel)
                 e.Cancel = true;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            Save();
+            SaveTemplate();
 
             btnSave.IsEnabled = false;
         }
 
-        private void Save()
+        private void SaveTemplate()
         {
-            _controller.LetterWindowSaveClicked(new LetterTemplate(
+            _controller.LetterWindowSaveTemplateClicked(new LetterTemplate(
                                             _letterTemplate.Id,
                                             tbKenmerk.Text,
                                             tbContactpersonen.Text,

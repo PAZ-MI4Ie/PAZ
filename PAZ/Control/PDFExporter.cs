@@ -141,7 +141,7 @@ namespace PAZ.Control
          * Dit maakt de brieven om te versturen naar de experts in zijn geheel en zet ze in een PDF document
          * Auteur: Yorg 
          */
-        public void CreateLetterPDF(String filename, Dictionary<string, Expert> receivers, LetterWindow letterWindow)
+        public void CreateLetterPDF(String filename, Dictionary<int, Expert> receivers, LetterWindow letterWindow)
         {
             // het document(standaard A4-formaat) maken
             iTextSharp.text.Document document = new iText.Document(PageSize.A4, 75.0f, 75.0f, 0.0f, 0.0f);
@@ -157,38 +157,26 @@ namespace PAZ.Control
                 // Zet de PageEvent van de writer klasse naar de instantie van de pagina
                 writer.PageEvent = page;
 
-                // Lijst met experts die al geweest zijn of om een andere reden genegeerd moeten worden
-                List<Expert> ignoreList = new List<Expert>();
-
                 // het document openen
                 document.Open();
                 for (int rowNo = 0; rowNo < _dataGrid.Items.Count; ++rowNo)
                 {
                     SessionRow rowSession = (SessionRow)_dataGrid.Items[rowNo];
+                    Session sessionModel = rowSession.GetSessionModel();
 
-                    List<User> attachments = rowSession.GetSessionModel().Pair.Attachments;
-                    List<Expert> experts = new List<Expert>();
+                    Dictionary<int, Expert> experts = sessionModel.Experts;
 
-                    foreach (User user in attachments)
+                    foreach(KeyValuePair<int, Expert> expertKeyValuePair in experts)
                     {
-                        if (user is Expert)
-                            experts.Add((Expert)user);
-                    }
-
-                    foreach(Expert expert in experts)
-                    {
-                        if (!receivers.ContainsKey(expert.Email) || ignoreList.Contains(expert))
+                        if (!receivers.ContainsKey(expertKeyValuePair.Key))
                             continue;
 
-                        bool bIgnore = false;
+                        Expert expert = expertKeyValuePair.Value;
 
-                        if(bIgnore)
-                            continue;
-                        
                         document.NewPage();
 
                         // Een titel maken
-                        iText.Paragraph titel = new iText.Paragraph("Academie voor Management en Bestuur", FontFactory.GetFont("Arial", 12, Font.BOLD));
+                        iText.Paragraph titel = new iText.Paragraph("Academie voor " + sessionModel.Pair.Student1.Study, FontFactory.GetFont("Arial", 12, Font.BOLD));
                         titel.Alignment = 1;
 
                         // Subtitel maken
@@ -229,11 +217,16 @@ namespace PAZ.Control
                         // Inhoud brief
                         document.Add(new iText.Paragraph("Geachte heer/mevrouw " + expert.Surname + ",", standardFont));
 
-                        document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph("Hierbij ontvangt u de afstudeerscriptie van onze student " + rowSession.GetSessionModel().Pair.Student1.Study + ", " + rowSession.GetSessionModel().Pair.Student1.Firstname + " " + rowSession.GetSessionModel().Pair.Student1.Surname + " van wie u de afstudeerbespreking zult bijwonen. Begeleidende docenten " + rowSession.GetSessionModel().GetTeachers()[0].Firstname + " " + rowSession.GetSessionModel().GetTeachers()[0].Surname + " en " + rowSession.GetSessionModel().GetTeachers()[1].Firstname + " " + rowSession.GetSessionModel().GetTeachers()[1].Surname + " zullen bij de zitting aanwezig zijn.", standardFont));
+                        Teacher[] teachers = new Teacher[2];
+                        int index = -1;
+                        foreach (KeyValuePair<int, Teacher> teacherKeyValuePair in sessionModel.Teachers)
+                            teachers[++index] = teacherKeyValuePair.Value;
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + rowSession.GetSessionModel().Daytime.Starttime + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, " + letterWindow.tbAvansLocatie.Text, standardFont));
+                        document.Add(new iText.Paragraph("Hierbij ontvangt u de afstudeerscriptie van onze student " + sessionModel.Pair.Student1.Study + ", " + sessionModel.Pair.Student1.Firstname + " " + sessionModel.Pair.Student1.Surname + " van wie u de afstudeerbespreking zult bijwonen. Begeleidende docenten " + teachers[0].Firstname + " " + teachers[0].Surname + " en " + teachers[1].Firstname + " " + teachers[1].Surname + " zullen bij de zitting aanwezig zijn.", standardFont));
+
+                        document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
+                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + sessionModel.Daytime.Starttime + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, " + letterWindow.tbAvansLocatie.Text, standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
                         document.Add(new iText.Paragraph(letterWindow.tbBeginKern.Text, standardFont));
@@ -270,10 +263,7 @@ namespace PAZ.Control
                         // Verander de font style weer terug
                         standardFont.SetStyle(Font.NORMAL);
 
-                        document.Add(new iText.Paragraph("        Bijlage(n):	" + letterWindow.tbBijlagen, standardFont));
-
-                        // We hebben nu een brief gemaakt voor deze expert, als deze meermaals in het systeem voorkomt, negeer die dan
-                        ignoreList.Add(expert);
+                        document.Add(new iText.Paragraph("        Bijlage(n):	" + letterWindow.tbBijlagen.Text, standardFont));
 
                         expert.WasChanged = false;
                     }

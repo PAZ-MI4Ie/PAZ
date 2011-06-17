@@ -87,7 +87,7 @@ namespace PAZ.Control
             letterWindow.ShowDialog();
         }
 
-        public void BriefMakenBevestigingClicked(Dictionary<string, Expert> receivers, LetterWindow letterWindow)
+        public void BriefMakenBevestigingClicked(Dictionary<int, Expert> receivers, LetterWindow letterWindow)
         {
             // dit zorgt ervoor dat er geen filters worden toegepast in de PDF uitdraai
             _mainWindow.textboxSearch.Text = "";
@@ -113,7 +113,7 @@ namespace PAZ.Control
             EmailTemplateMapper.Save(updatedTemplate);
         }
 
-        public void LetterWindowSaveClicked(LetterTemplate updatedTemplate)
+        public void LetterWindowSaveTemplateClicked(LetterTemplate updatedTemplate)
         {
             LetterTemplateMapper.Save(updatedTemplate);
         }

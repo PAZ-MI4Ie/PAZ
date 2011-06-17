@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using PAZ.Control;
 using PAZ.Model.Mappers;
@@ -5,7 +6,7 @@ using PAZMySQL;
 
 namespace PAZ.Model
 {
-    public class User
+    public class User : IComparable<User>
     {
         public int Id { get; set; }
         public string Username { get; set; }
@@ -21,10 +22,19 @@ namespace PAZ.Model
             get { return _wasChanged; }
             set 
             {
-                if (_wasChanged != null && value != _wasChanged)
-                    PAZController.GetInstance().UserMapper.Save(this);
+                if (_wasChanged == null)
+                {
+                    _wasChanged = value;
+                    return;
+                }
 
-                _wasChanged = value;
+                if (value != _wasChanged)
+                {
+                    _wasChanged = value;
+                    PAZController.GetInstance().UserMapper.Save(this);
+                }
+
+                
             }
         }
 
@@ -58,5 +68,10 @@ namespace PAZ.Model
 			Status = "accepted";
 			Username = surname;
 		}
+
+        public int CompareTo(User right)
+        {
+            return Firstname.CompareTo(right.Firstname);
+        }
     }
 }

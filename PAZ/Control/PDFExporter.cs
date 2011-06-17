@@ -180,7 +180,7 @@ namespace PAZ.Control
                         titel.Alignment = 1;
 
                         // Subtitel maken
-                        iText.Paragraph subTitel = new iText.Paragraph("`s-Hertogenbosch", FontFactory.GetFont(STANDARD_FONT_FAMILY, STANDARD_FONT_SIZE - 1));
+                        iText.Paragraph subTitel = new iText.Paragraph(letterWindow.tbAvansLocatie.Text, FontFactory.GetFont(STANDARD_FONT_FAMILY, STANDARD_FONT_SIZE - 1));
                         subTitel.Alignment = 1;
 
                         // elementen toevoegen aan het document
@@ -226,7 +226,7 @@ namespace PAZ.Control
                         document.Add(new iText.Paragraph("Hierbij ontvangt u de afstudeerscriptie van onze student " + sessionModel.Pair.Student1.Study + ", " + sessionModel.Pair.Student1.Firstname + " " + sessionModel.Pair.Student1.Surname + " van wie u de afstudeerbespreking zult bijwonen. Begeleidende docenten " + teachers[0].Firstname + " " + teachers[0].Surname + " en " + teachers[1].Firstname + " " + teachers[1].Surname + " zullen bij de zitting aanwezig zijn.", standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + sessionModel.Daytime.Starttime + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, " + letterWindow.tbAvansLocatie.Text, standardFont));
+                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + sessionModel.Daytime.Starttime + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, " + letterWindow.tbAvansAdres.Text + " te " + letterWindow.tbAvansLocatie.Text + ".", standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
                         document.Add(new iText.Paragraph(letterWindow.tbBeginKern.Text, standardFont));

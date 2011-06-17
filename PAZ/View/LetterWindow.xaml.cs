@@ -37,6 +37,7 @@ namespace PAZ
             tbContactpersonen.Text = letterTemplate.Contactpersonen;
             tbTelefoon.Text = letterTemplate.Telefoon;
             tbEmail.Text = letterTemplate.Email;
+            tbAvansAdres.Text = letterTemplate.AvansAdres;
             tbAvansLocatie.Text = letterTemplate.AvansLocatie;
             tbBeginKern.Text = letterTemplate.BeginKern;
             tbReisInformatie.Text = letterTemplate.ReisInformatie;
@@ -265,6 +266,7 @@ namespace PAZ
                                             tbContactpersonen.Text,
                                             tbTelefoon.Text,
                                             tbEmail.Text,
+                                            tbAvansAdres.Text,
                                             tbAvansLocatie.Text,
                                             tbBeginKern.Text,
                                             tbReisInformatie.Text,

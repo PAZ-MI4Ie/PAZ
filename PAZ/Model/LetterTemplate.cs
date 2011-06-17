@@ -7,13 +7,14 @@ namespace PAZ.Model
 {
     public class LetterTemplate
     {
-        public LetterTemplate(int id, string kenmerk, string contactpersonen, string telefoon, string email, string avans_locatie, string begin_kern, string reis_informatie, string verdere_informatie, string afzenders, string bijlagen, string voettekst_links, string voettekst_center, string voettekst_rechts)
+        public LetterTemplate(int id, string kenmerk, string contactpersonen, string telefoon, string email, string avans_adres, string avans_locatie, string begin_kern, string reis_informatie, string verdere_informatie, string afzenders, string bijlagen, string voettekst_links, string voettekst_center, string voettekst_rechts)
         {
             Id = id;
             Kenmerk = kenmerk;
             Contactpersonen = contactpersonen;
             Telefoon = telefoon;
             Email = email;
+            AvansAdres = avans_adres;
             AvansLocatie = avans_locatie;
             BeginKern = begin_kern;
             ReisInformatie = reis_informatie;
@@ -30,6 +31,7 @@ namespace PAZ.Model
         public string Contactpersonen { get; private set; }
         public string Telefoon { get; private set; }
         public string Email { get; private set; }
+        public string AvansAdres { get; private set; }
         public string AvansLocatie { get; private set; }
         public string BeginKern { get; private set; }
         public string ReisInformatie { get; private set; }

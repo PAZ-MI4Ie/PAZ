@@ -16,14 +16,14 @@ namespace PAZ.Model.Mappers
         {
             this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
-            command.CommandText = "SELECT id, kenmerk, contactpersonen, telefoon, email, avans_locatie, begin_kern, reis_informatie, verdere_informatie, afzenders, bijlagen, voettekst_links, voettekst_center, voettekst_rechts FROM letter_template WHERE id = ?id";
+            command.CommandText = "SELECT id, kenmerk, contactpersonen, telefoon, email, avans_adres, avans_locatie, begin_kern, reis_informatie, verdere_informatie, afzenders, bijlagen, voettekst_links, voettekst_center, voettekst_rechts FROM letter_template WHERE id = ?id";
             command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             Reader.Read();//Only 1 row
             this._db.CloseConnection();
 
             int index = -1;
-            return new LetterTemplate(Reader.GetInt32(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index));
+            return new LetterTemplate(Reader.GetInt32(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index));
         }
 
         public void Save(LetterTemplate letterTemplate)
@@ -31,13 +31,14 @@ namespace PAZ.Model.Mappers
             this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
 
-            command.CommandText = "UPDATE letter_template SET kenmerk=?kenmerk, contactpersonen=?contactpersonen, telefoon=?telefoon, email=?email, avans_locatie=?avans_locatie, begin_kern=?begin_kern, reis_informatie=?reis_informatie, verdere_informatie=?verdere_informatie, afzenders=?afzenders, bijlagen=?bijlagen, voettekst_links=?voettekst_links, voettekst_center=?voettekst_center, voettekst_rechts=?voettekst_rechts WHERE id = ?id";
+            command.CommandText = "UPDATE letter_template SET kenmerk=?kenmerk, contactpersonen=?contactpersonen, telefoon=?telefoon, email=?email, avans_adres=?avans_adres, avans_locatie=?avans_locatie, begin_kern=?begin_kern, reis_informatie=?reis_informatie, verdere_informatie=?verdere_informatie, afzenders=?afzenders, bijlagen=?bijlagen, voettekst_links=?voettekst_links, voettekst_center=?voettekst_center, voettekst_rechts=?voettekst_rechts WHERE id = ?id";
 
             command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = letterTemplate.Id;
             command.Parameters.Add(new MySqlParameter("?kenmerk", MySqlDbType.String)).Value = letterTemplate.Kenmerk;
             command.Parameters.Add(new MySqlParameter("?contactpersonen", MySqlDbType.String)).Value = letterTemplate.Contactpersonen;
             command.Parameters.Add(new MySqlParameter("?telefoon", MySqlDbType.String)).Value = letterTemplate.Telefoon;
             command.Parameters.Add(new MySqlParameter("?email", MySqlDbType.String)).Value = letterTemplate.Email;
+            command.Parameters.Add(new MySqlParameter("?avans_adres", MySqlDbType.String)).Value = letterTemplate.AvansAdres;
             command.Parameters.Add(new MySqlParameter("?avans_locatie", MySqlDbType.String)).Value = letterTemplate.AvansLocatie;
             command.Parameters.Add(new MySqlParameter("?begin_kern", MySqlDbType.Text)).Value = letterTemplate.BeginKern;
             command.Parameters.Add(new MySqlParameter("?reis_informatie", MySqlDbType.LongText)).Value = letterTemplate.ReisInformatie;

@@ -50,6 +50,9 @@ namespace PAZ
             foreach (User admin in _admins)
                 _users.Remove(admin);
 
+            _users.Sort();
+            _classrooms.Sort();
+
             LokalenToevoegen();
             PersonenToevoegen();            
         }

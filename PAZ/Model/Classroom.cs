@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PAZ.Model
 {
-    public class Classroom
+    public class Classroom : IComparable<Classroom>
     {
         public int Id { get; set; }
         public string Room_number { get; set; }
@@ -17,5 +17,10 @@ namespace PAZ.Model
 			Id = id;
 			Room_number = room_number;
 		}
+
+        public int CompareTo(Classroom right)
+        {
+            return Room_number.CompareTo(right.Room_number);
+        }
     }
 }

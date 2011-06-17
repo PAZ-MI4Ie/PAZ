@@ -26,20 +26,20 @@ namespace PAZ.Model
             VoettekstRechts = voettekst_rechts;
         }
 
-        public int Id { get; private set; }
-        public string Kenmerk { get; private set; }
-        public string Contactpersonen { get; private set; }
-        public string Telefoon { get; private set; }
-        public string Email { get; private set; }
-        public string AvansAdres { get; private set; }
-        public string AvansLocatie { get; private set; }
-        public string BeginKern { get; private set; }
-        public string ReisInformatie { get; private set; }
-        public string VerdereInformatie { get; private set; }
-        public string Afzenders { get; private set; }
-        public string Bijlagen { get; private set; }
-        public string VoettekstLinks { get; private set; }
-        public string VoettekstCenter { get; private set; }
-        public string VoettekstRechts { get; private set; }
+        public int Id { get; set; }
+        public string Kenmerk { get; set; }
+        public string Contactpersonen { get; set; }
+        public string Telefoon { get; set; }
+        public string Email { get; set; }
+        public string AvansAdres { get; set; }
+        public string AvansLocatie { get; set; }
+        public string BeginKern { get; set; }
+        public string ReisInformatie { get; set; }
+        public string VerdereInformatie { get; set; }
+        public string Afzenders { get; set; }
+        public string Bijlagen { get; set; }
+        public string VoettekstLinks { get; set; }
+        public string VoettekstCenter { get; set; }
+        public string VoettekstRechts { get; set; }
     }
 }

@@ -17,11 +17,11 @@ namespace PAZ.Model
             Afzenders = afzenders;
         }
 
-        public int Id { get; private set; }
-        public string Displayname { get; private set; }
-        public string Inleiding { get; private set; }
-        public string Informatie { get; private set; }
-        public string Afsluiting { get; private set; }
-        public string Afzenders { get; private set; }
+        public int Id { get; set; }
+        public string Displayname { get; set; }
+        public string Inleiding { get; set; }
+        public string Informatie { get; set; }
+        public string Afsluiting { get; set; }
+        public string Afzenders { get; set; }
     }
 }

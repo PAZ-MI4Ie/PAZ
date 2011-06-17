@@ -37,10 +37,10 @@ namespace PAZ
             InitializeComponent();
 
             tbAfzender.Text = emailTemplate.Displayname;
-            tbInleiding.Text += emailTemplate.Inleiding;
-            tbInformatie.Text += emailTemplate.Informatie;
-            tbAfsluiting.Text += emailTemplate.Afsluiting;
-            tbAfzenders.Text += emailTemplate.Afzenders;
+            tbInleiding.Text = emailTemplate.Inleiding;
+            tbInformatie.Text = emailTemplate.Informatie;
+            tbAfsluiting.Text = emailTemplate.Afsluiting;
+            tbAfzenders.Text = emailTemplate.Afzenders;
 
             _teachers = new List<Teacher>();
             _students = new List<Student>();
@@ -248,6 +248,10 @@ namespace PAZ
                 return;
             }
 
+            // Sla de wijzigingen vast op, indien er iets gewijzigd was
+            if (btnSave.IsEnabled)
+                SaveTemplate();
+
             if (MessageBox.Show("Weet u zeker dat u e-mailberichten wilt versturen?", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 Emailer emailer = _controller.Emailer;
@@ -255,7 +259,7 @@ namespace PAZ
                 emailer.User = _ini["EMAILSETTINGS"]["email_user"];                     // het gebruikte account voor het versturen van de e-mails
                 emailer.Password = _ini["EMAILSETTINGS"]["email_password"];             // het wachtwoord behorende bij bovenstaande account          
                 emailer.From = _ini["EMAILSETTINGS"]["email_from"];                     // de afzender
-                emailer.DisplayName = tbAfzender.Text;                                  // de naam van de afzender zoals die getoond wordt
+                emailer.DisplayName = _emailTemplate.Displayname;                       // de naam van de afzender zoals die getoond wordt
                 emailer.Host = _ini["EMAILSETTINGS"]["email_host"];                     // de server host
                 emailer.Port = Convert.ToInt32(_ini["EMAILSETTINGS"]["email_port"]);    // het gebruikte poort nummer
                 emailer.Subject = _ini["EMAILSETTINGS"]["email_onderwerp"];             // het onderwerp van het e-mailbericht
@@ -315,7 +319,7 @@ namespace PAZ
                         else if (receiver is Teacher)
                         {
                             emailBody += "<p>";
-                            emailBody += tbInleiding.Text;
+                            emailBody += _emailTemplate.Inleiding;
                             emailBody += "</p>";
 
                             emailBody += "<p>U neemt deel aan de volgende zittingen: <br /> Zitting " + (++zittingNummer);
@@ -329,17 +333,17 @@ namespace PAZ
             emailBody += "</p>";
 
             emailBody += "<p>";
-            emailBody += tbInformatie.Text;
+            emailBody += _emailTemplate.Informatie;
             emailBody += "</p>";
 
             emailBody += "<p>";
-            emailBody += tbAfsluiting.Text;
+            emailBody += _emailTemplate.Afsluiting;
             emailBody += "</p>";
 
             emailBody += "<p>Met vriendelijke groet, </p>";
 
             emailBody += "<p>";
-            emailBody += tbAfzenders.Text;
+            emailBody += _emailTemplate.Afzenders;
             emailBody += "<br /><i>Coördinatoren stage en afstuderen</i></p>";
 
             emailBody += "</body> \n </html>";
@@ -521,21 +525,32 @@ namespace PAZ
 
             MessageBoxResult result = MessageBox.Show("Wilt u de wijzigingen opslaan?", "Bevestiging", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
-                Save();
+                SaveTemplate();
             else if (result == MessageBoxResult.Cancel)
                 e.Cancel = true;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            Save();
+            SaveTemplate();
 
             btnSave.IsEnabled = false;
         }
 
-        private void Save()
+        private void SaveTemplate()
         {
-            _controller.EmailWindowSaveClicked(new EmailTemplate(_emailTemplate.Id, tbAfzender.Text, tbInleiding.Text, tbInformatie.Text, tbAfsluiting.Text, tbAfzenders.Text));
+            UpdateTemplate();
+
+            _controller.EmailWindowSaveClicked(_emailTemplate);
+        }
+
+        private void UpdateTemplate()
+        {
+            _emailTemplate.Displayname = tbAfzender.Text;
+            _emailTemplate.Inleiding = tbInleiding.Text;
+            _emailTemplate.Informatie = tbInformatie.Text;
+            _emailTemplate.Afsluiting = tbAfsluiting.Text;
+            _emailTemplate.Afzenders = tbAfzenders.Text;
         }
 
         private void textBox_TextChanged(object sender, TextChangedEventArgs e)

@@ -141,7 +141,7 @@ namespace PAZ.Control
          * Dit maakt de brieven om te versturen naar de experts in zijn geheel en zet ze in een PDF document
          * Auteur: Yorg 
          */
-        public void CreateLetterPDF(String filename, Dictionary<int, Expert> receivers, LetterWindow letterWindow)
+        public void CreateLetterPDF(String filename, Dictionary<int, Expert> receivers, LetterTemplate letterTemplate)
         {
             // het document(standaard A4-formaat) maken
             iTextSharp.text.Document document = new iText.Document(PageSize.A4, 75.0f, 75.0f, 0.0f, 0.0f);
@@ -149,7 +149,7 @@ namespace PAZ.Control
             try
             {
                 // Creeër een PDF pagina instantie(deze regelt de footer, meer niet)
-                pdfPage page = new pdfPage(letterWindow);  
+                pdfPage page = new pdfPage(letterTemplate);  
 
                 // De writer maken die naar het document luistert en zet de stream om in een PDF-bestand
                 PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(filename, FileMode.Create));
@@ -180,7 +180,7 @@ namespace PAZ.Control
                         titel.Alignment = 1;
 
                         // Subtitel maken
-                        iText.Paragraph subTitel = new iText.Paragraph(letterWindow.tbAvansLocatie.Text, FontFactory.GetFont(STANDARD_FONT_FAMILY, STANDARD_FONT_SIZE - 1));
+                        iText.Paragraph subTitel = new iText.Paragraph(letterTemplate.AvansLocatie, FontFactory.GetFont(STANDARD_FONT_FAMILY, STANDARD_FONT_SIZE - 1));
                         subTitel.Alignment = 1;
 
                         // elementen toevoegen aan het document
@@ -207,7 +207,7 @@ namespace PAZ.Control
                         document.Add(new iText.Paragraph(" "));
 
                         // Contact informatie tabel
-                        document.Add(MakeContactInformationTable(letterWindow));
+                        document.Add(MakeContactInformationTable(letterTemplate));
 
                         // Leeg ruimte toevoegen
                         document.Add(new iText.Paragraph(" "));
@@ -226,34 +226,24 @@ namespace PAZ.Control
                         document.Add(new iText.Paragraph("Hierbij ontvangt u de afstudeerscriptie van onze student " + sessionModel.Pair.Student1.Study + ", " + sessionModel.Pair.Student1.Firstname + " " + sessionModel.Pair.Student1.Surname + " van wie u de afstudeerbespreking zult bijwonen. Begeleidende docenten " + teachers[0].Firstname + " " + teachers[0].Surname + " en " + teachers[1].Firstname + " " + teachers[1].Surname + " zullen bij de zitting aanwezig zijn.", standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + sessionModel.Daytime.Starttime + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, " + letterWindow.tbAvansAdres.Text + " te " + letterWindow.tbAvansLocatie.Text + ".", standardFont));
+                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + sessionModel.Daytime.Starttime + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, " + letterTemplate.AvansAdres + " te " + letterTemplate.AvansLocatie + ".", standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph(letterWindow.tbBeginKern.Text, standardFont));
+                        document.Add(new iText.Paragraph(letterTemplate.BeginKern, standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph(letterWindow.tbReisInformatie.Text, standardFont));
-                        //document.Add(new iText.Paragraph("Mocht u daar gebruik van willen maken dan verzoeken wij u deze procedure te volgen:", standardFont));
-
-                        //// Korte lijst van stappen in de procedure
-                        //iText.List unorderedList = new iText.List(iText.List.UNORDERED);
-                        //unorderedList.SetListSymbol("\u2022");
-                        //unorderedList.Add(new iText.ListItem("vul het bijgevoegde formulier ‘Afsprakenformulier Freelancer’ zo volledig mogelijk in;", standardFont));
-                        //unorderedList.Add(new iText.ListItem("vul het bijgevoegde formulier ‘Declaratieformulier Freelancer’ in;", standardFont));
-                        //unorderedList.Add(new iText.ListItem("deze formulieren tezamen met een kopie van uw paspoort of identiteitskaart (een kopie van uw rijbewijs volstaat niet) ongefrankeerd terugsturen naar: Avans Hogeschool, t.a.v. Praktijkbureu AMB, Antwoordnummer 11095, 5200 VC ’s‑Hertogenbosch.", standardFont));
-
-                        //document.Add(unorderedList);
+                        document.Add(new iText.Paragraph(letterTemplate.ReisInformatie, standardFont));
 
                         // Ga verder met de inhoud van het document
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph(letterWindow.tbVerdereInformatie.Text, standardFont));
+                        document.Add(new iText.Paragraph(letterTemplate.VerdereInformatie, standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
                         document.Add(new iText.Paragraph("Wij danken u hartelijk voor uw medewerking.", standardFont));
                         document.Add(new iText.Paragraph("Met vriendelijke groet,", standardFont));
 
                         document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph(letterWindow.tbAfzenders.Text, standardFont));
+                        document.Add(new iText.Paragraph(letterTemplate.Afzenders, standardFont));
 
                         // Verander de font style tijdelijk
                         standardFont.SetStyle(Font.ITALIC);
@@ -263,7 +253,7 @@ namespace PAZ.Control
                         // Verander de font style weer terug
                         standardFont.SetStyle(Font.NORMAL);
 
-                        document.Add(new iText.Paragraph("        Bijlage(n):	" + letterWindow.tbBijlagen.Text, standardFont));
+                        document.Add(new iText.Paragraph("        Bijlage(n):	" + letterTemplate.Bijlagen, standardFont));
 
                         expert.WasChanged = false;
                     }
@@ -292,7 +282,7 @@ namespace PAZ.Control
          * Return: De gemaakte tabel
          * Auteur: Yorg 
          */
-        private PdfPTable MakeContactInformationTable(LetterWindow letterWindow)
+        private PdfPTable MakeContactInformationTable(LetterTemplate letterTemplate)
         {
             // Maak een tabel met het opgegeven aantal kolommen
             PdfPTable rosterTable = new PdfPTable(CONTACT_INFORMATION_NUM_COLUMNS);
@@ -312,9 +302,9 @@ namespace PAZ.Control
             // START EERSTE RIJ
 
             rosterTable.AddCell(MakeTableCell("ons kenmerk", standardBoldFont, true));
-            rosterTable.AddCell(MakeTableCell(letterWindow.tbKenmerk.Text, standardFont));
+            rosterTable.AddCell(MakeTableCell(letterTemplate.Kenmerk, standardFont));
             rosterTable.AddCell(MakeTableCell("contactpersonen", standardBoldFont, true));
-            rosterTable.AddCell(MakeTableCell(letterWindow.tbContactpersonen.Text, standardFont));
+            rosterTable.AddCell(MakeTableCell(letterTemplate.Contactpersonen, standardFont));
 
             // EINDE EERSTE RIJ
 
@@ -323,7 +313,7 @@ namespace PAZ.Control
             rosterTable.AddCell(MakeTableCell("datum", standardBoldFont, true));
             rosterTable.AddCell(MakeTableCell(DateTime.Now.Day + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year, standardFont));
             rosterTable.AddCell(MakeTableCell("telefoon", standardBoldFont, true));
-            rosterTable.AddCell(MakeTableCell(letterWindow.tbTelefoon.Text, standardFont));
+            rosterTable.AddCell(MakeTableCell(letterTemplate.Telefoon, standardFont));
 
             // EINDE TWEEDE RIJ
 
@@ -332,7 +322,7 @@ namespace PAZ.Control
             rosterTable.AddCell(MakeTableCell("onderwerp", standardBoldFont, true));
             rosterTable.AddCell(MakeTableCell("Afstudeerzitting", standardFont));
             rosterTable.AddCell(MakeTableCell("e-mail", standardBoldFont, true));
-            rosterTable.AddCell(MakeTableCell(letterWindow.tbEmail.Text, standardFont));
+            rosterTable.AddCell(MakeTableCell(letterTemplate.Email, standardFont));
 
             // EINDE DERDE RIJ
 
@@ -362,11 +352,11 @@ namespace PAZ.Control
          */
         private class pdfPage : iTextSharp.text.pdf.PdfPageEventHelper
         {
-            LetterWindow _letterWindow;
+            LetterTemplate _letterTemplate;
 
-            public pdfPage(LetterWindow letterWindow) : base ()
+            public pdfPage(LetterTemplate letterTemplate) : base ()
             {
-                _letterWindow = letterWindow;
+                _letterTemplate = letterTemplate;
             }
 
             // Override
@@ -386,9 +376,9 @@ namespace PAZ.Control
                 // Bepaal het font om te gebruiken voor de voettekst
                 Font footerFont = FontFactory.GetFont(FOOTER_FONT_FAMILY, FOOTER_FONT_SIZE);
 
-                footerTable.AddCell(MakeTableCell(_letterWindow.tbVoettekstLinks.Text, footerFont));
-                footerTable.AddCell(MakeTableCell(_letterWindow.tbVoettekstMidden.Text, footerFont));
-                footerTable.AddCell(MakeTableCell(_letterWindow.tbVoettekstRechts.Text, footerFont));
+                footerTable.AddCell(MakeTableCell(_letterTemplate.VoettekstLinks, footerFont));
+                footerTable.AddCell(MakeTableCell(_letterTemplate.VoettekstCenter, footerFont));
+                footerTable.AddCell(MakeTableCell(_letterTemplate.VoettekstRechts, footerFont));
 
                 // Schrijf de rijen naar de PDF output stream
                 footerTable.WriteSelectedRows(0, -1, document.LeftMargin, document.BottomMargin + 40, writer.DirectContent);

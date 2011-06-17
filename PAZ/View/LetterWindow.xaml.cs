@@ -193,7 +193,11 @@ namespace PAZ
                 return;
             }
 
-            _controller.BriefMakenBevestigingClicked(_receivers, this);
+            // Sla de wijzigingen vast op, indien er iets gewijzigd was
+            if(btnSave.IsEnabled)
+                SaveTemplate();
+
+            _controller.BriefMakenBevestigingClicked(_receivers, _letterTemplate);
         }
 
         /**
@@ -260,22 +264,27 @@ namespace PAZ
 
         private void SaveTemplate()
         {
-            _controller.LetterWindowSaveTemplateClicked(new LetterTemplate(
-                                            _letterTemplate.Id,
-                                            tbKenmerk.Text,
-                                            tbContactpersonen.Text,
-                                            tbTelefoon.Text,
-                                            tbEmail.Text,
-                                            tbAvansAdres.Text,
-                                            tbAvansLocatie.Text,
-                                            tbBeginKern.Text,
-                                            tbReisInformatie.Text,
-                                            tbVerdereInformatie.Text,
-                                            tbAfzenders.Text,
-                                            tbBijlagen.Text,
-                                            tbVoettekstLinks.Text,
-                                            tbVoettekstMidden.Text,
-                                            tbVoettekstRechts.Text));
+            UpdateTemplate();
+
+            _controller.LetterWindowSaveTemplateClicked(_letterTemplate);
+        }
+
+        private void UpdateTemplate()
+        {
+            _letterTemplate.Kenmerk = tbKenmerk.Text;
+            _letterTemplate.Contactpersonen = tbContactpersonen.Text;
+            _letterTemplate.Telefoon = tbTelefoon.Text;
+            _letterTemplate.Email = tbEmail.Text;
+            _letterTemplate.AvansAdres = tbAvansAdres.Text;
+            _letterTemplate.AvansLocatie = tbAvansLocatie.Text;
+            _letterTemplate.BeginKern = tbBeginKern.Text;
+            _letterTemplate.ReisInformatie = tbReisInformatie.Text;
+            _letterTemplate.VerdereInformatie = tbVerdereInformatie.Text;
+            _letterTemplate.Afzenders = tbAfzenders.Text;
+            _letterTemplate.Bijlagen = tbBijlagen.Text;
+            _letterTemplate.VoettekstLinks = tbVoettekstLinks.Text;
+            _letterTemplate.VoettekstCenter = tbVoettekstMidden.Text;
+            _letterTemplate.VoettekstRechts = tbVoettekstRechts.Text;
         }
 
         private void textBox_TextChanged(object sender, TextChangedEventArgs e)

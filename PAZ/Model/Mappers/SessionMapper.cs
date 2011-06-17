@@ -81,5 +81,26 @@ namespace PAZMySQL
             this._db.ExecuteCommand(command);
             this._db.CloseConnection();
         }
+
+        public void Save(Planning planning)
+        {
+            this.Save(planning, false);
+        }
+
+        public void Save(Planning planning, bool deleteOld)
+        {
+            if (deleteOld)
+            {
+                this._db.OpenConnection();
+                MySqlCommand command = this._db.CreateCommand();
+                command.CommandText = "DELETE FROM session WHERE 1=1";
+                this._db.ExecuteCommand(command);
+                this._db.CloseConnection();
+            }
+            foreach (Session session in planning.Sessions)
+            {
+                this.Save(session);
+            }
+        }
     }
 }

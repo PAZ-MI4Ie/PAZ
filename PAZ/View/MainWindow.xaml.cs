@@ -1085,7 +1085,7 @@ namespace PAZ
         private bool ZittingGen()
         {
             Planner planner = new Planner();
-            planner.Plan(_controller.PairMapper.FindAll());
+            PAZController.GetInstance().SessionMapper.Save(planner.Plan(_controller.PairMapper.FindAll()), false);//change to true for real life working(will delete all old session data)
             return true;
         }
 

@@ -215,34 +215,39 @@ namespace PAZ.Control
                         document.Add(new iText.Paragraph(" "));
 
                         // Inhoud brief
-                        document.Add(new iText.Paragraph("Geachte heer/mevrouw " + expert.Surname + ",", standardFont));
+                        document.Add(new iText.Paragraph("Geachte heer/mevrouw " + expert.Surname + ",\r\r", standardFont));
 
                         Teacher[] teachers = new Teacher[2];
                         int index = -1;
                         foreach (KeyValuePair<int, Teacher> teacherKeyValuePair in sessionModel.Teachers)
                             teachers[++index] = teacherKeyValuePair.Value;
 
-                        document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph("Hierbij ontvangt u de afstudeerscriptie van onze student " + sessionModel.Pair.Student1.Study + ", " + sessionModel.Pair.Student1.Firstname + " " + sessionModel.Pair.Student1.Surname + " van wie u de afstudeerbespreking zult bijwonen. Begeleidende docenten " + teachers[0].Firstname + " " + teachers[0].Surname + " en " + teachers[1].Firstname + " " + teachers[1].Surname + " zullen bij de zitting aanwezig zijn.", standardFont));
+                        bool isPairInvite = sessionModel.Pair.Student2 != null;
+                        string studentParagraphString = "Hierbij ontvangt u de afstudeerscriptie van onze ";
 
-                        document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + sessionModel.Daytime.Starttime + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, " + letterTemplate.AvansAdres + " te " + letterTemplate.AvansLocatie + ".", standardFont));
+                        if (isPairInvite)
+                            studentParagraphString += "studenten ";
+                        else
+                            studentParagraphString += "student ";
 
-                        document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph(letterTemplate.BeginKern, standardFont));
+                        studentParagraphString += sessionModel.Pair.Student1.Study + ", " + sessionModel.Pair.Student1.Firstname + " " + sessionModel.Pair.Student1.Surname + " ";
 
-                        document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph(letterTemplate.ReisInformatie, standardFont));
+                        if (isPairInvite)
+                            studentParagraphString += "en " + sessionModel.Pair.Student2.Firstname + " " + sessionModel.Pair.Student2.Surname + " ";
 
-                        // Ga verder met de inhoud van het document
-                        document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
-                        document.Add(new iText.Paragraph(letterTemplate.VerdereInformatie, standardFont));
+                        // Inleiding
+                        document.Add(new iText.Paragraph(studentParagraphString + "van wie u de afstudeerbespreking zult bijwonen. Begeleidende docenten " + teachers[0].Firstname + " " + teachers[0].Surname + " en " + teachers[1].Firstname + " " + teachers[1].Surname + " zullen bij de zitting aanwezig zijn.\r\r", standardFont));
 
-                        document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
+                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + sessionModel.Daytime.Starttime + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, " + letterTemplate.AvansAdres + " te " + letterTemplate.AvansLocatie + ".\r\r", standardFont));
+
+                        // Kern van de brief
+                        document.Add(new iText.Paragraph(letterTemplate.BeginKern + "\r\r", standardFont));
+                        document.Add(new iText.Paragraph(letterTemplate.ReisInformatie + "\r\r", standardFont));
+                        document.Add(new iText.Paragraph(letterTemplate.VerdereInformatie + "\r\r", standardFont));
+
+                        // Afsluiting
                         document.Add(new iText.Paragraph("Wij danken u hartelijk voor uw medewerking.", standardFont));
-                        document.Add(new iText.Paragraph("Met vriendelijke groet,", standardFont));
-
-                        document.Add(new iText.Paragraph(" "));  // leegruimte toevoegen
+                        document.Add(new iText.Paragraph("Met vriendelijke groet,\r\r", standardFont));
                         document.Add(new iText.Paragraph(letterTemplate.Afzenders, standardFont));
 
                         // Verander de font style tijdelijk
@@ -253,7 +258,12 @@ namespace PAZ.Control
                         // Verander de font style weer terug
                         standardFont.SetStyle(Font.NORMAL);
 
-                        document.Add(new iText.Paragraph("        Bijlage(n):	" + letterTemplate.Bijlagen, standardFont));
+                        document.Add(new iText.Phrase("", standardFont));
+
+                        iText.Paragraph bijlagenParagraph = new iText.Paragraph("Bijlage(n):      " + letterTemplate.Bijlagen, standardFont);
+                        bijlagenParagraph.FirstLineIndent = -55;
+                        bijlagenParagraph.IndentationLeft = 75;
+                        document.Add(bijlagenParagraph);
 
                         expert.WasChanged = false;
                     }

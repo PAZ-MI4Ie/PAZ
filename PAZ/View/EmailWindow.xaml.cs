@@ -322,7 +322,10 @@ namespace PAZ
                             emailBody += _emailTemplate.Inleiding;
                             emailBody += "</p>";
 
-                            emailBody += "<p>U neemt deel aan de volgende zittingen: <br /> Zitting " + (++zittingNummer);
+                            if(zittingNummer == 0)
+                                emailBody += "<p>U neemt deel aan de volgende zittingen: <br />";
+
+                            emailBody += "Zitting " + (++zittingNummer);
                         }
 
                         emailBody += " is gepland op, " + _sessions[i].Datum + " om " + sessionModel.Daytime.Starttime + ", in lokaal " + sessionModel.Classroom.Room_number + "<br />";

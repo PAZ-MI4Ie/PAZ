@@ -59,10 +59,16 @@ namespace PAZ.View
                         if (removeSessionLabel(other[1], Convert.ToInt32(other[2]), Convert.ToInt32(other[3])))
                         {
                             Session s = Sessionmapper.Find(Convert.ToInt32(other[0]));
-                            Daytime d = new Daytime(new int(),GetSessionDateTime(session),Grid.GetRow(session));
-                            //Daytimemapper.Save(d);
+                            Daytime d = Daytimemapper.Find(GetSessionDate(session), Grid.GetRow(session));
+                            if (d == null)
+                            {
+                                string[] date = other[1].Split('-');
+                                d = new Daytime(0, new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0])), Grid.GetRow(session) + 1);
+                                Daytimemapper.Save(d);
+                            }
                             s.Daytime = d;
-                            s.Classroom = new Classroom(Grid.GetColumn(session), "TEST");//Classroommapper.Find(Grid.GetColumn(session));
+                            Classroom c = Classroommapper.Find(Grid.GetColumn(session) + 1);
+                            s.Classroom = c;
                             addSession(s);
                         }
                     }
@@ -176,7 +182,6 @@ namespace PAZ.View
             DateTime stopDate = DateTime.Parse(ini["DATES"]["enddate"]);
             Brush headerColor = Brushes.LightGray;
             int interval = 1;
-            int columns = 0;
             int rows = 0;
 
             //Firste column color rec
@@ -215,7 +220,6 @@ namespace PAZ.View
                                 width = new GridLength(120);
                             column.Width = width;
                             ColumnDefinitions.Add(column);
-                            columns++;
                         }
                         //making labels
                         Label header = new Label();
@@ -306,8 +310,20 @@ namespace PAZ.View
         {
             foreach (Session session in sessions)
             {
-                addSessionPC(session);
+                addSessionLabel(session);
             }
+        }
+
+        public static void updateCalendar(CalendarView view, Ini.IniFile ini, List<Classroom> classrooms, PAZController controller)
+        {
+            view.emptyCalender();
+            view.createCalendar(ini, classrooms, controller);
+            view.loadAllSessions(controller.SessionMapper.FindAll());
+        }
+
+        private void emptyCalender()
+        {
+            Children.Clear();
         }
 
         void edit_Click(object sender, RoutedEventArgs e)
@@ -337,13 +353,13 @@ namespace PAZ.View
 
         public void addSession(Session session)
         {
-            //Sessionmapper.Save(session);
-            addSessionPC(session);
+            Sessionmapper.Save(session);
+            addSessionLabel(session);
         }
 
-        public void addSessionPC(Session session)
+        public void addSessionLabel(Session session)
         {
-            CustomLabel sessionLabel = dateGrids[session.Daytime.Date.ToShortDateString()].Children[(session.Classroom.Id) + ((session.Daytime.Timeslot) * 8)] as CustomLabel;
+            CustomLabel sessionLabel = dateGrids[session.Daytime.Date.ToShortDateString()].Children[(session.Classroom.Id - 1) + ((session.Daytime.Timeslot - 1) * 8)] as CustomLabel;
             sessionLabel.Id = session.Id;
             string[] students = new string[1];
             string[] teachers = new string[1];
@@ -404,21 +420,6 @@ namespace PAZ.View
                     return pair.Key;
             }
             return null;
-        }
-
-
-
-        public DateTime GetSessionDateTime(CustomLabel session)
-        {
-            foreach (KeyValuePair<string, Grid> pair in dateGrids)
-            {
-                if (pair.Value.Children.Contains(session))
-                {
-                    string[] time = pair.Key.Split('-');
-                    return new DateTime(Convert.ToInt32(time[2]), Convert.ToInt32(time[1]), Convert.ToInt32(time[0]));
-                }
-            }
-            return new DateTime(1,1,1);
         }
 
         public bool removeSession(Session session)

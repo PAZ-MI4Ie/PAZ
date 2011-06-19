@@ -39,6 +39,24 @@ namespace PAZMySQL
             return this.ProcessRow(new Daytime(), Reader);
         }
 
+        public Daytime Find(string date, int timeslot)
+        {
+            string[] d = date.Split('-');
+            date = d[2] + "-" + d[1] + "-" + d[0];
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "SELECT id, date, timeslot FROM daytime WHERE date = ?date AND timeslot = ?timeslot";
+            command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.String)).Value = date;
+            command.Parameters.Add(new MySqlParameter("?timeslot", MySqlDbType.Int32)).Value = timeslot+1;
+            MySqlDataReader Reader = this._db.ExecuteCommand(command);
+            if (Reader.Read())
+            {//Only 1 row
+                this._db.CloseConnection();
+                return this.ProcessRow(new Daytime(), Reader);
+            }
+            return null;
+        }
+
         public List<Daytime> FindAll()
         {
             this._db.OpenConnection();
@@ -53,10 +71,31 @@ namespace PAZMySQL
             this._db.CloseConnection();
             return result;
         }
-
+        
         public void Save(Daytime daytime)
         {
-            // TO DO?
+            Boolean insert = true;
+            if (daytime.Id != 0)
+            {
+                insert = false;
+            }
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            if (insert)
+            {
+                command.CommandText = "INSERT INTO daytime (date, timeslot) VALUES " +
+                "(?date, ?timeslot)";
+            }
+            else
+            {
+                command.CommandText = "UPDATE daytime (date, timeslot) VALUES " +
+                "(?date, ?timeslot) WHERE id = ?id";
+            }
+            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = daytime.Id;
+            command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.Datetime)).Value = daytime.Date;
+            command.Parameters.Add(new MySqlParameter("?timeslot", MySqlDbType.Int32)).Value = daytime.Timeslot;
+            this._db.ExecuteCommand(command);
+            this._db.CloseConnection();
         }
 
         /**

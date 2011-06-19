@@ -235,25 +235,6 @@ namespace PAZ
            
             _classrooms = _controller.ClassroomMapper.FindAll();
             _pairs = _controller.PairMapper.FindAll();
-            //Test CODE
-            _classrooms = new List<Classroom>();
-            Classroom room = new Classroom(1, "OB202");
-            _classrooms.Add(room);
-            room = new Classroom(2, "OB203");
-            _classrooms.Add(room);
-            room = new Classroom(3, "OB204");
-            _classrooms.Add(room);
-            room = new Classroom(4, "OB205");
-            _classrooms.Add(room);
-            room = new Classroom(5, "OC201");
-            _classrooms.Add(room);
-            room = new Classroom(6, "OB201");
-            _classrooms.Add(room);
-            room = new Classroom(7, "OC302");
-            _classrooms.Add(room);
-            room = new Classroom(8, "OC202");
-            _classrooms.Add(room);
-            //END TEST CODE
 
             CalendarView.Sessionmapper = _controller.SessionMapper;
             CalendarView.Pairmapper = _controller.PairMapper;

@@ -33,9 +33,12 @@ namespace PAZMySQL
             command.CommandText = "SELECT id, room_number FROM classroom WHERE id = ?id";
             command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
-            Reader.Read();//Only 1 row
-            this._db.CloseConnection();
-            return this.ProcessRow(new Classroom(), Reader);
+            if (Reader.Read())//Only 1 row
+            {
+                this._db.CloseConnection();
+                return this.ProcessRow(new Classroom(), Reader);
+            }
+            return null;
         }
 
         public List<Classroom> FindAll()
@@ -57,25 +60,11 @@ namespace PAZMySQL
 
         public void Save(Classroom classroom)
         {
-            // TO DO?
-
-			Boolean insert = true;
-			if (classroom.Id != 0)
-			{
-				insert = false;
-			}
-			this._db.OpenConnection();
+            this._db.OpenConnection();
 			MySqlCommand command = this._db.CreateCommand();
-			if (insert)
-			{
-				command.CommandText = "INSERT INTO classroom (id, room_number) VALUES " +
-				"(?id, ?room_number)";
-			}
-			else
-			{
-				command.CommandText = "UPDATE student (room_number) VALUES " +
+            command.CommandText = "UPDATE student (room_number) VALUES " +
 				"(?id) WHERE user_id = ?id";
-			}
+
 			command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = classroom.Id;
 			command.Parameters.Add(new MySqlParameter("?room_number", MySqlDbType.String)).Value = classroom.Room_number.ToString();
 			this._db.ExecuteCommand(command);

@@ -17,10 +17,7 @@ namespace PAZ.View
     {
         //TODO: database data schrijven + verwijderen
         public static Dictionary<string, Grid> dateGrids;
-        public static SessionMapper Sessionmapper { get; set; }
-        public static PairMapper Pairmapper { get; set; }
-        public static DaytimeMapper Daytimemapper { get; set; }
-        public static ClassroomMapper Classroommapper { get; set; }
+        public static PAZController _controller;
         public CalendarView()
             : base()
         {
@@ -55,22 +52,39 @@ namespace PAZ.View
                     if (dataString != null)
                     {
                         string[] other = dataString.Split(';');
-                        string[] users = dataString.Split('\n');
-                        if (removeSessionLabel(other[1], Convert.ToInt32(other[2]), Convert.ToInt32(other[3])))
+                        Session s = _controller.SessionMapper.Find(Convert.ToInt32(other[0]));
+                        Daytime d = _controller.DaytimeMapper.Find(GetSessionDate(session), Grid.GetRow(session));
+                        if (d == null)
                         {
-                            Session s = Sessionmapper.Find(Convert.ToInt32(other[0]));
-                            Daytime d = Daytimemapper.Find(GetSessionDate(session), Grid.GetRow(session));
-                            if (d == null)
-                            {
-                                string[] date = other[1].Split('-');
-                                d = new Daytime(0, new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0])), Grid.GetRow(session) + 1);
-                                Daytimemapper.Save(d);
-                            }
-                            s.Daytime = d;
-                            Classroom c = Classroommapper.Find(Grid.GetColumn(session) + 1);
-                            s.Classroom = c;
-                            addSession(s);
+                            string[] date = other[1].Split('-');
+                            d = new Daytime(0, new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0])), Grid.GetRow(session) + 1);
+                            _controller.DaytimeMapper.Save(d);
                         }
+                        s.Daytime = d;
+                        s.Classroom = _controller.ClassroomMapper.Find(Grid.GetColumn(session) + 1);
+                        addSession(s);
+                        removeSessionLabel(other[1], Convert.ToInt32(other[2]), Convert.ToInt32(other[3]));
+
+                    }
+                }
+                else
+                {
+                    int id = (int)e.Data.GetData("System.Int32");
+                    if (id != null)
+                    {
+                        Session s = new Session();
+                        Daytime d = _controller.DaytimeMapper.Find(GetSessionDate(session), Grid.GetRow(session));
+                        if (d == null)
+                        {
+                            string[] date = GetSessionDate(session).Split('-');
+                            d = new Daytime(0, new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0])), Grid.GetRow(session) + 1);
+                            _controller.DaytimeMapper.Save(d);
+                        }
+                        s.Daytime = d;
+                        s.Classroom = _controller.ClassroomMapper.Find(Grid.GetColumn(session) + 1);
+                        s.Pair = _controller.PairMapper.Find(Convert.ToInt32(id));
+                        addSession(s);
+                        UnPlannedPairs.update(new UnPlannedPairs(), _controller.PairMapper);
                     }
                 }
                 revertCheckAvailability();
@@ -85,7 +99,7 @@ namespace PAZ.View
             List<Blocked_timeslot> blockedSlots = new List<Blocked_timeslot>();
             if (isSession)
             {
-                Session s = Sessionmapper.Find(currentSession.Id);
+                Session s = _controller.SessionMapper.Find(currentSession.Id);
                 foreach (User u in s.Pair.Participants)
                 {
                     foreach (Blocked_timeslot b in u.BlockedTimeslots)
@@ -97,7 +111,7 @@ namespace PAZ.View
             }
             else
             {
-                Pair p = Pairmapper.Find(currentSession.Id);
+                Pair p = _controller.PairMapper.Find(currentSession.Id);
                 foreach (User u in p.Participants)
                 {
                     foreach (Blocked_timeslot b in u.BlockedTimeslots)
@@ -178,6 +192,7 @@ namespace PAZ.View
         
         public void createCalendar(Ini.IniFile ini, List<Classroom> classrooms, PAZController controller)
         {
+            _controller = controller;
             DateTime startDate = DateTime.Parse(ini["DATES"]["startdate"]);
             DateTime stopDate = DateTime.Parse(ini["DATES"]["enddate"]);
             Brush headerColor = Brushes.LightGray;
@@ -336,7 +351,7 @@ namespace PAZ.View
         {
             //Get the label
             CustomLabel sessionLabel = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
-            Session session = Sessionmapper.Find(sessionLabel.Id);
+            Session session = _controller.SessionMapper.Find(sessionLabel.Id);
 
             //TODO: get session and remove from db
             //TODO: remove session from calendar
@@ -353,7 +368,7 @@ namespace PAZ.View
 
         public void addSession(Session session)
         {
-            Sessionmapper.Save(session);
+            _controller.SessionMapper.Save(session);
             addSessionLabel(session);
         }
 
@@ -428,7 +443,7 @@ namespace PAZ.View
             if(succesfull)
             {
                 removeSessionLabel(session);
-                UnPlannedPairs.update(new UnPlannedPairs(),Pairmapper);
+                UnPlannedPairs.update(new UnPlannedPairs(), _controller.PairMapper);
                 return true;
             }
             return false;

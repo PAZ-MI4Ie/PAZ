@@ -63,7 +63,6 @@ namespace PAZMySQL
             {
                 insert = false;
             }
-            this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
             if (insert)
             {
@@ -75,10 +74,11 @@ namespace PAZMySQL
                 command.CommandText = "UPDATE session SET daytime_id = ?daytime_id, classroom_id = ?classroom_id, pair_id = ?pair_id WHERE id = ?id";
             }
 
-            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.String)).Value = session.Id;
+            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = session.Id;
             command.Parameters.Add(new MySqlParameter("?daytime_id", MySqlDbType.Int32)).Value = session.Daytime.Id;
             command.Parameters.Add(new MySqlParameter("?classroom_id", MySqlDbType.Int32)).Value = session.Classroom.Id;
-            command.Parameters.Add(new MySqlParameter("?pair_id", MySqlDbType.String)).Value = session.Pair.ID;
+            command.Parameters.Add(new MySqlParameter("?pair_id", MySqlDbType.Int32)).Value = session.Pair.ID;
+            this._db.OpenConnection();
             this._db.ExecuteCommand(command);
             this._db.CloseConnection();
         }

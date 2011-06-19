@@ -7,7 +7,7 @@ using MySql.Data.MySqlClient;
 
 namespace PAZ.Model.Mappers
 {
-    class BlockedTimeslotMapper : Mapper
+    public class BlockedTimeslotMapper : Mapper
     {
         public BlockedTimeslotMapper(MysqlDb db) : base(db) { }
 

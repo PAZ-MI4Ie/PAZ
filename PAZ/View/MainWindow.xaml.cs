@@ -236,10 +236,7 @@ namespace PAZ
             _classrooms = _controller.ClassroomMapper.FindAll();
             _pairs = _controller.PairMapper.FindAll();
 
-            CalendarView.Sessionmapper = _controller.SessionMapper;
-            CalendarView.Pairmapper = _controller.PairMapper;
-            CalendarView.Daytimemapper = _controller.DaytimeMapper;
-            CalendarView.Classroommapper = _controller.ClassroomMapper;
+
             calendar.createCalendar(_controller.IniReader, _classrooms, _controller);
             calendar.loadAllSessions(tempSessions);
             UnPlannedPairs unPlannedPairs = new UnPlannedPairs();

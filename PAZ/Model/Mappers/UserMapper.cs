@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using MySql.Data.MySqlClient;
 using PAZ.Model;
+using PAZ.Control;
+using PAZ.Model.Mappers;
 
 namespace PAZMySQL
 {
@@ -114,6 +116,18 @@ namespace PAZMySQL
             Reader.Read();
             this._db.CloseConnection();
             user.Id = Reader.GetInt32(0);
+            this._db.OpenConnection();
+            MySqlCommand command3 = this._db.CreateCommand();
+            command3.CommandText = "DELETE FROM blocked_timeslot WHERE user_id = ?user_id";
+            command3.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.Int32)).Value = user.Id;
+            this._db.ExecuteCommand(command3);
+            this._db.CloseConnection();
+            BlockedTimeslotMapper blockedtimeslotmapper = PAZController.GetInstance().BlockedTimeslotMapper;
+            foreach (Blocked_timeslot slot in user.BlockedTimeslots)
+            {
+                slot.User = user;
+                blockedtimeslotmapper.Save(slot);
+            }
         }
 
         /**

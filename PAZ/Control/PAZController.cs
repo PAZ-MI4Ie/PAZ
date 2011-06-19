@@ -14,6 +14,7 @@ namespace PAZ.Control
         public IniFile IniReader { get; private set; }
         public MysqlDb DB { get; private set; }
 
+        public BlockedTimeslotMapper BlockedTimeslotMapper { get; private set; }
         public SessionMapper SessionMapper { get; private set; }
         public UserMapper UserMapper { get; private set; }
         public ClassroomMapper ClassroomMapper { get; private set; }
@@ -52,6 +53,7 @@ namespace PAZ.Control
 
             DB = MysqlDb.GetInstance();
 
+            BlockedTimeslotMapper = new BlockedTimeslotMapper(DB);
             SessionMapper = new SessionMapper(DB);
             UserMapper = new UserMapper(DB);
             ClassroomMapper = new ClassroomMapper(DB);

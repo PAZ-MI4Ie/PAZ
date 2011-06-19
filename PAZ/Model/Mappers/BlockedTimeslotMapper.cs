@@ -33,5 +33,24 @@ namespace PAZ.Model.Mappers
             this._db.CloseConnection();
             return result;
         }
+
+        public void Save(Blocked_timeslot slot)
+        {
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "INSERT INTO blocked_timeslot (user_id, daytime_id, hardblock) VALUES (?user_id, ?daytime_id, ?hardblock)";
+            command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.Int32)).Value = slot.User.Id;
+            command.Parameters.Add(new MySqlParameter("?daytime_id", MySqlDbType.Int32)).Value = slot.Daytime.Id;
+            if (slot.Hardblock)
+            {
+                command.Parameters.Add(new MySqlParameter("?hardblock", MySqlDbType.Int16)).Value = 1;
+            }
+            else
+            {
+                command.Parameters.Add(new MySqlParameter("?hardblock", MySqlDbType.Int16)).Value = 0;
+            }
+            this._db.ExecuteCommand(command);
+            this._db.CloseConnection();
+        }
     }
 }

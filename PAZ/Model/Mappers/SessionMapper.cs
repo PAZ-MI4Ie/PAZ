@@ -72,8 +72,7 @@ namespace PAZMySQL
             }
             else
             {
-                command.CommandText = "UPDATE session (daytime_id, classroom_id, pair_id) VALUES " +
-                "(?daytime_id, ?classroom_id, ?pair_id) WHERE id = ?id";
+                command.CommandText = "UPDATE session SET daytime_id = ?daytime_id, classroom_id = ?classroom_id, pair_id = ?pair_id WHERE id = ?id";
             }
 
             command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.String)).Value = session.Id;

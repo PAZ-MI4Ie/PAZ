@@ -331,6 +331,7 @@ namespace PAZ.View
 
         public static void updateCalendar(CalendarView view, Ini.IniFile ini, List<Classroom> classrooms, PAZController controller)
         {
+            dateGrids.Clear();
             view.emptyCalender();
             view.createCalendar(ini, classrooms, controller);
             view.loadAllSessions(controller.SessionMapper.FindAll());
@@ -351,19 +352,9 @@ namespace PAZ.View
         {
             //Get the label
             CustomLabel sessionLabel = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
-            Session session = _controller.SessionMapper.Find(sessionLabel.Id);
-
-            //TODO: get session and remove from db
-            //TODO: remove session from calendar
-            bool removed = removeSession(session);
-            if (removed)
-            {
-                MessageBox.Show("De zitting is succesvol verwijderd");
-            }
-            else
-            {
-                MessageBox.Show("Er is iets mis gegaan met het verwijderen van de zitting", "Foutmelding", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            _controller.SessionMapper.Delete(sessionLabel.Id);
+            MessageBox.Show("De zitting is succesvol verwijderd");
+            updateCalendar(this, _controller.IniReader, _controller.ClassroomMapper.FindAll(), _controller);
         }
 
         public void addSession(Session session)

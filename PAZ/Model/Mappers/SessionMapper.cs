@@ -103,5 +103,15 @@ namespace PAZMySQL
                 this.Save(session);
             }
         }
+
+        public void Delete(int id)
+        {
+            this._db.OpenConnection();
+                MySqlCommand command = this._db.CreateCommand();
+                command.CommandText = "DELETE FROM session WHERE id = ?id";
+                command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
+                this._db.ExecuteCommand(command);
+                this._db.CloseConnection();
+        }
     }
 }

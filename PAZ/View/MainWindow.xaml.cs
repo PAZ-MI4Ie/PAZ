@@ -1050,10 +1050,14 @@ namespace PAZ
 
         private void buttonZittingenGenereren_Click(object sender, RoutedEventArgs e)
         {
-            
-            //@MarkM: Schermpje dat ie bezig is laten zien aub
-            // editted by MarkM
-            StartWork();
+            switch (MessageBox.Show("Weet u zeker dat u opnieuw de planning wilt genereren? Dit verwijdert de datum uit ALLE tot nu toe ingeplande sessies.", "Ja of Nee", MessageBoxButton.YesNo, MessageBoxImage.Warning)) {
+                case MessageBoxResult.Yes:
+                    StartWork();
+                    break;
+                case MessageBoxResult.No:
+                    //doe niks
+                    break;
+            }
             //Planner planner = new Planner();
             //planner.Plan(_controller.PairMapper.FindAll());
             

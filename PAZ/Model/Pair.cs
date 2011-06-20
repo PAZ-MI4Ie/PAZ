@@ -125,5 +125,17 @@ namespace PAZ.Model
             }
             return score;
         }
+
+        public bool HasExpert()
+        {
+            foreach (User user in this.Participants)
+            {
+                if (user is Expert)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

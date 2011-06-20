@@ -26,6 +26,51 @@ namespace PAZ.Model.Mappers
             return pair;
         }
 
+        public void Save(Pair pair)
+        {
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            if (pair.ID != 0)
+            {
+                command.CommandText = "UPDATE pair SET number_of_guests=?number_of_guests, student1=?student1, student2=?student2 WHERE id = ?id";
+                command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = pair.ID;
+            }
+            else
+            {
+                command.CommandText = "INSERT INTO pair (number_of_guests, student1, student2) VALUES " +
+                "(?number_of_guests, ?student1, ?student2)";
+            }
+            command.Parameters.Add(new MySqlParameter("?number_of_guests", MySqlDbType.Int32)).Value = pair.Number_of_guests;
+            command.Parameters.Add(new MySqlParameter("?student1", MySqlDbType.Int32)).Value = pair.Student1_id;
+            command.Parameters.Add(new MySqlParameter("?student2", MySqlDbType.Int32)).Value = pair.Student2_id;
+            this._db.ExecuteCommand(command);
+            this._db.CloseConnection();
+            this._db.OpenConnection();
+            MySqlCommand command2 = this._db.CreateCommand();
+            command2.CommandText = "SELECT LAST_INSERT_ID()";
+            MySqlDataReader Reader = this._db.ExecuteCommand(command2);
+            Reader.Read();
+            this._db.CloseConnection();
+            pair.ID = Reader.GetInt32(0);
+
+            this._db.OpenConnection();
+            MySqlCommand command3 = this._db.CreateCommand();
+            command3.CommandText = "DELETE FROM pair_attachment WHERE pair_id = ?pair_id";
+            command3.Parameters.Add(new MySqlParameter("?pair_id", MySqlDbType.Int32)).Value = pair.ID;
+            this._db.ExecuteCommand(command3);
+            this._db.CloseConnection();
+            foreach (User attachment in pair.Attachments)
+            {
+                this._db.OpenConnection();
+                MySqlCommand command4 = this._db.CreateCommand();
+                command4.CommandText = "INSERT INTO pair_attachment (user_id, pair_id) VALUES (?user_id, ?pair_id)";
+                command4.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.Int32)).Value = attachment.Id;
+                command4.Parameters.Add(new MySqlParameter("?pair_id", MySqlDbType.Int32)).Value = pair.ID;
+                this._db.ExecuteCommand(command4);
+                this._db.CloseConnection();
+            }
+        }
+
         public Pair Find(int id)
         {
             this._db.OpenConnection();

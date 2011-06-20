@@ -59,16 +59,6 @@ namespace PAZ
 
             _teachers = _controller.TeacherMapper.FindAll();
             _students = _controller.StudentMapper.FindAll();
-
-            Student verlept = new Student();
-            verlept.Firstname = "Henk";
-            verlept.Surname = "de Vries";
-            verlept.Study = "Bierkunde";
-            verlept.Studentnumber = 53290523;
-            verlept.Username = "hdevries";
-            verlept.Status = "accepted";
-            verlept.Email = "hdevries@avans.nl";
-            //studentmapper.Save(verlept);
             //END OF TEST CODE
 
             #region test shit
@@ -1067,7 +1057,7 @@ namespace PAZ
         private bool ZittingGen()
         {
             Planner planner = new Planner();
-            PAZController.GetInstance().SessionMapper.Save(planner.Plan(_controller.PairMapper.FindAll()), false);//change to true for real life working(will delete all old session data)
+            PAZController.GetInstance().SessionMapper.Save(planner.Plan(_controller.PairMapper.FindAll()), true);//change to false to not delete old data
             return true;
         }
 
@@ -1092,9 +1082,9 @@ namespace PAZ
             {
 
                 MessageBox.Show("Zittingen zijn gegenereerd.", "Actie succesvol"); 
-
+                
                 /*
-                 *  HIER IETS DOEN ALS HET SUCCESVOL IS
+                 *  @CPTJEROEN/LUNITARI: HIER IETS DOEN ALS HET SUCCESVOL IS
                  */
             }
         }

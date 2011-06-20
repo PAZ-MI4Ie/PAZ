@@ -17,12 +17,33 @@ namespace PAZ.Control
             Random r = new Random();
             Planning result = new Planning();
 
-            List<Classroom> classrooms = new ClassroomMapper(MysqlDb.GetInstance()).FindAll();
-            List<Daytime> daytimes = new DaytimeMapper(MysqlDb.GetInstance()).FindAll();
+            List<Classroom> classrooms = PAZController.GetInstance().ClassroomMapper.FindAll();
+            List<Daytime> daytimes = PAZController.GetInstance().DaytimeMapper.FindAll();
             Dictionary<Daytime, List<Classroom>> available = new Dictionary<Daytime,List<Classroom>>();
+            Dictionary<Daytime, List<Expert>> availableExperts = new Dictionary<Daytime, List<Expert>>();
+
+            List<Expert> allExperts = PAZController.GetInstance().ExpertMapper.FindAll();
             foreach (Daytime daytime in daytimes)
             {
                 available.Add(daytime, new List<Classroom>(classrooms));//Clone :)
+                List<Expert> expertsToAdd = new List<Expert>();
+                foreach (Expert expert in allExperts)
+                {
+                    bool add = true;
+                    foreach (Blocked_timeslot bs in expert.BlockedTimeslots)
+                    {
+                        if (bs.Hardblock && bs.Daytime_id == daytime.Id)
+                        {
+                            add = false;
+                            break;
+                        }
+                    }
+                    if (add)
+                    {
+                        expertsToAdd.Add(expert);
+                    }
+                }
+                availableExperts.Add(daytime, expertsToAdd);
             }
 
             foreach (Pair pair in pairs)
@@ -41,6 +62,18 @@ namespace PAZ.Control
                 int classRoomI = r.Next(0, available.ElementAt(daytimeI).Value.Count);
                 session.Classroom = available.ElementAt(daytimeI).Value.ElementAt(classRoomI);
                 available[session.Daytime].RemoveAt(classRoomI);
+
+                if (!session.Pair.HasExpert())
+                {
+                    List<Expert> availableThisSlot = availableExperts.ElementAt(daytimeI).Value;
+                    if (availableThisSlot.Count > 0)
+                    {
+                        session.Pair.Attachments.Add(availableThisSlot.ElementAt(0));
+                        availableThisSlot.RemoveAt(0);
+                        PAZController.GetInstance().PairMapper.Save(session.Pair);
+                    }
+                }
+
                 result.Sessions.Add(session);
             }
             if (result.GetScore() == -1)

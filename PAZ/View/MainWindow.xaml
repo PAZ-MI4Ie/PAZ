@@ -67,7 +67,7 @@
                     </GroupBox>
                     
                     <!-- groupboxes, bij default hidden-->
-                    <GroupBox Header="Student gegevens" Height="450" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxGebruikerGegevens" VerticalAlignment="Top" Width="757" Visibility="Hidden">
+                    <GroupBox Header="Student gegevens" Height="450" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxGebruikerGegevens" VerticalAlignment="Top" Width="757" Visibility="Hidden" IsVisibleChanged="studentToevoegenVisible">
                         <Grid Height="376" Visibility="Visible">
                             <Label Content="Studentennummer" Height="28" HorizontalAlignment="Left" Margin="24,19,0,0" Name="labelStudentenNummer" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,21,0,0" Name="textBoxStudentennummer" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
@@ -169,7 +169,7 @@
 
                     <!-- DOCENT -->
                     <!-- groupboxes, bij default hidden-->
-                    <GroupBox Header="Docent gegevens" Height="397" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxLeraarGegevens" VerticalAlignment="Top" Width="757" Visibility="Hidden">
+                    <GroupBox Header="Docent gegevens" Height="397" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxLeraarGegevens" VerticalAlignment="Top" Width="757" Visibility="Hidden" IsVisibleChanged="docentToevoegenVisible">
                         <Grid Height="376" Visibility="Visible">
                             <Label Content="Voornaam" Height="28" HorizontalAlignment="Left" Margin="24,19,0,0" Name="labelLeraarVoornaam" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,21,0,0" Name="textBoxLeraarVoornaam" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
@@ -177,20 +177,20 @@
                             <Label Content="Achternaam" Height="28" HorizontalAlignment="Left" Margin="24,59,0,0" Name="labelLeraarAchternaam" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,61,0,0" Name="textLeraarAchternaam" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
-                            <Label Content="Geblokkeerde dag" Height="28" HorizontalAlignment="Left" Margin="24,99,0,0" Name="labelBlockedDay1" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
-                            <DatePicker Height="23" HorizontalAlignment="Left" Margin="293,99,0,0" Name="datePickerBlockedDay1" VerticalAlignment="Top" Width="246" Foreground="#FF595959" SelectedDateFormat="Short" />
+                            <Label Content="E-mail" Height="28" HorizontalAlignment="Left" Margin="24,99,0,0" Name="EmailLeraar" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,99,0,0" Name="EmailLeraar1" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
+                            <Label Content="Spreiding" Height="28" HorizontalAlignment="Left" Margin="24,139,0,0" Name="Spreiding" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <RadioButton GroupName="teacher_sessionspread" Height="23" Content="Verspreid" Margin="93,139,0,0" Name="sessionVerspreid" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
+                            <RadioButton GroupName="teacher_sessionspread" Height="23" Content="Dicht bij elkaar" Margin="390,139,0,0" Name="sessionDichtBijElkaar" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
 
-                            <Label Content="E-mail" Height="28" HorizontalAlignment="Left" Margin="24,142,0,0" Name="EmailLeraar" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
-                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,149,0,0" Name="EmailLeraar1" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+                            <Label Content="Geblokkeerde dag" Height="28" HorizontalAlignment="Left" Margin="24,179,0,0" Name="labelBlockedDayTeacher" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <ListBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="246" Height="50" Name="blockedDayTimesTeacher" Margin="293,179,0,0" SelectionMode="Single">
+                            </ListBox>
 
-                            <Label Content="Spreiding" Height="28" HorizontalAlignment="Left" Margin="24,189,0,0" Name="Spreiding" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
-                            <RadioButton GroupName="teacher_sessionspread" Height="23" Content="Verspreid" Margin="93,189,0,0" Name="sessionVerspreid" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
-                            <RadioButton GroupName="teacher_sessionspread" Height="23" Content="Dicht bij elkaar" Margin="390,189,0,0" Name="sessionDichtBijElkaar" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
-                            
-                            <Label Content="Type Blokkade" Height="28" HorizontalAlignment="Left" Margin="24,240,0,0" Name="TypeBlock" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
-                            <RadioButton GroupName="teacher_blocktype" Height="23" Content="Zacht" Margin="93,240,0,0" Name="teacher_blocktype_soft" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
-                            <RadioButton GroupName="teacher_blocktype" Height="23" Content="Hard" Margin="390,240,0,0" Name="teacher_blocktype_hard" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
+                            <Label Content="Liever niet dagen" Height="28" HorizontalAlignment="Left" Margin="24,239,0,0" Name="labelsoftBlockedDay" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <ListBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="246" Height="50" Name="softblockedDayTimesDocent" Margin="293,239,0,0">
+                            </ListBox>
 
                             <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,301,0,0" Name="buttonLeraar" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onTeacherAddClicked" />
                         

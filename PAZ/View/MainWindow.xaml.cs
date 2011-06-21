@@ -35,6 +35,7 @@ namespace PAZ
         private List<Classroom> _classrooms;
 		private List<TextBox> _classroomTextboxes;
         private List<Pair> _pairs;
+		private List<Expert> _experts;
 
         private PAZController _controller;
 
@@ -227,6 +228,7 @@ namespace PAZ
             _classrooms = _controller.ClassroomMapper.FindAll();
             _pairs = _controller.PairMapper.FindAll();
 
+			_experts = _controller.ExpertMapper.FindAll();
 
             calendar.createCalendar(_controller.IniReader, _classrooms, _controller);
             calendar.loadAllSessions(tempSessions);
@@ -236,8 +238,8 @@ namespace PAZ
             tabCalender.Focus();
 
 			_classroomTextboxes = new List<TextBox>();
-
 			getAlleLokalen();
+
 
         }
 
@@ -312,13 +314,71 @@ namespace PAZ
 
 				switch (comboBoxSelecteerWijziging.SelectedIndex)
 				{
-					case 1: groupBoxWijzigLokaalGegevens.Visibility = Visibility.Visible; break;
-					case 2: groupBoxWijzigStudent.Visibility = Visibility.Visible; break;
-					case 3: groupBoxWijzigBegeleiderGegevens.Visibility = Visibility.Visible; break;
-					case 4: groupBoxWijzigExternGegevens.Visibility = Visibility.Visible; break;
-					case 5: groupBoxLeraarGegevenswijzig.Visibility = Visibility.Visible; break;
+					case 0: comboBoxSelecteerWijzigPersoon.Visibility = Visibility.Hidden; break;
+					case 1: groupBoxWijzigLokaalGegevens.Visibility = Visibility.Visible;
+							comboBoxSelecteerWijzigPersoon.Visibility = Visibility.Hidden;
+							break;
+					case 2: showAndFillStudentBox(); break;
+					case 3: showAndFillExpertBox(); break;
+					case 4: showAndFillExpertBox(); break;
+					case 5: showAndFillDocentBox();	break;
 				}
 			}
+		}
+
+		private void comboBoxSelecteerWijzigPersoon_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (comboBoxSelecteerType.SelectedIndex > 0)
+			{
+				switch (comboBoxSelecteerType.SelectedIndex)
+				{
+					case 2: getPersoon("student"); break;
+					case 3: getPersoon("expert"); break;
+					case 4: getPersoon("expert"); break;
+					case 5: getPersoon("teacher"); break;
+				}
+			}
+		}
+
+		private void getPersoon(String type)
+		{
+			// laat juiste velden van geselecteerde persoon zien
+		}
+
+		private void showAndFillStudentBox()
+		{
+			comboBoxSelecteerWijzigPersoon.Items.Clear();
+			comboBoxSelecteerWijzigPersoon.Items.Add("Selecteer een persoon");
+			comboBoxSelecteerWijzigPersoon.SelectedIndex = 0;
+			for (int i = 0; i < _students.Count; i++)
+			{
+				comboBoxSelecteerWijzigPersoon.Items.Add(_students[i].Firstname + " " + _students[i].Surname + " - " + _students[i].Studentnumber);
+			}
+			comboBoxSelecteerWijzigPersoon.Visibility = Visibility.Visible;
+		}
+
+		private void showAndFillDocentBox()
+		{
+			comboBoxSelecteerWijzigPersoon.Items.Clear();
+			comboBoxSelecteerWijzigPersoon.Items.Add("Selecteer een persoon");
+			comboBoxSelecteerWijzigPersoon.SelectedIndex = 0;
+			for (int i = 0; i < _teachers.Count; i++)
+			{
+				comboBoxSelecteerWijzigPersoon.Items.Add(_teachers[i].Firstname + " " + _teachers[i].Surname);
+			}
+			comboBoxSelecteerWijzigPersoon.Visibility = Visibility.Visible;
+		}
+
+		private void showAndFillExpertBox()
+		{
+			comboBoxSelecteerWijzigPersoon.Items.Clear();
+			comboBoxSelecteerWijzigPersoon.Items.Add("Selecteer een persoon");
+			comboBoxSelecteerWijzigPersoon.SelectedIndex = 0;
+			for (int i = 0; i < _experts.Count; i++)
+			{
+				comboBoxSelecteerWijzigPersoon.Items.Add(_experts[i].Firstname + " " + _experts[i].Surname);
+			}
+			comboBoxSelecteerWijzigPersoon.Visibility = Visibility.Visible;
 		}
 
 		/*

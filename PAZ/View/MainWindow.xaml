@@ -211,13 +211,17 @@
                 <Grid Name="GridWijzigen">
                     <GroupBox Header="Selecteer wijziging" Height="82" Margin="10,2,5,0" Name="groupBoxWijzig" VerticalAlignment="Top">
                     <Grid>
-                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="490,17,0,0" Name="comboBoxSelecteerWijziging" Background="#FFEFEFEF" Foreground="#FF595959" VerticalAlignment="Top" Width="246" SelectedIndex="0" SelectionChanged="comboBoxSelecteerWijziging_SelectionChanged">
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="289,17,0,0" Name="comboBoxSelecteerWijziging" Background="#FFEFEFEF" Foreground="#FF595959" VerticalAlignment="Top" Width="246" SelectedIndex="0" SelectionChanged="comboBoxSelecteerWijziging_SelectionChanged">
                                 <ComboBoxItem Content="Selecteer een actie" />
                                 <ComboBoxItem Content="Lokaal" />
                                 <ComboBoxItem Content="Student" />
                                 <ComboBoxItem Content="Bedrijfsbegeleider" />
                                 <ComboBoxItem Content="Externe Deskundige" />
                                 <ComboBoxItem Content="Docent" />
+                            </ComboBox>
+
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="560,17,0,0"  Visibility="Hidden" Name="comboBoxSelecteerWijzigPersoon" Background="#FFEFEFEF" Foreground="#FF595959" VerticalAlignment="Top" Width="180" SelectedIndex="0" SelectionChanged="comboBoxSelecteerWijzigPersoon_SelectionChanged">
+                                <ComboBoxItem Content="Selecteer een persoon" />
                             </ComboBox>
                             <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,17,0,0" Name="textBlockWijzig" Text="Selecteer de type actie wat u wilt wijzigen." VerticalAlignment="Top" Width="247" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
                          </Grid>

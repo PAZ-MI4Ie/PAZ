@@ -51,7 +51,7 @@ namespace PAZ.Model
         {
             get
             {
-                if(_attachments == null)
+                if (_attachments == null)
                 {
                     _attachments = new List<User>();
                     foreach (KeyValuePair<int, string> pair in (new PairMapper(MysqlDb.GetInstance())).FindAttachments(this.ID))
@@ -86,15 +86,15 @@ namespace PAZ.Model
             }
         }
 
-		public Pair() { }
+        public Pair() { }
 
         public Pair(int id, Student student1, Student student2, int number_of_guests)
-		{
-			ID = id;
-			Student1 = student1;
-			Student2 = student2;
-			Number_of_guests = number_of_guests;
-		}
+        {
+            ID = id;
+            Student1 = student1;
+            Student2 = student2;
+            Number_of_guests = number_of_guests;
+        }
 
         public int ScoreAt(Daytime daytime)
         {
@@ -129,6 +129,18 @@ namespace PAZ.Model
         public override string ToString()
         {
             return Student1.Firstname + " " + Student1.Surname + ", " + Student2.Firstname + " " + Student2.Surname;
+        }
+
+        public bool HasExpert()
+        {
+            foreach (User user in this.Participants)
+            {
+                if (user is Expert)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

@@ -59,16 +59,6 @@ namespace PAZ
 
             _teachers = _controller.TeacherMapper.FindAll();
             _students = _controller.StudentMapper.FindAll();
-
-            Student verlept = new Student();
-            verlept.Firstname = "Henk";
-            verlept.Surname = "de Vries";
-            verlept.Study = "Bierkunde";
-            verlept.Studentnumber = 53290523;
-            verlept.Username = "hdevries";
-            verlept.Status = "accepted";
-            verlept.Email = "hdevries@avans.nl";
-            //studentmapper.Save(verlept);
             //END OF TEST CODE
 
             #region test shit
@@ -317,7 +307,7 @@ namespace PAZ
 
         private void textboxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (comboBoxSearch.SelectedIndex > 1)
+            if (comboBoxSearch.SelectedIndex > 0)
             {
                 Sessions.Filter = delegate(object item)
                 {
@@ -326,7 +316,7 @@ namespace PAZ
                     switch (comboBoxSearch.SelectedIndex)
                     {
                         case 1: _match = ((SessionRow)(item)).Datum.ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 2: _match = ((SessionRow)(item)).Timeslot.ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 2: _match = ((SessionRow)(item)).Tijd.ToString().Contains(textboxSearch.Text.ToLower()); break;
                         case 3: _match = ((SessionRow)(item)).Lokaal.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
                         case 4: _match = ((SessionRow)(item)).Studenten.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
                         case 5: _match = ((SessionRow)(item)).Docenten.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
@@ -1063,10 +1053,14 @@ namespace PAZ
 
         private void buttonZittingenGenereren_Click(object sender, RoutedEventArgs e)
         {
-            
-            //@MarkM: Schermpje dat ie bezig is laten zien aub
-            // editted by MarkM
-            StartWork();
+            switch (MessageBox.Show("Weet u zeker dat u opnieuw de planning wilt genereren? Dit verwijdert de datum uit ALLE tot nu toe ingeplande sessies.", "Ja of Nee", MessageBoxButton.YesNo, MessageBoxImage.Warning)) {
+                case MessageBoxResult.Yes:
+                    StartWork();
+                    break;
+                case MessageBoxResult.No:
+                    //doe niks
+                    break;
+            }
             //Planner planner = new Planner();
             //planner.Plan(_controller.PairMapper.FindAll());
             
@@ -1076,7 +1070,7 @@ namespace PAZ
         private bool ZittingGen()
         {
             Planner planner = new Planner();
-            PAZController.GetInstance().SessionMapper.Save(planner.Plan(_controller.PairMapper.FindAll()), false);//change to true for real life working(will delete all old session data)
+            PAZController.GetInstance().SessionMapper.Save(planner.Plan(_controller.PairMapper.FindAll()), true);//change to false to not delete old data
             return true;
         }
 
@@ -1104,9 +1098,9 @@ namespace PAZ
                 Sessions.Refresh();
                 updateOverzicht();
                 MessageBox.Show("Zittingen zijn gegenereerd.", "Actie succesvol"); 
-
+                
                 /*
-                 *  HIER IETS DOEN ALS HET SUCCESVOL IS
+                 *  @CPTJEROEN/LUNITARI: HIER IETS DOEN ALS HET SUCCESVOL IS
                  */
                 
             }

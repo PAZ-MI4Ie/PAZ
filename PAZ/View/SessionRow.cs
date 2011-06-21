@@ -15,12 +15,12 @@ namespace PAZ.View
                 this.Datum = session.Daytime.Date.Day.ToString()
                     + "-" + session.Daytime.Date.Month.ToString()
                     + "-" + session.Daytime.Date.Year.ToString();
-                this.Timeslot = session.Daytime.Timeslot;
+                this.Tijd = session.Daytime.StartEndTime;
             }
             else
             {
                 this.Datum = "Onbekend";
-                this.Timeslot = 0;
+                this.Tijd = "Onbekend";
             }
             if (session.Classroom != null)
             {
@@ -59,7 +59,7 @@ namespace PAZ.View
 
             _dataList = new List<Object>();
             _dataList.Add(Datum);
-            _dataList.Add(Timeslot);
+            _dataList.Add(Tijd);
             _dataList.Add(Lokaal);
             _dataList.Add(Studenten);
             _dataList.Add(Docenten);
@@ -81,7 +81,7 @@ namespace PAZ.View
         }
 
         public string Datum { get; set; }
-        public int Timeslot { get; set; }
+        public string Tijd { get; set; }
         public string Lokaal { get; set; }
         public string Studenten { get; set; }
         public string Docenten { get; set; }

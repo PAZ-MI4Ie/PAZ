@@ -47,7 +47,7 @@ namespace PAZ.Control
                 document.Open();
 
                 // Een titel maken
-                iText.Paragraph titel = new iText.Paragraph("Het PAZ-rooster", FontFactory.GetFont("Arial", 26, Font.BOLDITALIC));
+                iText.Paragraph titel = new iText.Paragraph("Het afstudeerzittingen rooster", FontFactory.GetFont("Arial", 26, Font.BOLDITALIC));
                 titel.Alignment = 1; // titel centeren
 
                 // elementen toevoegen aan het document

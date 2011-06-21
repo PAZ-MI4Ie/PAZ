@@ -85,7 +85,6 @@
     <Compile Include="Model\Classroom.cs" />
     <Compile Include="Model\Daytime.cs" />
     <Compile Include="Model\Expert.cs" />
-    <Compile Include="Model\login.cs" />
     <Compile Include="Model\Mappers\StudentMapper.cs" />
     <Compile Include="Model\Mappers\TeacherMapper.cs" />
     <Compile Include="Model\Mappers\TimeslotMapper.cs" />
@@ -118,7 +117,6 @@
     <Compile Include="View\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\Zitting.cs" />
     <Compile Include="View\SessionWindow.xaml.cs">
       <DependentUpon>SessionWindow.xaml</DependentUpon>
     </Compile>

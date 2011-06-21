@@ -15,7 +15,7 @@ namespace PAZ.Model
 		public string Telephone { get; set; }
         
         private List<Pair> _pairs;
-        public List<Pair> Pairs//UNTESTED!!!!!!!!!!!
+        public List<Pair> Pairs
         {
             get
             {
@@ -43,7 +43,6 @@ namespace PAZ.Model
 			this.User_type = "expert";
 
             // Placeholders voor brief aan experts
-            // TO DO: Regel dit een keer plz
             this.Company = "<bedrijf>";
             this.Address = "<adres>";
             this.Postcode = "<pc / ";

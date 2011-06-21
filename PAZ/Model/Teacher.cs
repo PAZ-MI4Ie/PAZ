@@ -13,7 +13,7 @@ namespace PAZ.Model
 		public session_spread Session_spread { get; set; }
 
         private List<Pair> _pairs;
-        public List<Pair> Pairs//UNTESTED!!!!!!!!!!!
+        public List<Pair> Pairs
         {
             get
             {

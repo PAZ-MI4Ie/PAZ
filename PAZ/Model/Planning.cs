@@ -5,9 +5,6 @@ using System.Text;
 
 namespace PAZ.Model
 {
-    /* 
-     * TODO: alles
-     */
     public class Planning
     {
         private List<Session> _sessions;

@@ -236,14 +236,15 @@
                             <Label Content="Achternaam" Height="28" HorizontalAlignment="Left" Margin="24,99,0,0" Name="labelAchternaamwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,101,0,0" Name="textBoxAchternaamwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
-                            <Label Content="Geblokkeerde dag" Height="28" HorizontalAlignment="Left" Margin="24,139,0,0" Name="labelBlockedDaywijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
-                            <DatePicker Height="23" HorizontalAlignment="Left" Margin="293,141,0,0" Name="datePickerBlockedDaywijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959" SelectedDateFormat="Short" />
-
+                            <Label Content="Geblokkeerde dag" Height="28" HorizontalAlignment="Left" Margin="24,219,0,0" Name="labelBlockedDayWijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <ListBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="246" Height="50" Name="blockedDayTimesWijzig" Margin="293,209,0,0" SelectionMode="Single">
+                            </ListBox>
+                            
                             <Label Content="Opleiding" Height="28" HorizontalAlignment="Left" Margin="24,179,0,0" Name="labelStudy1wijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,179,0,0" Name="textBoxStudywijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
-                            <Label Content="E-mail" Height="28" HorizontalAlignment="Left" Margin="24,259,0,0" Name="EmailLeerlingwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
-                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,261,0,0" Name="EmailLeering1wijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+                            <Label Content="E-mail" Height="28" HorizontalAlignment="Left" Margin="24,139,0,0" Name="EmailLeerlingwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,139,0,0" Name="EmailLeering1wijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
                             <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,301,0,0" Name="buttonGebruikerGegevenswijzig" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onStudentAddClicked" />
                         </Grid>

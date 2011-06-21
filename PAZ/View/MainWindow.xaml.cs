@@ -353,9 +353,9 @@ namespace PAZ
 
 		private void comboBoxSelecteerWijzigPersoon_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			if (comboBoxSelecteerType.SelectedIndex > 0)
+			if (comboBoxSelecteerWijziging.SelectedIndex > 0)
 			{
-				switch (comboBoxSelecteerType.SelectedIndex)
+				switch (comboBoxSelecteerWijziging.SelectedIndex)
 				{
 					case 2: getPersoon("student"); break;
 					case 3: getPersoon("expert"); break;
@@ -368,6 +368,34 @@ namespace PAZ
 		private void getPersoon(String type)
 		{
 			// laat juiste velden van geselecteerde persoon zien
+			if (comboBoxSelecteerWijzigPersoon.SelectedIndex > 0)
+			{
+				String identifier = comboBoxSelecteerWijzigPersoon.SelectedItem.ToString();
+				if(identifier != "" && identifier != "Selecteer een persoon")
+				{
+					if (type == "student")
+					{
+						String[] nr = identifier.Split('-');
+						nr[1].ToString().Trim();
+
+						for (int i = 0; i < _students.Count; i++)
+						{
+							if (_students[i].Studentnumber == Convert.ToInt32(nr[1]))
+							{
+								Student student = _students[i];
+								groupBoxWijzigStudent.Visibility = Visibility.Visible;
+								textBoxStudentennummerwijzig.Text = student.Studentnumber.ToString();
+								textBoxStudywijzig.Text = student.Study;
+								textBoxVoornaamwijzig.Text = student.Firstname;
+								textBoxAchternaamwijzig.Text = student.Surname;
+								EmailLeering1wijzig.Text = student.Email;
+								//blockedDayTimesWijzig.Items.Add = student.BlockedTimeslots;
+								break;
+							}
+						}
+					}
+				}
+			}
 		}
 
 		private void showAndFillStudentBox()

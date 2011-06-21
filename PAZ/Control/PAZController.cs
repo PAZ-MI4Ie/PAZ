@@ -122,6 +122,12 @@ namespace PAZ.Control
             LetterTemplateMapper.Save(updatedTemplate);
         }
 
+        public void KoppelenWindowSaveClicked(List<Pair> pairsToSave)
+        {
+            foreach (Pair pair in pairsToSave)
+                PairMapper.Save(pair);
+        }
+
         public void VerwijderGegegevensClicked()
         {
             DeleteDataWindow deleteDataWindow = new DeleteDataWindow();

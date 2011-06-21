@@ -31,7 +31,6 @@ namespace PAZ.Control
 
         /**
          * Dit maakt de opzet voor het overzicht PDF, het werkelijke rooster wordt gemaakt in een aparte functie.
-         * Auteur: Gökhan en Yorg 
          */
         public void CreateOverviewPDF(String filename)
         {
@@ -85,7 +84,6 @@ namespace PAZ.Control
         /**
          * Maakt het rooster in een tabel vorm
          * Return: De gemaakte tabel
-         * Auteur: Gökhan en Yorg
         */
         private PdfPTable MakeRoster()
         {
@@ -139,7 +137,6 @@ namespace PAZ.Control
 
         /**
          * Dit maakt de brieven om te versturen naar de experts in zijn geheel en zet ze in een PDF document
-         * Auteur: Yorg 
          */
         public void CreateLetterPDF(String filename, Dictionary<int, Expert> receivers, LetterTemplate letterTemplate)
         {
@@ -290,7 +287,6 @@ namespace PAZ.Control
         /**
          * Dit maakt de contact informatie tabel zoals te zien is bovenaan de brief bij de adressering
          * Return: De gemaakte tabel
-         * Auteur: Yorg 
          */
         private PdfPTable MakeContactInformationTable(LetterTemplate letterTemplate)
         {
@@ -345,7 +341,6 @@ namespace PAZ.Control
          * @input: font het font wat gebruikt wordt in de cell
          * @input: rightJustified waar als de text rechts gecentreerd moet staan, anders false
          * Return: De gemaakte cell
-         * Auteur: Yorg 
          */
         private static PdfPCell MakeTableCell(string text, Font font, bool rightJustified = false)
         {
@@ -358,7 +353,6 @@ namespace PAZ.Control
 
         /**
          * Deze klasse bestaat alleen voor het invoeren van een footer door middel van het OnEndPage event, misschien lelijk, maar zo werkt ITextSharp schijnbaar :(
-         * Auteur: Yorg 
          */
         private class pdfPage : iTextSharp.text.pdf.PdfPageEventHelper
         {

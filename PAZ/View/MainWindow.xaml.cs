@@ -238,30 +238,6 @@ namespace PAZ
             tabCalender.Focus();
 
 			_classroomTextboxes = new List<TextBox>();
-			ListBoxItem item = new ListBoxItem();
-			int count = 0;
-			
-			List<Daytime>dayTimeList = _controller.DaytimeMapper.FindAll();
-			foreach (Daytime daytime in dayTimeList)
-			{
-				if (count == 0)
-				{
-					item = new ListBoxItem();
-					item.Content = daytime.Date.ToShortDateString();
-					item.Tag = daytime.Id;
-
-					blockedDayTimes.Items.Add(item);
-					count++;
-				}
-				else if (count == 3)
-				{
-					count = 0;
-				}
-				else
-				{
-					count++;
-				}
-			}
             
             _classroomTextboxes = new List<TextBox>();
 
@@ -710,28 +686,6 @@ namespace PAZ
 				EmailLeraar1.BorderBrush = Brushes.Gray;
 			}
 
-
-			//Used for date validation
-			DateTime dateValue;
-
-			//Check blocked timeslot
-			if (datePickerBlockedDay1.Text.Equals(String.Empty))
-			{
-				datePickerBlockedDay1.BorderBrush = Brushes.Red;
-				hasInputError = true;
-			}
-			else if (!DateTime.TryParse(datePickerBlockedDay1.Text, out dateValue))
-			{
-				datePickerBlockedDay1.BorderBrush = Brushes.Red;
-				hasInputError = true;
-			}
-			else
-			{
-				datePickerBlockedDay1.BorderBrush = Brushes.Gray;
-				hasInputError = false;
-			}
-
-
 			//Create sessionspread variable
 			Teacher.session_spread sessionSpread;
 
@@ -749,15 +703,12 @@ namespace PAZ
 				sessionSpread = Teacher.session_spread.ANY;
 			}
 
-			int teacher_blocktype_selected = 1;
-
-			if (teacher_blocktype_soft.IsChecked == true)
+			if (blockedDayTimesTeacher.SelectedItems != null)
 			{
-				teacher_blocktype_selected = 0;
-			}
-			else if (teacher_blocktype_hard.IsChecked == true)
-			{
-				teacher_blocktype_selected = 1;
+				foreach (ListBoxItem selectedBlockdays in blockedDayTimesTeacher.SelectedItems)
+				{
+					
+				}
 			}
 
 			if (hasInputError == false)
@@ -768,8 +719,6 @@ namespace PAZ
 				newTeacher.Surname = textLeraarAchternaam.Text;
 				newTeacher.Email = EmailLeraar1.Text;
 				newTeacher.Session_spread = sessionSpread;
-				newTeacher.blockedTimeslot = datePickerBlockedDay1.SelectedDate.Value;
-				newTeacher.BlockType = teacher_blocktype_selected;
 
 				//Send to the database
 				_controller.TeacherMapper.Save(newTeacher);
@@ -777,11 +726,8 @@ namespace PAZ
 				textBoxLeraarVoornaam.Text = "";
 				textLeraarAchternaam.Text = "";
 				EmailLeraar1.Text = "";
-				datePickerBlockedDay1.Text = "";
 				sessionVerspreid.IsChecked = false;
 				sessionDichtBijElkaar.IsChecked = false;
-				teacher_blocktype_soft.IsChecked = false;
-				teacher_blocktype_hard.IsChecked = false;
 			}
 		}
 
@@ -1302,6 +1248,53 @@ namespace PAZ
                     scrollviewer.ScrollToHorizontalOffset(scrollviewer.ContentHorizontalOffset + 20);
             }
         }
+
+		private void studentToevoegenVisible(object sender, DependencyPropertyChangedEventArgs e)
+		{
+			ListBoxItem item = new ListBoxItem();
+			int count = 0;
+			List<Daytime> dayTimeList = _controller.DaytimeMapper.FindAll();
+			
+			foreach (Daytime daytime in dayTimeList)
+			{
+				if (count == 0)
+				{
+					item = new ListBoxItem();
+					item.Content = daytime.Date.ToShortDateString();
+					item.Tag = daytime.Id;
+
+					blockedDayTimes.Items.Add(item);
+					count++;
+				}
+				else if (count == 3)
+				{
+					count = 0;
+				}
+				else
+				{
+					count++;
+				}
+			}
+		}
+
+		private void docentToevoegenVisible(object sender, DependencyPropertyChangedEventArgs e)
+		{
+			ListBoxItem item = new ListBoxItem();
+			ListBoxItem item1 = new ListBoxItem();
+			List<Daytime> dayTimeList = _controller.DaytimeMapper.FindAll();
+
+			foreach (Daytime daytime in dayTimeList)
+			{
+				item = new ListBoxItem();
+				item1 = new ListBoxItem();
+				item.Content = daytime.Date.ToShortDateString() + " - " + daytime.Starttime;
+				item1.Content = daytime.Date.ToShortDateString() + " - " + daytime.Starttime;
+
+				blockedDayTimesTeacher.Items.Add(item);
+				softblockedDayTimesDocent.Items.Add(item1);
+			}
+		}
+
 
         private void buttonKoppelen_Click(object sender, RoutedEventArgs e)
         {

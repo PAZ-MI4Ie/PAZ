@@ -11,8 +11,6 @@ namespace PAZ.Model
 		public enum session_spread { ANY, CLOSE, FAR };
 
 		public session_spread Session_spread { get; set; }
-		public DateTime blockedTimeslot { get; set; }
-		public int BlockType { get; set; }
 
         private List<Pair> _pairs;
         public List<Pair> Pairs//UNTESTED!!!!!!!!!!!

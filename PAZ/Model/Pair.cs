@@ -71,7 +71,7 @@ namespace PAZ.Model
             }
             set
             {
-
+                _attachments = value;
             }
         }
 

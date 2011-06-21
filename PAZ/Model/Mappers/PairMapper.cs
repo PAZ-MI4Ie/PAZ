@@ -137,9 +137,6 @@ namespace PAZ.Model.Mappers
             return result;
         }
 
-        /**
-         * UNTESTED!!!!!!!!!!!!!!!!!
-         */
         public List<Pair> FindByAttachment(int attachmentId)
         {
             List<Pair> result = new List<Pair>();

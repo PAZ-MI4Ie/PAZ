@@ -116,14 +116,5 @@ namespace PAZMySQL
             this._db.ExecuteCommand(command);
             this._db.CloseConnection();
         }
-
-        /**
-         * Dit is een functieverzoek aan Teun: Verwijder alle entries in de tabel classroom (DELETE FROM classroom)
-         * Return: true als geslaagd, anders false(kan dat wel? misschien false als lokaal tabel leeg is?)
-         */
-        public bool Delete()
-        {
-            return true;
-        }
     }
 }

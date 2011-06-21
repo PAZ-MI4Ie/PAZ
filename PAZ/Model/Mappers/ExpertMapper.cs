@@ -69,8 +69,7 @@ namespace PAZMySQL
 			}
 			else
 			{
-				command.CommandText = "UPDATE student (company, address, postcode, telephone, city) VALUES " +
-				"(?company, ?address, ?postcode, ?telephone, ?city) WHERE user_id = ?user_id";
+				command.CommandText = "UPDATE expert SET user_id = ?user_id, company = ?company, address = ?address, postcode = ?postcode, telephone = ?telephone, city = ?city WHERE user_id = ?user_id";
 			}
 			command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.Int32)).Value = expert.Id;
 			command.Parameters.Add(new MySqlParameter("?company", MySqlDbType.String)).Value = expert.Company;

@@ -22,8 +22,8 @@ namespace PAZ.Model.Mappers
             Reader.Read();//Only 1 row
             this._db.CloseConnection();
 
-            int index = -1;
-            return new LetterTemplate(Reader.GetInt32(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index), Reader.GetString(++index));
+            int index = 0;
+            return new LetterTemplate(Reader.GetInt32(index++), Reader.GetString(index++), Reader.GetString(index++), Reader.GetString(index++), Reader.GetString(index++), Reader.GetString(index++), Reader.GetString(index++), Reader.GetString(index++), Reader.GetString(index++), Reader.GetString(index++), Reader.GetString(index++), Reader.GetString(index++), Reader.GetString(index++), Reader.GetString(index++), Reader.GetString(index++));
         }
 
         public void Save(LetterTemplate letterTemplate)

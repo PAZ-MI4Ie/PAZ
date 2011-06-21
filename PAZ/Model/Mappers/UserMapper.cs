@@ -74,7 +74,6 @@ namespace PAZMySQL
             this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
 
-            // Verzoekje van Yorg aan Teun, deze sorteren op naam, gewoon een extra-tje
             command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, was_changed FROM user";
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             List<User> result = new List<User>();
@@ -130,10 +129,6 @@ namespace PAZMySQL
             }
         }
 
-        /**
-         * Dit is een functieverzoek aan Teun: Verwijder alle entries in de tabel user(die geen admin zijn) (DELETE FROM user WHERE user_type != 'admin')
-         * Return: true als geslaagd, anders false(kan dat wel? misschien false als er geen non admin users zijn om te verwijderen?)
-         */
         public bool Delete()
         {
             this._db.OpenConnection();

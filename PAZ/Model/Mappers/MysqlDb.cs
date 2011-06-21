@@ -57,7 +57,6 @@ namespace PAZMySQL
 
         public MySqlDataReader ExecuteCommand(MySqlCommand command)
         {
-            //command.ExecuteNonQuery();
             return command.ExecuteReader();
         }
     }

@@ -23,15 +23,10 @@ namespace PAZ.View
         {
             InitializeComponent();
         }
-
-        public static void update(UnPlannedPairs c, PairMapper pairMapper)
-        {
-            c.GridPairs.Children.Clear();
-            c.loadAllPairs(pairMapper);
-        }
-
+        
         public void loadAllPairs(PairMapper pairmapper)
         {
+            GridPairs.Children.Clear();
             List<Model.Pair> pairs = pairmapper.FindAllUnplanned();
             int i = 0;
             foreach (Model.Pair pair in pairs)

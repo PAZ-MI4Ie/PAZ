@@ -238,6 +238,33 @@ namespace PAZ
             tabCalender.Focus();
 
 			_classroomTextboxes = new List<TextBox>();
+			ListBoxItem item = new ListBoxItem();
+			int count = 0;
+			
+			List<Daytime>dayTimeList = _controller.DaytimeMapper.FindAll();
+			foreach (Daytime daytime in dayTimeList)
+			{
+				if (count == 0)
+				{
+					item = new ListBoxItem();
+					item.Content = daytime.Date.ToShortDateString();
+					item.Tag = daytime.Id;
+
+					blockedDayTimes.Items.Add(item);
+					count++;
+				}
+				else if (count == 3)
+				{
+					count = 0;
+				}
+				else
+				{
+					count++;
+				}
+			}
+            
+            _classroomTextboxes = new List<TextBox>();
+
 			getAlleLokalen();
 
 
@@ -281,11 +308,10 @@ namespace PAZ
 
                 switch (comboBoxSelecteerType.SelectedIndex)
                 {
-                    case 1: groupBoxLokaalGegevens.Visibility = Visibility.Visible; break;
-                    case 2: groupBoxGebruikerGegevens.Visibility = Visibility.Visible; break;
-                    case 3: groupBoxBegeleiderGegevens.Visibility = Visibility.Visible; break;
-                    case 4: groupBoxExternGegevens.Visibility = Visibility.Visible; break;
-                    case 5: groupBoxLeraarGegevens.Visibility = Visibility.Visible; break;
+                    case 1: groupBoxGebruikerGegevens.Visibility = Visibility.Visible; break;
+                    case 2: groupBoxBegeleiderGegevens.Visibility = Visibility.Visible; break;
+                    case 3: groupBoxExternGegevens.Visibility = Visibility.Visible; break;
+                    case 4: groupBoxLeraarGegevens.Visibility = Visibility.Visible; break;
                 }
             }
         }
@@ -295,7 +321,6 @@ namespace PAZ
 		 */
         private void verbergAlleToevoegGroupBoxs()
         {
-            groupBoxLokaalGegevens.Visibility = Visibility.Hidden;
             groupBoxGebruikerGegevens.Visibility = Visibility.Hidden;
             groupBoxBegeleiderGegevens.Visibility = Visibility.Hidden;
             groupBoxExternGegevens.Visibility = Visibility.Hidden;
@@ -760,21 +785,6 @@ namespace PAZ
 			}
 		}
 
-		private void onClassroomAddClicked(object sender, RoutedEventArgs e)
-		{
-			if (textBoxLokaalGegevens.Text.Equals(string.Empty))
-			{
-				textBoxLokaalGegevens.BorderBrush = Brushes.Red;
-			}
-			else
-			{
-				textBoxLokaalGegevens.BorderBrush = Brushes.Gray;
-				Classroom newClassroom = new Classroom();
-				newClassroom.Room_number = textBoxLokaalGegevens.Text;
-				_controller.ClassroomMapper.Save(newClassroom);
-				MessageBox.Show("Lokaal toegevoegd");
-			}
-		}
         private void buttonOptiesOpslaan_Click(object sender, RoutedEventArgs e)
         {
             _controller.IniReader["DATES"]["startdate"] = textBoxDeadlineStart.Text;
@@ -1089,6 +1099,25 @@ namespace PAZ
 				textBoxStudy.BorderBrush = Brushes.Gray;
 			}
 
+			//Check email adress
+			if (EmailLeering1.Text.Equals(String.Empty))
+			{
+				EmailLeering1.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				EmailLeering1.BorderBrush = Brushes.Gray;
+			}
+			if (!EmailLeering1.Text.IsValidEmailAddress())
+			{
+				EmailLeering1.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				EmailLeering1.BorderBrush = Brushes.Gray;
+			}
 
 			//Check student number
 			if (textBoxStudentennummer.Text.Equals(String.Empty))
@@ -1102,66 +1131,45 @@ namespace PAZ
 			}
 
 			//Check first name
-			if (textBoxExternVoornaam.Text.Equals(String.Empty))
+			if (textBoxVoornaam.Text.Equals(String.Empty))
 			{
-				textBoxExternVoornaam.BorderBrush = Brushes.Red;
+				textBoxVoornaam.BorderBrush = Brushes.Red;
 				hasInputError = true;
 			}
 			else
 			{
-				textBoxExternVoornaam.BorderBrush = Brushes.Gray;
+				textBoxVoornaam.BorderBrush = Brushes.Gray;
 			}
 
 			//Check surname
-			if (textBoxExternAchternaam.Text.Equals(String.Empty))
+			if (textBoxAchternaam.Text.Equals(String.Empty))
 			{
-				textBoxExternAchternaam.BorderBrush = Brushes.Red;
+				textBoxAchternaam.BorderBrush = Brushes.Red;
 				hasInputError = true;
 			}
 			else
 			{
-				textBoxExternAchternaam.BorderBrush = Brushes.Gray;
+				textBoxAchternaam.BorderBrush = Brushes.Gray;
 			}
 
-			//Check email adress
-			if (textBoxExternEmail.Text.Equals(String.Empty))
+			//Check Blocked timeslots
+
+			if (blockedDayTimes.SelectedItem == null)
 			{
-				textBoxExternEmail.BorderBrush = Brushes.Red;
+				blockedDayTimes.BorderBrush = Brushes.Red;
 				hasInputError = true;
 			}
 			else
 			{
-				textBoxExternEmail.BorderBrush = Brushes.Gray;
-			}
-			if (!textBoxExternEmail.Text.IsValidEmailAddress())
-			{
-				textBoxExternEmail.BorderBrush = Brushes.Red;
-				hasInputError = true;
-			}
-			else
-			{
-				textBoxExternEmail.BorderBrush = Brushes.Gray;
+				blockedDayTimes.BorderBrush = Brushes.Gray;
 			}
 
-
-			//Used for date validation
-			DateTime dateValue;
-
-			//Check blocked timeslot
-			if (datePickerBlockedDay.Text.Equals(String.Empty))
+			if (_controller.StudentMapper.FindWithDuplicateCheck(int.Parse(textBoxStudentennummer.Text), EmailLeering1.Text))
 			{
-				datePickerBlockedDay.BorderBrush = Brushes.Red;
+				textBoxStudentennummer.BorderBrush = Brushes.Red;
+				EmailLeering1.BorderBrush = Brushes.Red;
 				hasInputError = true;
-			}
-			else if (!DateTime.TryParse(datePickerBlockedDay.Text, out dateValue))
-			{
-				datePickerBlockedDay.BorderBrush = Brushes.Red;
-				hasInputError = true;
-			}
-			else
-			{
-				datePickerBlockedDay.BorderBrush = Brushes.Gray;
-				hasInputError = false;
+				MessageBox.Show("Studentnummer of emailadres bestaat al.");
 			}
 
 			if (hasInputError == false)
@@ -1173,8 +1181,17 @@ namespace PAZ
 				newStudent.Email = EmailLeering1.Text;
 				newStudent.Studentnumber = Convert.ToInt32(textBoxStudentennummer.Text);
 				newStudent.Study = textBoxStudy.Text;
-				//TODO: Blocked Timeslots
+				newStudent.WasChanged = false;
+				Blocked_timeslot timeslot = new Blocked_timeslot();
 
+				//Blocked Timeslot
+				ListBoxItem selectedItem = (ListBoxItem)blockedDayTimes.SelectedItem;
+				string date = selectedItem.Content.ToString();
+				List<Daytime> foundDayTimes = _controller.DaytimeMapper.FindWithDate(date);
+				foreach (Daytime thisTimeslot in foundDayTimes)
+				{
+					newStudent.BlockedTimeslots.Add(new Blocked_timeslot(thisTimeslot, true));
+				}
 
 				//Send to the database
 				_controller.StudentMapper.Save(newStudent);
@@ -1230,7 +1247,6 @@ namespace PAZ
             {
                 calendar.updateCalendar();
                 _controller.toPlanWindow.loadAllPairs(_controller.PairMapper);
-                Sessions.Refresh();
                 updateOverzicht();
                 MessageBox.Show("Zittingen zijn gegenereerd.", "Actie succesvol"); 
                 
@@ -1275,9 +1291,9 @@ namespace PAZ
             if (position.Y > 0 && position.Y < this.Height)
             {
                 if (position.Y < 150)
-                    scrollviewer.ScrollToVerticalOffset(scrollviewer.ContentVerticalOffset - 100);
+                    scrollviewer.ScrollToVerticalOffset(scrollviewer.ContentVerticalOffset - 50);
                 if (position.Y > this.Height - 150)
-                    scrollviewer.ScrollToVerticalOffset(scrollviewer.ContentVerticalOffset + 100);
+                    scrollviewer.ScrollToVerticalOffset(scrollviewer.ContentVerticalOffset + 50);
             } if (position.X > 0 && position.X < this.Width)
             {
                 if (position.X < 100)

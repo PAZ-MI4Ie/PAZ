@@ -381,18 +381,26 @@ namespace PAZ.View
                 else
                     experts[0] += name;
             }
-            teachers = teachers[0].Split(',');
-            experts = experts[0].Split(',');
+
             students = students[0].Split(',');
+            if (experts[0] != null)
+                experts = experts[0].Split(',');
+            else
+                experts = new string[]{"GEEN EXPERTS",""};
+
+            if (teachers[0] != null)
+                teachers = teachers[0].Split(',');
+            else
+                teachers = new string[] { "GEEN DOCENTEN", "" };
 
             sessionLabel.Content = students[0] + "\n" + students[1] + "\n\n" + teachers[0] + "\n" + teachers[1] + "\n\n" + experts[0] + "\n" + experts[1];
+            sessionLabel.ToolTip = "Studenten\n\nDocenten\n\nExperts";
             sessionLabel.BorderBrush = Brushes.LightGray;
             sessionLabel.BorderThickness = new Thickness(2);
             sessionLabel.MouseMove += new System.Windows.Input.MouseEventHandler(session_MouseMove);
             sessionLabel.AllowDrop = false;
             sessionLabel.Drop -= Session_Drop;
             sessionLabel.Background = Brushes.White;
-            sessionLabel.ToolTip = "Studenten\n\nDocenten\n\nExperts";
 
             //Context Menu
             System.Windows.Controls.ContextMenu editMenu = new ContextMenu();

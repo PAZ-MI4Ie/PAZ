@@ -35,38 +35,50 @@ namespace PAZ.View
             List<Pair> pairs = _controller.PairMapper.FindAll();
             foreach (Pair pair in pairs)
             {
-                cbPairs.Items.Add(pair);
+                cbPairs.Items.Add(pair.ID + ", " + pair.ToString());
 
             }
 
             foreach (Teacher teacher in _controller.TeacherMapper.FindAll())
             {
-                cbTeacher1.Items.Add(teacher);
-                cbTeacher2.Items.Add(teacher);
+                cbTeacher1.Items.Add(teacher.Id + ", " + teacher.ToString());
+                cbTeacher2.Items.Add(teacher.Id + ", " + teacher.ToString());
 
             }
 
             foreach (Expert expert in _controller.ExpertMapper.FindAll())
             {
-                cbExpert1.Items.Add(expert);
-                cbExpert2.Items.Add(expert);
+                cbExpert1.Items.Add(expert.Id + ", " + expert.ToString());
+                cbExpert2.Items.Add(expert.Id + ", " + expert.ToString());
 
             }
-            List<Teacher> teachers = new List<Teacher>();
-            List<Expert> experts = new List<Expert>();
+            List<string> teachers = new List<string>();
+            List<string> experts = new List<string>();
             foreach (User user in session.Pair.Attachments)
             {
                 if (user.User_type == "teacher")
-                    teachers.Add(_controller.TeacherMapper.Find(user.Id));
-                else
-                    experts.Add(_controller.ExpertMapper.Find(user.Id));
+                {
+                    Teacher t = _controller.TeacherMapper.Find(user.Id);
+                    teachers.Add(t.Id + ", " + t.ToString());
+                }
+                else if (user.User_type == "teacher")
+                {
+                    Expert t = _controller.ExpertMapper.Find(user.Id);
+                    teachers.Add(t.Id + ", " + t.ToString());
+                }
             }
 
             cbPairs.Text = session.Pair.ToString();
-            cbTeacher1.Text = teachers[0].ToString();
-            cbTeacher2.Text = teachers[1].ToString();
-            cbExpert1.Text = experts[0].ToString();
-            cbExpert2.Text = experts[1].ToString();
+            if (teachers.Count > 0)
+            {
+                cbTeacher1.SelectedIndex = cbTeacher1.Items.IndexOf(teachers[0]);
+                cbTeacher2.SelectedIndex = cbTeacher2.Items.IndexOf(teachers[1]);
+            }
+            if (experts.Count > 0)
+            {
+                cbExpert1.SelectedIndex = cbExpert1.Items.IndexOf(experts[0]);
+                cbExpert2.SelectedIndex = cbExpert2.Items.IndexOf(experts[1]);
+            }
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)

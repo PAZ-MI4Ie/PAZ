@@ -27,5 +27,15 @@ namespace PAZ.Model
         }
         public User User { get; set; }
         public bool Hardblock { get; set; }
+
+		public Blocked_timeslot()
+		{
+		}
+
+		public Blocked_timeslot(Daytime dayTimeinput, bool blocktype)
+		{
+			this.Daytime = dayTimeinput;
+			this.Hardblock = blocktype;
+		}
     }
 }

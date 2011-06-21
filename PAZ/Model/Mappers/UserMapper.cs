@@ -60,7 +60,7 @@ namespace PAZMySQL
 			strResult = (String)command.ExecuteScalar();
 
 			Boolean found = false;
-			if (strResult.Length != 0)
+			if ((strResult != null) && (strResult.Length != 0))
 			{
 				found = true;
 			}

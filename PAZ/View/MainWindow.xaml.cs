@@ -33,6 +33,7 @@ namespace PAZ
 		private List<Teacher> _teachers;
 		private List<Student> _students;
         private List<Classroom> _classrooms;
+		private List<TextBox> _classroomTextboxes;
         private List<Pair> _pairs;
 
         private PAZController _controller;
@@ -233,7 +234,11 @@ namespace PAZ
             unPlannedPairs.loadAllPairs(_controller.PairMapper);
             unPlannedPairs.Show();
             tabCalender.Focus();
-            
+
+			_classroomTextboxes = new List<TextBox>();
+
+			getAlleLokalen();
+
         }
 
 
@@ -248,6 +253,11 @@ namespace PAZ
             _controller.VerwijderGegegevensClicked();     
         }
 
+
+		/*
+		 * Selection of toevoegen tab
+		 * 
+		 */
         private void comboBoxSelecteerType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (comboBoxSelecteerType.SelectedIndex > 0)
@@ -265,6 +275,9 @@ namespace PAZ
             }
         }
 
+		/*
+		 * verberg alle groupboxes van toevoegen
+		 */
         private void verbergAlleToevoegGroupBoxs()
         {
             groupBoxLokaalGegevens.Visibility = Visibility.Hidden;
@@ -274,6 +287,64 @@ namespace PAZ
             groupBoxLeraarGegevens.Visibility = Visibility.Hidden;
         }
 
+
+		/*
+		 * Show de selected item van de list in wijzigen
+		 */
+		private void comboBoxSelecteerWijziging_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (comboBoxSelecteerWijziging.SelectedIndex > 0)
+			{
+				verbergAlleWijzigGroupBoxs();
+
+				switch (comboBoxSelecteerWijziging.SelectedIndex)
+				{
+					case 1: groupBoxWijzigLokaalGegevens.Visibility = Visibility.Visible; break;
+					case 2: groupBoxWijzigStudent.Visibility = Visibility.Visible; break;
+					case 3: groupBoxWijzigBegeleiderGegevens.Visibility = Visibility.Visible; break;
+					case 4: groupBoxWijzigExternGegevens.Visibility = Visibility.Visible; break;
+					case 5: groupBoxLeraarGegevenswijzig.Visibility = Visibility.Visible; break;
+				}
+			}
+		}
+
+		/*
+		 * Verberg alle groupboxes voor de list in de tabblad wijzigen
+		 */
+		private void verbergAlleWijzigGroupBoxs()
+		{
+			groupBoxWijzigLokaalGegevens.Visibility = Visibility.Hidden;
+			groupBoxWijzigStudent.Visibility = Visibility.Hidden;
+			groupBoxWijzigBegeleiderGegevens.Visibility = Visibility.Hidden;
+			groupBoxWijzigExternGegevens.Visibility = Visibility.Hidden;
+			groupBoxLeraarGegevenswijzig.Visibility = Visibility.Hidden;
+		}
+
+		/*
+		 * getAlleLokalen()
+		 * 
+		 * verkrijgt alle lokalen. Dit is nodig 
+		 * voor het wijzigen van de lokalen.
+		 * 
+		 * Mark m & Mark b
+		 */
+		private void getAlleLokalen()
+		{
+			_classroomTextboxes.Add(textBoxLokaal1);
+			_classroomTextboxes.Add(textBoxLokaal2);
+			_classroomTextboxes.Add(textBoxLokaal3);
+			_classroomTextboxes.Add(textBoxLokaal4);
+			_classroomTextboxes.Add(textBoxLokaal5);
+			_classroomTextboxes.Add(textBoxLokaal6);
+			_classroomTextboxes.Add(textBoxLokaal7);
+			_classroomTextboxes.Add(textBoxLokaal8);
+
+			for (int i = 0; i < _classroomTextboxes.Count; i++)
+			{
+				_classroomTextboxes[i].Text = _classrooms[i].Room_number;
+			}
+		}
+
         private void buttonEmailVersturen_Click(object sender, RoutedEventArgs e)
         {
             _controller.EmailVersturenClicked(_master);
@@ -282,14 +353,6 @@ namespace PAZ
         private void buttonBriefMaken_Click(object sender, RoutedEventArgs e)
         {
             _controller.BriefMakenClicked(_master);
-        }
-
-        private void GridOverzichtList_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-        {
-            if (MessageBox.Show("Wilt u de wijzigingen opslaan?", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                MessageBoxResult result = MessageBox.Show("Wijzigingen zijn opgeslagen.", "Succesvol");
-            }
         }
 
         private void textboxSearch_TextChanged(object sender, TextChangedEventArgs e)
@@ -487,6 +550,18 @@ namespace PAZ
             // Return de waarde teruggekregen op het moment dat het dialoog sloot
             return returnValue;
         }
+
+
+		private void onLokaalWijzigClicked(object sender, RoutedEventArgs e)
+		{
+			for (int i = 0; i < _classroomTextboxes.Count; i++)
+			{
+				_classrooms[i].Room_number = _classroomTextboxes[i].Text;
+				_controller.ClassroomMapper.Save(_classrooms[i]);
+			}
+			MessageBox.Show("Lokalen zijn gewijzigd.");
+		}
+
 
 		private void onTeacherAddClicked(object sender, RoutedEventArgs e)
 		{
@@ -1131,6 +1206,8 @@ namespace PAZ
                     scrollviewer.ScrollToHorizontalOffset(scrollviewer.ContentHorizontalOffset + 20);
             }
         }
+
+
     }
 
 	public static class ValidatorExtensions

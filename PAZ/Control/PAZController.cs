@@ -26,6 +26,7 @@ namespace PAZ.Control
         public EmailTemplateMapper EmailTemplateMapper { get; private set; }
         public LetterTemplateMapper LetterTemplateMapper { get; private set; }
         public TimeslotMapper TimeslotMapper { get; private set; }
+        public UnPlannedPairs toPlanWindow { get; set; }
 
         public List<Timeslot> Timeslots { get; private set; }
 
@@ -67,6 +68,7 @@ namespace PAZ.Control
             TimeslotMapper = new TimeslotMapper(DB);
 
             Timeslots = TimeslotMapper.FindAll();
+            toPlanWindow = new UnPlannedPairs();
 
             _mainWindow = mainWindow;
         }

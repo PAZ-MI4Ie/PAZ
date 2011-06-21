@@ -62,7 +62,7 @@ namespace PAZ.View
                         }
                         s.Daytime = d;
                         s.Classroom = _controller.ClassroomMapper.Find(Grid.GetColumn(session) + 1);
-                        addSession(s);
+                        addSession(s, false);
                         removeSessionLabel(other[1], Convert.ToInt32(other[2]), Convert.ToInt32(other[3]));
 
                     }
@@ -70,7 +70,7 @@ namespace PAZ.View
                 else
                 {
                     int id = (int)e.Data.GetData("System.Int32");
-                    if (id != null)
+                    if (id != 0)
                     {
                         Session s = new Session();
                         Daytime d = _controller.DaytimeMapper.Find(GetSessionDate(session), Grid.GetRow(session));
@@ -83,8 +83,7 @@ namespace PAZ.View
                         s.Daytime = d;
                         s.Classroom = _controller.ClassroomMapper.Find(Grid.GetColumn(session) + 1);
                         s.Pair = _controller.PairMapper.Find(Convert.ToInt32(id));
-                        addSession(s);
-                        UnPlannedPairs.update(new UnPlannedPairs(), _controller.PairMapper);
+                        addSession(s, true);
                     }
                 }
                 revertCheckAvailability();
@@ -93,8 +92,6 @@ namespace PAZ.View
         
         public static void CheckAvailability(CustomLabel currentSession, bool isSession)
         {
-            //TODO: optimising.. possible??
-
             //getting all blocked timeslots of all users
             List<Blocked_timeslot> blockedSlots = new List<Blocked_timeslot>();
             if (isSession)
@@ -106,7 +103,6 @@ namespace PAZ.View
                     {
                         blockedSlots.Add(b);
                     }
-
                 }
             }
             else
@@ -329,41 +325,46 @@ namespace PAZ.View
             }
         }
 
-        public static void updateCalendar(CalendarView view, Ini.IniFile ini, List<Classroom> classrooms, PAZController controller)
+        public void updateCalendar()
         {
+            // TODO height voor groter dan de kalender, fix it.
             dateGrids.Clear();
-            view.emptyCalender();
-            view.createCalendar(ini, classrooms, controller);
-            view.loadAllSessions(controller.SessionMapper.FindAll());
-        }
-
-        private void emptyCalender()
-        {
             Children.Clear();
+            createCalendar(_controller.IniReader, _controller.ClassroomMapper.FindAll(), _controller);
+            loadAllSessions(_controller.SessionMapper.FindAll());
         }
-
+        
         void edit_Click(object sender, RoutedEventArgs e)
         {
             //Get the label
             CustomLabel session = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
+            SessionWindow sw = new SessionWindow(_controller.SessionMapper.Find(session.Id));
+            sw.ShowDialog();
         }
 
         void delete_Click(object sender, RoutedEventArgs e)
         {
             //Get the label
-            CustomLabel sessionLabel = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
-            _controller.SessionMapper.Delete(sessionLabel.Id);
+            CustomLabel session = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
+            removeSession(session);
+            _controller.toPlanWindow.loadAllPairs(_controller.PairMapper);
             MessageBox.Show("De zitting is succesvol verwijderd");
-            updateCalendar(this, _controller.IniReader, _controller.ClassroomMapper.FindAll(), _controller);
+            
         }
 
-        public void addSession(Session session)
+        public void addSession(Session session,bool newSession)
         {
-            _controller.SessionMapper.Save(session);
-            addSessionLabel(session);
+            int id = _controller.SessionMapper.Save(session);
+            if (newSession)
+            {
+                addSessionLabel(session, id);
+                _controller.toPlanWindow.loadAllPairs(_controller.PairMapper);
+            }
+            else
+                addSessionLabel(session);
         }
 
-        public void addSessionLabel(Session session)
+        public CustomLabel addSessionLabel(Session session)
         {
             CustomLabel sessionLabel = dateGrids[session.Daytime.Date.ToShortDateString()].Children[(session.Classroom.Id - 1) + ((session.Daytime.Timeslot - 1) * 8)] as CustomLabel;
             sessionLabel.Id = session.Id;
@@ -406,6 +407,12 @@ namespace PAZ.View
             delete.Click += new RoutedEventHandler(delete_Click);
             editMenu.Items.Add(delete);
             sessionLabel.ContextMenu = editMenu;
+            return sessionLabel;
+        }
+        public void addSessionLabel(Session session, int newId)
+        {
+            CustomLabel s = addSessionLabel(session);
+            s.Id = newId;
         }
 
         public Grid HasSession(CustomLabel session)
@@ -428,16 +435,11 @@ namespace PAZ.View
             return null;
         }
 
-        public bool removeSession(Session session)
+        public void removeSession(CustomLabel session)
         {
-            bool succesfull = true;// Sessionmapper.Delete(session);
-            if(succesfull)
-            {
-                removeSessionLabel(session);
-                UnPlannedPairs.update(new UnPlannedPairs(), _controller.PairMapper);
-                return true;
-            }
-            return false;
+            _controller.SessionMapper.Delete(session.Id);
+            removeSessionLabel(session);
+
         }
 
         public bool removeSessionLabel(string date, int column, int row)
@@ -459,23 +461,18 @@ namespace PAZ.View
             return false;
         }
 
-        public bool removeSessionLabel(Session session)
+        public void removeSessionLabel(CustomLabel session)
         {
-            CustomLabel sessionLabel = dateGrids[session.Daytime.Date.ToShortDateString()].Children[(session.Classroom.Id) + ((session.Daytime.Timeslot) * 8)] as CustomLabel;
-            if (session != null)
-            {
-                sessionLabel.Id = 0;
-                sessionLabel.Content = null;
-                sessionLabel.ToolTip = null;
-                sessionLabel.BorderBrush = null;
-                sessionLabel.BorderThickness = new Thickness(0);
-                sessionLabel.MouseMove -= session_MouseMove;
-                sessionLabel.ContextMenu = null;
-                sessionLabel.AllowDrop = true;
-                sessionLabel.Drop += new DragEventHandler(Session_Drop);
-                return true;
-            }
-            return false;
+            session.Id = 0;
+            session.Content = null;
+            session.ToolTip = null;
+            session.BorderBrush = null;
+            session.BorderThickness = new Thickness(0);
+            session.MouseMove -= session_MouseMove;
+            session.ContextMenu = null;
+            session.AllowDrop = true;
+            session.Drop += new DragEventHandler(Session_Drop);
+
         }
     }
 }

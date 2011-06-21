@@ -125,5 +125,10 @@ namespace PAZ.Model
             }
             return score;
         }
+
+        public override string ToString()
+        {
+            return Student1.Firstname + " " + Student1.Surname + ", " + Student2.Firstname + " " + Student2.Surname;
+        }
     }
 }

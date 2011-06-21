@@ -56,7 +56,7 @@ namespace PAZMySQL
             
         }
 
-        public void Save(Session session)
+        public int Save(Session session)
         {
             Boolean insert = true;
             if (session.Id != 0)
@@ -81,6 +81,17 @@ namespace PAZMySQL
             this._db.OpenConnection();
             this._db.ExecuteCommand(command);
             this._db.CloseConnection();
+            this._db.OpenConnection();
+            if (insert)
+            {
+                MySqlCommand command2 = this._db.CreateCommand();
+                command2.CommandText = "SELECT LAST_INSERT_ID()";
+                MySqlDataReader Reader = this._db.ExecuteCommand(command2);
+                Reader.Read();
+                this._db.CloseConnection();
+                return Reader.GetInt32(0);
+            }
+            return 0;
         }
 
         public void Save(Planning planning)

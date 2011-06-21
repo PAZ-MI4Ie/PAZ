@@ -73,5 +73,10 @@ namespace PAZ.Model
         {
             return Firstname.CompareTo(right.Firstname);
         }
+
+        public override string ToString()
+        {
+            return Firstname + " " + Surname;
+        }
     }
 }

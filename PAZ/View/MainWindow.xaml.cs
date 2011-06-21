@@ -239,11 +239,24 @@ namespace PAZ
 
             calendar.createCalendar(_controller.IniReader, _classrooms, _controller);
             calendar.loadAllSessions(tempSessions);
-            UnPlannedPairs unPlannedPairs = new UnPlannedPairs();
+            UnPlannedPairs unPlannedPairs = _controller.toPlanWindow;
             unPlannedPairs.loadAllPairs(_controller.PairMapper);
             unPlannedPairs.Show();
             tabCalender.Focus();
             
+        }
+
+        public void updateOverzicht()
+        {
+            List<Session> sessions = _controller.SessionMapper.FindAll();
+            _master = new List<SessionRow>();
+            foreach (Session s in sessions)
+            {
+                _master.Add(new SessionRow(s));
+            }
+
+            Sessions = CollectionViewSource.GetDefaultView(_master);
+            GridOverzichtList.ItemsSource = Sessions;
         }
 
 
@@ -658,9 +671,9 @@ namespace PAZ
         {
             if (Application.Current.Windows.Count == 1)
             {
-                UnPlannedPairs upp = new UnPlannedPairs();
-                upp.loadAllPairs(_controller.PairMapper);
-                upp.Show();
+                _controller.toPlanWindow = new UnPlannedPairs();
+                _controller.toPlanWindow.loadAllPairs(_controller.PairMapper);
+                _controller.toPlanWindow.Show();
             }
             else
                 MessageBox.Show("Het scherm met de nog niet ingeplande paren staat nog open.");
@@ -1086,12 +1099,16 @@ namespace PAZ
 
             if (succesfull)
             {
-
+                calendar.updateCalendar();
+                _controller.toPlanWindow.loadAllPairs(_controller.PairMapper);
+                Sessions.Refresh();
+                updateOverzicht();
                 MessageBox.Show("Zittingen zijn gegenereerd.", "Actie succesvol"); 
 
                 /*
                  *  HIER IETS DOEN ALS HET SUCCESVOL IS
                  */
+                
             }
         }
 
@@ -1115,8 +1132,11 @@ namespace PAZ
 
         private void GridOverzichtList_Loaded(object sender, RoutedEventArgs e)
         {
-            GridOverzichtList.Columns[0].SortDirection = ListSortDirection.Ascending;
-            GridOverzichtList.Columns[1].SortDirection = ListSortDirection.Ascending;
+            if (GridOverzichtList.Columns.Count > 0)
+            {
+                GridOverzichtList.Columns[0].SortDirection = ListSortDirection.Ascending;
+                GridOverzichtList.Columns[1].SortDirection = ListSortDirection.Ascending;
+            }
         }
 
         private void ScrollViewer_DragOver(object sender, DragEventArgs e)

@@ -233,6 +233,9 @@ namespace PAZ
             unPlannedPairs.loadAllPairs(_controller.PairMapper);
             unPlannedPairs.Show();
             tabCalender.Focus();
+
+            SessionWindow sw = new SessionWindow(tempSessions[0]);
+            sw.Show();
             
         }
 
@@ -1095,7 +1098,6 @@ namespace PAZ
             {
                 calendar.updateCalendar();
                 _controller.toPlanWindow.loadAllPairs(_controller.PairMapper);
-                Sessions.Refresh();
                 updateOverzicht();
                 MessageBox.Show("Zittingen zijn gegenereerd.", "Actie succesvol"); 
                 

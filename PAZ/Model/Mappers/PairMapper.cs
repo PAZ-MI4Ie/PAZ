@@ -126,13 +126,6 @@ namespace PAZ.Model.Mappers
                 result.Add(Reader.GetInt32(0), Reader.GetString(1));
             }
             this._db.CloseConnection();
-            if (result.Count <= 0)
-            {
-                result.Add(21, "teacher");
-                result.Add(23, "teacher");
-                result.Add(26, "expert");
-                result.Add(27, "expert");
-            }
             return result;
         }
 

@@ -39,6 +39,24 @@ namespace PAZMySQL
             return this.ProcessRow(new Daytime(), Reader);
         }
 
+		public List<Daytime> FindWithDate(string date)
+		{
+			string[] d = date.Split('-');
+			date = d[2] + "-" + d[1] + "-" + d[0];
+			this._db.OpenConnection();
+			MySqlCommand command = this._db.CreateCommand();
+			command.CommandText = "SELECT id, date, timeslot FROM daytime WHERE date = ?date";
+			command.Parameters.Add(new MySqlParameter("?date", MySqlDbType.String)).Value = date;
+			MySqlDataReader Reader = this._db.ExecuteCommand(command);
+			List<Daytime> result = new List<Daytime>();
+			while (Reader.Read())
+			{
+				result.Add(this.ProcessRow(new Daytime(), Reader));
+			}
+			this._db.CloseConnection();
+			return result;
+		}
+
         public Daytime Find(string date, int timeslot)
         {
             string[] d = date.Split('-');
@@ -50,10 +68,11 @@ namespace PAZMySQL
             command.Parameters.Add(new MySqlParameter("?timeslot", MySqlDbType.Int32)).Value = timeslot+1;
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             if (Reader.Read())
-            {//Only 1 row
-                this._db.CloseConnection();
+			{//Only 1 row
+				this._db.CloseConnection();
                 return this.ProcessRow(new Daytime(), Reader);
-            }
+			}
+			this._db.CloseConnection();
             return null;
         }
 

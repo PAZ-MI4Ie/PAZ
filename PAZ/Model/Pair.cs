@@ -71,7 +71,7 @@ namespace PAZ.Model
             }
             set
             {
-
+                _attachments = value;
             }
         }
 
@@ -128,7 +128,7 @@ namespace PAZ.Model
 
         public override string ToString()
         {
-            return Student1.Firstname + " " + Student1.Surname + ", " + Student2.Firstname + " " + Student2.Surname;
+            return Student1.ToString() + Student2 != null ? Student2.ToString() + ", " : "";
         }
 
         public bool HasExpert()

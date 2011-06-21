@@ -128,7 +128,7 @@ namespace PAZ.Model
 
         public override string ToString()
         {
-            return Student1.ToString() + ", " + Student2.ToString();
+            return Student1.ToString() + Student2 != null ? Student2.ToString() + ", " : "";
         }
 
         public bool HasExpert()

@@ -1296,6 +1296,12 @@ namespace PAZ
 		}
 
 
+        private void buttonKoppelen_Click(object sender, RoutedEventArgs e)
+        {
+            // Wordt nog ge-uncomment, als we de koppel window kunnen toevoegen en committen
+            //KoppelWindow koppelWindow = new KoppelWindow();
+            //koppelWindow.ShowDialog();
+        }
     }
 
 	public static class ValidatorExtensions

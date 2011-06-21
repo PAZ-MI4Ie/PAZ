@@ -238,7 +238,7 @@ namespace PAZ.Control
                         // Inleiding
                         document.Add(new iText.Paragraph(studentParagraphString + "van wie u de afstudeerbespreking zult bijwonen. Begeleidende docenten " + teachers[0].Firstname + " " + teachers[0].Surname + " en " + teachers[1].Firstname + " " + teachers[1].Surname + " zullen bij de zitting aanwezig zijn.\r\r", standardFont));
 
-                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + sessionModel.Daytime.Starttime + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, " + letterTemplate.AvansAdres + " te " + letterTemplate.AvansLocatie + ".\r\r", standardFont));
+                        document.Add(new iText.Paragraph("De afstudeerzitting is gepland op, " + rowSession.Datum + " om " + sessionModel.Daytime.GetStarttime() + ", in lokaal " + rowSession.Lokaal + " van Avans Hogeschool, " + letterTemplate.AvansAdres + " te " + letterTemplate.AvansLocatie + ".\r\r", standardFont));
 
                         // Kern van de brief
                         document.Add(new iText.Paragraph(letterTemplate.BeginKern + "\r\r", standardFont));

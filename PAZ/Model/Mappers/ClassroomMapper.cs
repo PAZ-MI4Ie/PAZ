@@ -62,8 +62,7 @@ namespace PAZMySQL
         {
             this._db.OpenConnection();
 			MySqlCommand command = this._db.CreateCommand();
-            command.CommandText = "UPDATE student (room_number) VALUES " +
-				"(?id) WHERE user_id = ?id";
+            command.CommandText = "UPDATE classroom SET room_number=?room_number WHERE id = ?id";
 
 			command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = classroom.Id;
 			command.Parameters.Add(new MySqlParameter("?room_number", MySqlDbType.String)).Value = classroom.Room_number.ToString();

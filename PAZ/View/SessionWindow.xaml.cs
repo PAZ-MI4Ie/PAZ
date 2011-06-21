@@ -98,7 +98,33 @@ namespace PAZ.View
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            Pair pair = _controller.PairMapper.Find(ids[0]);
+            List<User> newAttachment = new List<User>();
+            int[] newIds = new int[4];
+            string[] id = cbTeacher1.SelectedItem.ToString().Split(',');
+            newIds[0] = Convert.ToInt32(id[0]);
+            id = cbTeacher2.SelectedItem.ToString().Split(',');
+            newIds[1] = Convert.ToInt32(id[0]);
+            id = cbExpert1.SelectedItem.ToString().Split(',');
+            newIds[2] = Convert.ToInt32(id[0]);
+            id = cbExpert2.SelectedItem.ToString().Split(',');
+            newIds[3] = Convert.ToInt32(id[0]);
 
+            for (int i = 0; i < newIds.Length; i++)
+            {
+                if (i == 0 || i == 1)
+                {
+                    newAttachment.Add(_controller.TeacherMapper.Find(newIds[i]));
+                }
+                else
+                {
+                    newAttachment.Add(_controller.ExpertMapper.Find(newIds[i]));
+                }
+            }
+            pair.Attachments = newAttachment;
+            _controller.PairMapper.Save(pair);
+            MessageBox.Show("De wijzigingen zijn opgeslagen.");
+            this.Close();
         }
     }
 }

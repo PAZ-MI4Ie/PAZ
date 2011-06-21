@@ -340,6 +340,8 @@ namespace PAZ.View
             CustomLabel session = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
             SessionWindow sw = new SessionWindow(_controller.SessionMapper.Find(session.Id));
             sw.ShowDialog();
+            //if save
+            //_controller.MainWindow.updateOverzicht();
         }
 
         void delete_Click(object sender, RoutedEventArgs e)
@@ -348,6 +350,7 @@ namespace PAZ.View
             CustomLabel session = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
             removeSession(session);
             _controller.toPlanWindow.loadAllPairs(_controller.PairMapper);
+            _controller.MainWindow.updateOverzicht();
             MessageBox.Show("De zitting is succesvol verwijderd");
             
         }
@@ -362,6 +365,7 @@ namespace PAZ.View
             }
             else
                 addSessionLabel(session);
+            _controller.MainWindow.updateOverzicht();
         }
 
         public CustomLabel addSessionLabel(Session session)
@@ -417,6 +421,7 @@ namespace PAZ.View
             sessionLabel.ContextMenu = editMenu;
             return sessionLabel;
         }
+
         public void addSessionLabel(Session session, int newId)
         {
             CustomLabel s = addSessionLabel(session);

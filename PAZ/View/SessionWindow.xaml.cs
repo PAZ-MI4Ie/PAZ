@@ -22,9 +22,11 @@ namespace PAZ.View
     {
         private PAZController _controller;
         static string[] names;
+        public int[] ids = new int[5];
         public SessionWindow()
         {
             InitializeComponent();
+            
             
         }
 
@@ -61,32 +63,40 @@ namespace PAZ.View
                     Teacher t = _controller.TeacherMapper.Find(user.Id);
                     teachers.Add(t.Id + ", " + t.ToString());
                 }
-                else if (user.User_type == "teacher")
+                else if (user.User_type == "expert")
                 {
                     Expert t = _controller.ExpertMapper.Find(user.Id);
-                    teachers.Add(t.Id + ", " + t.ToString());
+                    experts.Add(t.Id + ", " + t.ToString());
                 }
             }
 
-            cbPairs.Text = session.Pair.ToString();
+            ids[0] = session.Pair.ID;
+            string[] temp;
+
+            cbPairs.SelectedIndex = cbPairs.Items.IndexOf(session.Pair.ID  + ", " + session.Pair.ToString());
             if (teachers.Count > 0)
             {
                 cbTeacher1.SelectedIndex = cbTeacher1.Items.IndexOf(teachers[0]);
                 cbTeacher2.SelectedIndex = cbTeacher2.Items.IndexOf(teachers[1]);
+                temp = teachers[0].Split(',');
+                ids[1] = Convert.ToInt32(temp[0]);
+                temp = teachers[1].Split(',');
+                ids[2] = Convert.ToInt32(temp[0]);
             }
             if (experts.Count > 0)
             {
                 cbExpert1.SelectedIndex = cbExpert1.Items.IndexOf(experts[0]);
                 cbExpert2.SelectedIndex = cbExpert2.Items.IndexOf(experts[1]);
+                temp = experts[0].Split(',');
+                ids[3] = Convert.ToInt32(temp[0]);
+                temp = experts[1].Split(',');
+                ids[4] = Convert.ToInt32(temp[0]);
             }
+            
+            
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void cbPairs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }

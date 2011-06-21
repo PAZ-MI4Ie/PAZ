@@ -30,7 +30,7 @@ namespace PAZ.Control
 
         public List<Timeslot> Timeslots { get; private set; }
 
-        private MainWindow _mainWindow;
+        public MainWindow MainWindow { get; private set; }
 
         private static PAZController _controller;
 
@@ -70,13 +70,13 @@ namespace PAZ.Control
             Timeslots = TimeslotMapper.FindAll();
             toPlanWindow = new UnPlannedPairs();
 
-            _mainWindow = mainWindow;
+            MainWindow = mainWindow;
         }
 
         public void ExportRoosterClicked()
         {
             string fileName;
-            if (_mainWindow.OpenNewSaveDialog("Roosteroverzicht PAZ", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
+            if (MainWindow.OpenNewSaveDialog("Roosteroverzicht PAZ", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
             {
                 // maak en exporteer als pdf
                 PDFexporter.CreateOverviewPDF(fileName);
@@ -94,10 +94,10 @@ namespace PAZ.Control
         public void BriefMakenBevestigingClicked(Dictionary<int, Expert> receivers, LetterTemplate letterTemplate)
         {
             // dit zorgt ervoor dat er geen filters worden toegepast in de PDF uitdraai
-            _mainWindow.textboxSearch.Text = "";
+            MainWindow.textboxSearch.Text = "";
 
             string fileName;
-            if (_mainWindow.OpenNewSaveDialog("Bevestigingsbrieven PAZ", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
+            if (MainWindow.OpenNewSaveDialog("Bevestigingsbrieven PAZ", ".pdf", "PDF (.pdf)|*.pdf", out fileName) == true)
             {
                 // maak en exporteer als pdf
                 PDFexporter.CreateLetterPDF(fileName, receivers, letterTemplate);

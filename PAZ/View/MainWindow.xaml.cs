@@ -1225,8 +1225,6 @@ namespace PAZ
                     scrollviewer.ScrollToHorizontalOffset(scrollviewer.ContentHorizontalOffset + 20);
             }
         }
-
-
     }
 
 	public static class ValidatorExtensions

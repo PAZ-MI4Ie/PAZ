@@ -360,16 +360,53 @@ namespace PAZ
 							{
 								Student student = _students[i];
 								groupBoxWijzigStudent.Visibility = Visibility.Visible;
+								//fillBlockedDaysWijzigenListBox();
 								textBoxStudentennummerwijzig.Text = student.Studentnumber.ToString();
 								textBoxStudywijzig.Text = student.Study;
 								textBoxVoornaamwijzig.Text = student.Firstname;
 								textBoxAchternaamwijzig.Text = student.Surname;
 								EmailLeering1wijzig.Text = student.Email;
+								List<Daytime> dayTimeList = _controller.DaytimeMapper.FindAll();
 								//blockedDayTimesWijzig.Items.Add = student.BlockedTimeslots;
 								break;
 							}
 						}
 					}
+				}
+			}
+		}
+
+		// deze functie moet nog uitgewerkt worden om in wijzigen aan te geven welke data de student al aangegeven had als geblokeerd.
+		private void fillBlockedDaysWijzigenListBox(int user_id)
+		{
+			ListBoxItem item = new ListBoxItem();
+			int count = 0;
+			List<Blocked_timeslot> blocked_timeslot = _controller.BlockedTimeslotMapper.FindByUserId(user_id);
+			List<Daytime> dayTimeList = new List<Daytime>();
+
+			for (int i = 0; i < blocked_timeslot.Count; i++)
+			{
+				//dayTimeList.Add(_controller.DaytimeMapper.Find(blocked_timeslot[i]));
+			}
+			
+			foreach (Daytime daytime in dayTimeList)
+			{
+				if (count == 0)
+				{
+					item = new ListBoxItem();
+					item.Content = daytime.Date.ToShortDateString();
+					item.Tag = daytime.Id;
+
+					blockedDayTimesWijzig.Items.Add(item);
+					count++;
+				}
+				else if (count == 3)
+				{
+					count = 0;
+				}
+				else
+				{
+					count++;
 				}
 			}
 		}

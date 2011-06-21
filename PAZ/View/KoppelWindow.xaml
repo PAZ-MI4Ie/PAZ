@@ -1,0 +1,31 @@
+﻿<Window x:Class="PAZ.KoppelWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Koppelen" Height="394" Width="561" WindowStartupLocation="CenterOwner" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" Closing="Window_Closing" Background="#FFD51D53">
+    <Grid Height="310" Width="498">
+        <TabControl HorizontalAlignment="Left" Name="tcKoppelen" VerticalAlignment="Top" Width="495" UseLayoutRounding="False" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Height="309" Margin="0,1,0,0">
+            <TabItem Header="Koppelen" Name="tiKoppelen">
+                <Grid Height="258" Width="465">
+                    <Label Content="Paar:" FontStyle="Italic" Foreground="#FF5E5353" Height="28" HorizontalAlignment="Left" Margin="6,18,0,0" Name="lblPair" VerticalAlignment="Top" Width="77.463" HorizontalContentAlignment="Right" />
+                    <Label Content="Docent 1:" FontStyle="Italic" Foreground="#FF5E5353" Height="28" HorizontalAlignment="Left" Margin="6,50,0,0" Name="lblteacher1" VerticalAlignment="Top" HorizontalContentAlignment="Right" Width="77.553" />
+                    <Label Content="Docent 2:" FontStyle="Italic" Foreground="#FF5E5353" Height="28" HorizontalAlignment="Left" Margin="6,82,0,0" Name="lblteacher2" VerticalAlignment="Top" HorizontalContentAlignment="Right" Width="77.553" />
+                    <Label Content="Expert 1:" FontStyle="Italic" Foreground="#FF5E5353" Height="28" HorizontalAlignment="Left" Margin="6,116,0,0" Name="lblexpert1" VerticalAlignment="Top" Width="80.46" HorizontalContentAlignment="Right" />
+                    <Label Content="Expert 2:" FontStyle="Italic" Foreground="#FF5E5353" Height="28" HorizontalAlignment="Right" Margin="0,150,378.54,0" Name="lblexpert2" VerticalAlignment="Top" Width="80.46" HorizontalContentAlignment="Right" />
+                    <ComboBox Background="#FFEFEFEF" Foreground="#FF595959" Height="23" HorizontalAlignment="Left" Margin="100,18,0,0" Name="cbPairs" VerticalAlignment="Top" Width="258" SelectionChanged="cbPairs_SelectionChanged">
+                    </ComboBox>
+                    <ComboBox Background="#FFEFEFEF" Foreground="#FF595959" Height="23" HorizontalAlignment="Left" Margin="100,50,0,0" Name="cbTeacher1" VerticalAlignment="Top" Width="258" SelectionChanged="cbTeacher1_SelectionChanged">
+                    </ComboBox>
+                    <ComboBox Background="#FFEFEFEF" Foreground="#FF595959" Height="23" HorizontalAlignment="Left" Margin="100,82,0,0" Name="cbTeacher2" VerticalAlignment="Top" Width="258" SelectionChanged="cbTeacher2_SelectionChanged">
+                    </ComboBox>
+                    <ComboBox Background="#FFEFEFEF" Foreground="#FF595959" Height="23" HorizontalAlignment="Left" Margin="100,116,0,0" Name="cbExpert1" VerticalAlignment="Top" Width="258" SelectionChanged="cbExpert1_SelectionChanged">
+                    </ComboBox>
+                    <ComboBox Background="#FFEFEFEF" Foreground="#FF595959" Height="23" HorizontalAlignment="Left" Margin="100,150,0,0" Name="cbExpert2" VerticalAlignment="Top" Width="258" SelectionChanged="cbExpert2_SelectionChanged">
+                    </ComboBox>
+                    <Button Content="Toepassen" Height="29" HorizontalAlignment="Left" IsEnabled="False" Margin="297,223,0,0" Name="btnSave" VerticalAlignment="Top" Width="78" Click="btnSave_Click" />
+                    <Button Content="Ok" Height="29" HorizontalAlignment="Left" Margin="381,223,0,0" Name="btnOk" VerticalAlignment="Top" Width="78" Click="btnOk_Click" />
+                    <Button Content="Annuleren" Height="29" HorizontalAlignment="Left" Margin="201,223,0,0" Name="btnSluiten" VerticalAlignment="Top" Width="90" Click="btnAnnuleren" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

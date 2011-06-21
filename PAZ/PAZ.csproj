@@ -100,6 +100,9 @@
     <Compile Include="View\DeleteDataWindow.xaml.cs">
       <DependentUpon>DeleteDataWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\KoppelWindow.xaml.cs">
+      <DependentUpon>KoppelWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\LetterWindow.xaml.cs">
       <DependentUpon>LetterWindow.xaml</DependentUpon>
     </Compile>
@@ -125,6 +128,10 @@
     <Page Include="View\DeleteDataWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\KoppelWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\LetterWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

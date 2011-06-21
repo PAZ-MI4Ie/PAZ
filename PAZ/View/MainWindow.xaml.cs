@@ -294,7 +294,7 @@ namespace PAZ
 
         private void textboxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (comboBoxSearch.SelectedIndex > 1)
+            if (comboBoxSearch.SelectedIndex > 0)
             {
                 Sessions.Filter = delegate(object item)
                 {

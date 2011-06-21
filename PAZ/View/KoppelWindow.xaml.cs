@@ -126,7 +126,6 @@ namespace PAZ
         private void btnAnnuleren(object sender, RoutedEventArgs e)
         {
             btnSave.IsEnabled = false;
-            _wasChanged = false;
             this.Close();
         }
 

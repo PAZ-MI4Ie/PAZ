@@ -338,10 +338,13 @@ namespace PAZ.View
         {
             //Get the label
             CustomLabel session = ((sender as MenuItem).Parent as ContextMenu).PlacementTarget as CustomLabel;
-            SessionWindow sw = new SessionWindow(_controller.SessionMapper.Find(session.Id));
-            sw.ShowDialog();
-            //if save
-            //_controller.MainWindow.updateOverzicht();
+            Session s = _controller.SessionMapper.Find(session.Id);
+            KoppelWindow kw = new KoppelWindow(s.Pair.ID);
+            if (kw.ShowDialog())
+            {
+                _controller.MainWindow.updateOverzicht();
+                updateCalendar();
+            }
         }
 
         void delete_Click(object sender, RoutedEventArgs e)

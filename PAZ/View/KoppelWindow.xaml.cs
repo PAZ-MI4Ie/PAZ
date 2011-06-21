@@ -25,6 +25,7 @@ namespace PAZ
         private List<Expert> _experts;
 
         private bool _isBusyCoupling = false;
+        private bool _wasChanged = false;
 
         public KoppelWindow()
         {
@@ -41,6 +42,24 @@ namespace PAZ
             fillPairs();
             fillTeachers();
             fillExperts();
+        }
+
+        public KoppelWindow(int id)
+        {
+            InitializeComponent();
+
+            _controller = PAZController.GetInstance();
+
+            btnSave.IsEnabled = false;
+
+            _pairs = _controller.PairMapper.FindAll();
+            _teachers = _controller.TeacherMapper.FindAll();
+            _experts = _controller.ExpertMapper.FindAll();
+
+            fillPairs();
+            fillTeachers();
+            fillExperts();
+            cbPairs.SelectedIndex = id;
         }
 
         private void fillPairs()
@@ -93,7 +112,7 @@ namespace PAZ
         */
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
-            if(btnSave.IsEnabled)
+            if (btnSave.IsEnabled)
                 Save();
 
             this.Close();
@@ -107,7 +126,7 @@ namespace PAZ
         private void btnAnnuleren(object sender, RoutedEventArgs e)
         {
             btnSave.IsEnabled = false;
-
+            _wasChanged = false;
             this.Close();
         }
 
@@ -131,7 +150,7 @@ namespace PAZ
         private void Save()
         {
             _controller.KoppelenWindowSaveClicked(_pairs);
-
+            _wasChanged = true;
             btnSave.IsEnabled = false;
         }
 
@@ -155,6 +174,13 @@ namespace PAZ
 
             pair.Attachments = newAttachmentList;
         }
+
+        public new bool ShowDialog()
+        {
+            base.ShowDialog();
+            return _wasChanged;
+        }
+
 
         private void cbPairs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

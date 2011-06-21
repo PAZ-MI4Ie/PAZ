@@ -46,7 +46,7 @@
                         </Grid>
                     </GroupBox>
 
-                    <DataGrid Name="GridOverzichtList" RowHeight="50" Margin="0, 70, 0, 0" RowEditEnding="GridOverzichtList_RowEditEnding" ColumnWidth="105" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="#FFDEDEDE" Foreground="#FF6F6F6F" AlternatingRowBackground="#FFF8F8F8" Loaded="GridOverzichtList_Loaded">
+                    <DataGrid Name="GridOverzichtList" RowHeight="50" Margin="0, 70, 0, 0" ColumnWidth="105" HorizontalGridLinesBrush="{x:Null}" VerticalGridLinesBrush="#FFDEDEDE" Foreground="#FF6F6F6F" AlternatingRowBackground="#FFF8F8F8" Loaded="GridOverzichtList_Loaded">
                     </DataGrid>
                 </Grid>
             </TabItem>
@@ -202,8 +202,180 @@
                 </Grid>
             </TabItem>
 
+            <!-- wijzigen-->
             <TabItem Header="Wijzigen" Name="tabItemWijzigen" Background="White" Padding="5" Width="80" HorizontalAlignment="Center">
                 <Grid Name="GridWijzigen">
+                    <GroupBox Header="Selecteer wijziging" Height="82" Margin="10,2,5,0" Name="groupBoxWijzig" VerticalAlignment="Top">
+                    <Grid>
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="490,17,0,0" Name="comboBoxSelecteerWijziging" Background="#FFEFEFEF" Foreground="#FF595959" VerticalAlignment="Top" Width="246" SelectedIndex="0" SelectionChanged="comboBoxSelecteerWijziging_SelectionChanged">
+                                <ComboBoxItem Content="Selecteer een actie" />
+                                <ComboBoxItem Content="Lokaal" />
+                                <ComboBoxItem Content="Student" />
+                                <ComboBoxItem Content="Bedrijfsbegeleider" />
+                                <ComboBoxItem Content="Externe Deskundige" />
+                                <ComboBoxItem Content="Docent" />
+                            </ComboBox>
+                            <TextBlock Height="45" HorizontalAlignment="Left" Margin="6,17,0,0" Name="textBlockWijzig" Text="Selecteer de type actie wat u wilt wijzigen." VerticalAlignment="Top" Width="247" TextWrapping="Wrap" Foreground="#FF5E5353" FontStyle="Italic" />
+                         </Grid>
+                    </GroupBox>
+                    
+                    <!-- wijzigen grids-->
+                    <!-- groupboxes, bij default hidden-->
+                    <GroupBox Header="Student gegevens" Height="397" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxWijzigStudent" VerticalAlignment="Top" Width="757" Visibility="Hidden">
+                        <Grid Height="376" Visibility="Visible">
+                            <Label Content="Studentennummer" Height="28" HorizontalAlignment="Left" Margin="24,19,0,0" Name="labelStudentenNummerwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,21,0,0" Name="textBoxStudentennummerwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Voornaam" Height="28" HorizontalAlignment="Left" Margin="24,59,0,0" Name="labelVoornaamwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,61,0,0" Name="textBoxVoornaamwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Achternaam" Height="28" HorizontalAlignment="Left" Margin="24,99,0,0" Name="labelAchternaamwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,101,0,0" Name="textBoxAchternaamwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Geblokkeerde dag" Height="28" HorizontalAlignment="Left" Margin="24,139,0,0" Name="labelBlockedDaywijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <DatePicker Height="23" HorizontalAlignment="Left" Margin="293,141,0,0" Name="datePickerBlockedDaywijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959" SelectedDateFormat="Short" />
+
+                            <Label Content="Opleiding" Height="28" HorizontalAlignment="Left" Margin="24,179,0,0" Name="labelStudy1wijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,179,0,0" Name="textBoxStudywijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="E-mail" Height="28" HorizontalAlignment="Left" Margin="24,259,0,0" Name="EmailLeerlingwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,261,0,0" Name="EmailLeering1wijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,301,0,0" Name="buttonGebruikerGegevenswijzig" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onStudentAddClicked" />
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- LOKALEN -->
+                    <GroupBox Header="Lokaal gegevens" Height="397" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxWijzigLokaalGegevens" VerticalAlignment="Top" Width="757" Visibility="Hidden">
+                        <Grid Height="376" Visibility="Visible">
+                            <Label Content="Lokaal #1" Height="28" HorizontalAlignment="Left" Margin="24,19,0,0" Name="labelLokaalNummer1" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,21,0,0" Name="textBoxLokaal1" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Lokaal #2" Height="28" HorizontalAlignment="Left" Margin="24,59,0,0" Name="labelLokaalNummer2" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,61,0,0" Name="textBoxLokaal2" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Lokaal #3" Height="28" HorizontalAlignment="Left" Margin="24,99,0,0" Name="labelLokaalNummer3" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,101,0,0" Name="textBoxLokaal3" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Lokaal #4" Height="28" HorizontalAlignment="Left" Margin="24,139,0,0" Name="labelLokaalNummer4" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,141,0,0" Name="textBoxLokaal4" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Lokaal #5" Height="28" HorizontalAlignment="Left" Margin="24,179,0,0" Name="labelLokaalNummer5" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,181,0,0" Name="textBoxLokaal5" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Lokaal #6" Height="28" HorizontalAlignment="Left" Margin="24,219,0,0" Name="labelLokaalNummer6" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,221,0,0" Name="textBoxLokaal6" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Lokaal #7" Height="28" HorizontalAlignment="Left" Margin="24,259,0,0" Name="labelLokaalNummer7" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,261,0,0" Name="textBoxLokaal7" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Lokaal #8" Height="28" HorizontalAlignment="Left" Margin="24,299,0,0" Name="labelLokaalNummer8" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,301,0,0" Name="textBoxLokaal8" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,339,0,0" Name="buttonLokaalGegevenswijzig" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onLokaalWijzigClicked" />
+                        </Grid>
+                    </GroupBox>
+
+
+                    <!-- BEGELEIDER -->
+                    <!-- groupboxes, bij default hidden-->
+                    <GroupBox Header="Begeleider gebruiker gegegevens" Height="397" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxWijzigBegeleiderGegevens" VerticalAlignment="Top" Width="757" Visibility="Hidden">
+                        <Grid Height="376" Visibility="Visible">
+                            <Label Content="Voornaam" Height="28" HorizontalAlignment="Left" Margin="24,19,0,0" Name="labelBegeleiderVoornaamwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,21,0,0" Name="textBoxBegeleiderVoornaamwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Achternaam" Height="28" HorizontalAlignment="Left" Margin="24,59,0,0" Name="labelBegeleiderAchternaamwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,61,0,0" Name="textBoxBegeleiderAchternaamwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Bedrijf" Height="28" HorizontalAlignment="Left" Margin="24,99,0,0" Name="labelBegeleiderBedrijfwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,101,0,0" Name="textBoxBegeleiderBedrijfwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Adres" Height="28" HorizontalAlignment="Left" Margin="24,139,0,0" Name="labelBegeleiderAdreswijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,141,0,0" Name="textBoxBegeleiderAdreswijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Postcode" Height="28" HorizontalAlignment="Left" Margin="24,179,0,0" Name="labelBegeleiderPostcodewijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,181,0,0" Name="textBoxBegeleiderPostcodewijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Telefoonnummer" Height="28" HorizontalAlignment="Left" Margin="24,219,0,0" Name="labelBegeleiderTelefoonnummerwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,221,0,0" Name="textBoxBegeleiderTelefoonnummerwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="E-mail" Height="28" HorizontalAlignment="Left" Margin="24,259,0,0" Name="labelBegeleiderEmailwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,261,0,0" Name="textBoxBegeleiderEmailwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Stad" Height="28" HorizontalAlignment="Left" Margin="24,301,0,0" Name="labelBegeleiderCitywijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,301,0,0" Name="textBoxBegeleiderCitywijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+
+                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,351,0,0" Name="buttonBegeleiderwijzig" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onBegeleiderAddClicked" />
+                        </Grid>
+                    </GroupBox>
+
+
+                    <!-- EXTERN -->
+                    <!-- groupboxes, bij default hidden-->
+                    <GroupBox Header="Externe deskundige gegevens" Height="397" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxWijzigExternGegevens" VerticalAlignment="Top" Width="757" Visibility="Hidden">
+                        <Grid Height="376" Visibility="Visible">
+                            <Label Content="Voornaam" Height="28" HorizontalAlignment="Left" Margin="24,19,0,0" Name="labelExternVoornaamwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,21,0,0" Name="textBoxExternVoornaamwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Achternaam" Height="28" HorizontalAlignment="Left" Margin="24,59,0,0" Name="labelExternAchternaamwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,61,0,0" Name="textBoxExternAchternaamwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Bedrijf" Height="28" HorizontalAlignment="Left" Margin="24,99,0,0" Name="labelExternBedrijfwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,101,0,0" Name="textBoxExternBedrijfwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Adres" Height="28" HorizontalAlignment="Left" Margin="24,139,0,0" Name="labelExternAdreswijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,141,0,0" Name="textBoxExternAdreswijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Postcode" Height="28" HorizontalAlignment="Left" Margin="24,179,0,0" Name="labelExternPostcodewijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,181,0,0" Name="textBoxExternPostcodewijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Telefoonnummer" Height="28" HorizontalAlignment="Left" Margin="24,219,0,0" Name="labelExternTelefoonnummerwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,221,0,0" Name="textBoxExternTelefoonnummerwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="E-mail" Height="28" HorizontalAlignment="Left" Margin="24,259,0,0" Name="labelExternEmailwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,261,0,0" Name="textBoxExternEmailwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Stad" Height="28" HorizontalAlignment="Left" Margin="24,301,0,0" Name="labelExpertCitywijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,301,0,0" Name="textBoxExpertCitywijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+
+
+                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,341,0,0" Name="buttonExternwijzig" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onExpertAddClicked" />
+                        </Grid>
+                    </GroupBox>
+
+
+                    <!-- DOCENT -->
+                    <!-- groupboxes, bij default hidden-->
+                    <GroupBox Header="Docent gegevens" Height="397" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxLeraarGegevenswijzig" VerticalAlignment="Top" Width="757" Visibility="Hidden">
+                        <Grid Height="376" Visibility="Visible">
+                            <Label Content="Voornaam" Height="28" HorizontalAlignment="Left" Margin="24,19,0,0" Name="labelLeraarVoornaamwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,21,0,0" Name="textBoxLeraarVoornaamwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Achternaam" Height="28" HorizontalAlignment="Left" Margin="24,59,0,0" Name="labelLeraarAchternaamwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,61,0,0" Name="textLeraarAchternaamwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Geblokkeerde dag" Height="28" HorizontalAlignment="Left" Margin="24,99,0,0" Name="labelBlockedDay1wijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <DatePicker Height="23" HorizontalAlignment="Left" Margin="293,99,0,0" Name="datePickerBlockedDay1wijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959" SelectedDateFormat="Short" />
+
+
+                            <Label Content="E-mail" Height="28" HorizontalAlignment="Left" Margin="24,142,0,0" Name="EmailLeraarwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="293,149,0,0" Name="EmailLeraar1wijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
+
+                            <Label Content="Spreiding" Height="28" HorizontalAlignment="Left" Margin="24,189,0,0" Name="Spreidingwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <RadioButton GroupName="teacher_sessionspread" Height="23" Content="Verspreid" Margin="93,189,0,0" Name="sessionVerspreidwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
+                            <RadioButton GroupName="teacher_sessionspread" Height="23" Content="Dicht bij elkaar" Margin="390,189,0,0" Name="sessionDichtBijElkaarwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
+
+                            <Label Content="Type Blokkade" Height="28" HorizontalAlignment="Left" Margin="24,240,0,0" Name="TypeBlockwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <RadioButton GroupName="teacher_blocktype" Height="23" Content="Zacht" Margin="93,240,0,0" Name="teacher_blocktype_softwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
+                            <RadioButton GroupName="teacher_blocktype" Height="23" Content="Hard" Margin="390,240,0,0" Name="teacher_blocktype_hardwijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
+
+                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,301,0,0" Name="buttonLeraarwijzig" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onTeacherAddClicked" />
+
+                        </Grid>
+                    </GroupBox>
+                    <!-- end wijzigen grids-->
                 </Grid>
             </TabItem>
             

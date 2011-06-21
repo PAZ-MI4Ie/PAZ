@@ -18,6 +18,14 @@ namespace PAZ.Model
             }
         }
 
+        public string StartEndTime
+        {
+            get
+            {
+                return new TimeslotMapper(MysqlDb.GetInstance()).Find(this.Timeslot).Time;
+            }
+        }
+
         public Daytime()
         {
         }

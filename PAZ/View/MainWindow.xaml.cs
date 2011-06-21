@@ -33,6 +33,7 @@ namespace PAZ
 		private List<Teacher> _teachers;
 		private List<Student> _students;
         private List<Classroom> _classrooms;
+		private List<TextBox> _classroomTextboxes;
         private List<Pair> _pairs;
 
         private PAZController _controller;
@@ -229,7 +230,7 @@ namespace PAZ
 
             calendar.createCalendar(_controller.IniReader, _classrooms, _controller);
             calendar.loadAllSessions(tempSessions);
-            UnPlannedPairs unPlannedPairs = new UnPlannedPairs();
+            UnPlannedPairs unPlannedPairs = _controller.toPlanWindow;
             unPlannedPairs.loadAllPairs(_controller.PairMapper);
             unPlannedPairs.Show();
             tabCalender.Focus();
@@ -258,6 +259,24 @@ namespace PAZ
 					count++;
 				}
 			}
+            
+            _classroomTextboxes = new List<TextBox>();
+
+			getAlleLokalen();
+
+        }
+
+        public void updateOverzicht()
+        {
+            List<Session> sessions = _controller.SessionMapper.FindAll();
+            _master = new List<SessionRow>();
+            foreach (Session s in sessions)
+            {
+                _master.Add(new SessionRow(s));
+            }
+
+            Sessions = CollectionViewSource.GetDefaultView(_master);
+            GridOverzichtList.ItemsSource = Sessions;
         }
 
 
@@ -272,6 +291,11 @@ namespace PAZ
             _controller.VerwijderGegegevensClicked();     
         }
 
+
+		/*
+		 * Selection of toevoegen tab
+		 * 
+		 */
         private void comboBoxSelecteerType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (comboBoxSelecteerType.SelectedIndex > 0)
@@ -288,6 +312,9 @@ namespace PAZ
             }
         }
 
+		/*
+		 * verberg alle groupboxes van toevoegen
+		 */
         private void verbergAlleToevoegGroupBoxs()
         {
             groupBoxGebruikerGegevens.Visibility = Visibility.Hidden;
@@ -295,6 +322,64 @@ namespace PAZ
             groupBoxExternGegevens.Visibility = Visibility.Hidden;
             groupBoxLeraarGegevens.Visibility = Visibility.Hidden;
         }
+
+
+		/*
+		 * Show de selected item van de list in wijzigen
+		 */
+		private void comboBoxSelecteerWijziging_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (comboBoxSelecteerWijziging.SelectedIndex > 0)
+			{
+				verbergAlleWijzigGroupBoxs();
+
+				switch (comboBoxSelecteerWijziging.SelectedIndex)
+				{
+					case 1: groupBoxWijzigLokaalGegevens.Visibility = Visibility.Visible; break;
+					case 2: groupBoxWijzigStudent.Visibility = Visibility.Visible; break;
+					case 3: groupBoxWijzigBegeleiderGegevens.Visibility = Visibility.Visible; break;
+					case 4: groupBoxWijzigExternGegevens.Visibility = Visibility.Visible; break;
+					case 5: groupBoxLeraarGegevenswijzig.Visibility = Visibility.Visible; break;
+				}
+			}
+		}
+
+		/*
+		 * Verberg alle groupboxes voor de list in de tabblad wijzigen
+		 */
+		private void verbergAlleWijzigGroupBoxs()
+		{
+			groupBoxWijzigLokaalGegevens.Visibility = Visibility.Hidden;
+			groupBoxWijzigStudent.Visibility = Visibility.Hidden;
+			groupBoxWijzigBegeleiderGegevens.Visibility = Visibility.Hidden;
+			groupBoxWijzigExternGegevens.Visibility = Visibility.Hidden;
+			groupBoxLeraarGegevenswijzig.Visibility = Visibility.Hidden;
+		}
+
+		/*
+		 * getAlleLokalen()
+		 * 
+		 * verkrijgt alle lokalen. Dit is nodig 
+		 * voor het wijzigen van de lokalen.
+		 * 
+		 * Mark m & Mark b
+		 */
+		private void getAlleLokalen()
+		{
+			_classroomTextboxes.Add(textBoxLokaal1);
+			_classroomTextboxes.Add(textBoxLokaal2);
+			_classroomTextboxes.Add(textBoxLokaal3);
+			_classroomTextboxes.Add(textBoxLokaal4);
+			_classroomTextboxes.Add(textBoxLokaal5);
+			_classroomTextboxes.Add(textBoxLokaal6);
+			_classroomTextboxes.Add(textBoxLokaal7);
+			_classroomTextboxes.Add(textBoxLokaal8);
+
+			for (int i = 0; i < _classroomTextboxes.Count; i++)
+			{
+				_classroomTextboxes[i].Text = _classrooms[i].Room_number;
+			}
+		}
 
         private void buttonEmailVersturen_Click(object sender, RoutedEventArgs e)
         {
@@ -306,17 +391,9 @@ namespace PAZ
             _controller.BriefMakenClicked(_master);
         }
 
-        private void GridOverzichtList_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-        {
-            if (MessageBox.Show("Wilt u de wijzigingen opslaan?", "Bevestiging", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                MessageBoxResult result = MessageBox.Show("Wijzigingen zijn opgeslagen.", "Succesvol");
-            }
-        }
-
         private void textboxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (comboBoxSearch.SelectedIndex > 1)
+            if (comboBoxSearch.SelectedIndex > 0)
             {
                 Sessions.Filter = delegate(object item)
                 {
@@ -325,7 +402,7 @@ namespace PAZ
                     switch (comboBoxSearch.SelectedIndex)
                     {
                         case 1: _match = ((SessionRow)(item)).Datum.ToString().Contains(textboxSearch.Text.ToLower()); break;
-                        case 2: _match = ((SessionRow)(item)).Timeslot.ToString().Contains(textboxSearch.Text.ToLower()); break;
+                        case 2: _match = ((SessionRow)(item)).Tijd.ToString().Contains(textboxSearch.Text.ToLower()); break;
                         case 3: _match = ((SessionRow)(item)).Lokaal.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
                         case 4: _match = ((SessionRow)(item)).Studenten.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
                         case 5: _match = ((SessionRow)(item)).Docenten.ToLower().ToString().Contains(textboxSearch.Text.ToLower()); break;
@@ -510,6 +587,18 @@ namespace PAZ
             return returnValue;
         }
 
+
+		private void onLokaalWijzigClicked(object sender, RoutedEventArgs e)
+		{
+			for (int i = 0; i < _classroomTextboxes.Count; i++)
+			{
+				_classrooms[i].Room_number = _classroomTextboxes[i].Text;
+				_controller.ClassroomMapper.Save(_classrooms[i]);
+			}
+			MessageBox.Show("Lokalen zijn gewijzigd.");
+		}
+
+
 		private void onTeacherAddClicked(object sender, RoutedEventArgs e)
 		{
 
@@ -655,9 +744,9 @@ namespace PAZ
         {
             if (Application.Current.Windows.Count == 1)
             {
-                UnPlannedPairs upp = new UnPlannedPairs();
-                upp.loadAllPairs(_controller.PairMapper);
-                upp.Show();
+                _controller.toPlanWindow = new UnPlannedPairs();
+                _controller.toPlanWindow.loadAllPairs(_controller.PairMapper);
+                _controller.toPlanWindow.Show();
             }
             else
                 MessageBox.Show("Het scherm met de nog niet ingeplande paren staat nog open.");
@@ -1094,12 +1183,15 @@ namespace PAZ
 
             if (succesfull)
             {
-
+                calendar.updateCalendar();
+                _controller.toPlanWindow.loadAllPairs(_controller.PairMapper);
+                updateOverzicht();
                 MessageBox.Show("Zittingen zijn gegenereerd.", "Actie succesvol"); 
                 
                 /*
                  *  @CPTJEROEN/LUNITARI: HIER IETS DOEN ALS HET SUCCESVOL IS
                  */
+                
             }
         }
 
@@ -1123,8 +1215,11 @@ namespace PAZ
 
         private void GridOverzichtList_Loaded(object sender, RoutedEventArgs e)
         {
-            GridOverzichtList.Columns[0].SortDirection = ListSortDirection.Ascending;
-            GridOverzichtList.Columns[1].SortDirection = ListSortDirection.Ascending;
+            if (GridOverzichtList.Columns.Count > 0)
+            {
+                GridOverzichtList.Columns[0].SortDirection = ListSortDirection.Ascending;
+                GridOverzichtList.Columns[1].SortDirection = ListSortDirection.Ascending;
+            }
         }
 
         private void ScrollViewer_DragOver(object sender, DragEventArgs e)
@@ -1134,9 +1229,9 @@ namespace PAZ
             if (position.Y > 0 && position.Y < this.Height)
             {
                 if (position.Y < 150)
-                    scrollviewer.ScrollToVerticalOffset(scrollviewer.ContentVerticalOffset - 100);
+                    scrollviewer.ScrollToVerticalOffset(scrollviewer.ContentVerticalOffset - 50);
                 if (position.Y > this.Height - 150)
-                    scrollviewer.ScrollToVerticalOffset(scrollviewer.ContentVerticalOffset + 100);
+                    scrollviewer.ScrollToVerticalOffset(scrollviewer.ContentVerticalOffset + 50);
             } if (position.X > 0 && position.X < this.Width)
             {
                 if (position.X < 100)
@@ -1145,6 +1240,8 @@ namespace PAZ
                     scrollviewer.ScrollToHorizontalOffset(scrollviewer.ContentHorizontalOffset + 20);
             }
         }
+
+
     }
 
 	public static class ValidatorExtensions

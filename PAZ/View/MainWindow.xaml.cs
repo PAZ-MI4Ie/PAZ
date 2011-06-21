@@ -1340,8 +1340,8 @@ namespace PAZ
 			{
 				item = new ListBoxItem();
 				item1 = new ListBoxItem();
-				item.Content = daytime.Date.ToShortDateString() + " - " + daytime.Starttime;
-				item1.Content = daytime.Date.ToShortDateString() + " - " + daytime.Starttime;
+                item.Content = daytime.Date.ToShortDateString() + " - " + daytime.GetStarttime();
+                item1.Content = daytime.Date.ToShortDateString() + " - " + daytime.GetStarttime();
 
 				blockedDayTimesTeacher.Items.Add(item);
 				softblockedDayTimesDocent.Items.Add(item1);

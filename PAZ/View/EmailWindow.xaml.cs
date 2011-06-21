@@ -328,7 +328,7 @@ namespace PAZ
                             emailBody += "Zitting " + (++zittingNummer);
                         }
 
-                        emailBody += " is gepland op, " + _sessions[i].Datum + " om " + sessionModel.Daytime.Starttime + ", in lokaal " + sessionModel.Classroom.Room_number + "<br />";
+                        emailBody += " is gepland op, " + _sessions[i].Datum + " om " + sessionModel.Daytime.GetStarttime() + ", in lokaal " + sessionModel.Classroom.Room_number + "<br />";
                     }
                 }
             }

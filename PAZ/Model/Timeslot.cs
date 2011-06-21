@@ -9,11 +9,11 @@ namespace PAZ.Model
     {
         public Timeslot(int id, string time)
 		{
-			Id = id;
-            Time = time;
+			this.Id = id;
+            this.Time = time;
         }
 
-        public int Id { get; private set; }
-        public string Time { get; private set; }
+        public int Id { get; set; }
+        public string Time { get; set; }
     }
 }

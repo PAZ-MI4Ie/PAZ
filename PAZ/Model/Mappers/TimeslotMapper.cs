@@ -35,8 +35,8 @@ namespace PAZ.Model.Mappers
             List<Timeslot> result = new List<Timeslot>();
             while (Reader.Read())
             {
-                int index = -1;
-                result.Add(new Timeslot(Reader.GetInt32(++index), Reader.GetString(++index)));
+                int index = 0;
+                result.Add(new Timeslot(Reader.GetInt32(index++), Reader.GetString(index++)));
             }
             this._db.CloseConnection();
             return result;

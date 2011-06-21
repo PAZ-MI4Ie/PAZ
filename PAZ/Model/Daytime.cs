@@ -1,6 +1,7 @@
 ﻿using System;
 using PAZ.Model.Mappers;
 using PAZMySQL;
+using PAZ.Control;
 
 namespace PAZ.Model
 {
@@ -9,14 +10,6 @@ namespace PAZ.Model
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public int Timeslot { get; set; }
-        public string Starttime
-        {
-            get
-            {
-                // Lang en lelijk D:
-                return new TimeslotMapper(MysqlDb.GetInstance()).Find(this.Timeslot).Time.Split(new char[] { '-' })[0];
-            }
-        }
 
         public string StartEndTime
         {
@@ -32,9 +25,14 @@ namespace PAZ.Model
 
 		public Daytime(int id, DateTime date, int timeslot)
 		{
-			Id = id;
-			Date = date;
-			Timeslot = timeslot;
+			this.Id = id;
+			this.Date = date;
+			this.Timeslot = timeslot;
 		}
+
+        public string GetStarttime()
+        {
+            return PAZController.GetInstance().TimeslotMapper.Find(this.Timeslot).Time.Split(new char[] { '-' })[0];
+        }
     }
 }

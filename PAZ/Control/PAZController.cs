@@ -144,9 +144,15 @@ namespace PAZ.Control
                 int id;
 
                 if (dataItem is User)
+                {
                     id = ((User)dataItem).Id;
+                    PAZController.GetInstance().UserMapper.Delete(id);
+                }
                 else
+                {
                     id = ((Classroom)dataItem).Id;
+                    PAZController.GetInstance().ClassroomMapper.Delete(id);
+                }
             }
 
             return true;
@@ -156,7 +162,9 @@ namespace PAZ.Control
         {
             IniFile ini = new Ini.IniFile("sys.ini");
             if (ini.Exists())
+            {
                 ini.Load();
+            }
             else
             {
                 IniSection section = new IniSection();

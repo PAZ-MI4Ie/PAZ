@@ -70,7 +70,7 @@
     <Compile Include="Control\Emailer.cs" />
     <Compile Include="Model\EmailTemplate.cs" />
     <Compile Include="Model\LetterTemplate.cs" />
-    <Compile Include="Model\Mappers\BlockedTimeslotMapper.cs" />
+    <Compile Include="View\BlockedTimeslotMapper.cs" />
     <Compile Include="Model\Mappers\EmailTemplateMapper.cs" />
     <Compile Include="Model\Mappers\LetterTemplateMapper.cs" />
     <Compile Include="Model\Mappers\PairAttachmentMapper.cs" />

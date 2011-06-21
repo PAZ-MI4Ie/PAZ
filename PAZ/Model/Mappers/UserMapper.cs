@@ -145,15 +145,20 @@ namespace PAZMySQL
             return true;
         }
 
-        public bool Delete(User user)
+        public bool Delete(int id)
         {
             this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
             command.CommandText = "DELETE FROM user WHERE id = ?id";
-            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = user.Id;
+            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
             this._db.ExecuteCommand(command);
             this._db.CloseConnection();
             return true;
+        }
+
+        public bool Delete(User user)
+        {
+            return this.Delete(user.Id);
         }
 
         public bool Delete(List<User> users)

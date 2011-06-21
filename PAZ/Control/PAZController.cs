@@ -37,7 +37,9 @@ namespace PAZ.Control
         public static PAZController GetInstance()
         {
             if (PAZController._controller == null)
+            {
                 PAZController._controller = new PAZController();
+            }
 
             return PAZController._controller;
         }
@@ -50,27 +52,27 @@ namespace PAZ.Control
 
         public void Init(MainWindow mainWindow)
         {
-            PDFexporter = new PDFExporter(mainWindow.GridOverzichtList);
+            this.PDFexporter = new PDFExporter(mainWindow.GridOverzichtList);
 
-            DB = MysqlDb.GetInstance();
+            this.DB = MysqlDb.GetInstance();
 
-            BlockedTimeslotMapper = new BlockedTimeslotMapper(DB);
-            SessionMapper = new SessionMapper(DB);
-            UserMapper = new UserMapper(DB);
-            ClassroomMapper = new ClassroomMapper(DB);
-            StudentMapper = new StudentMapper(DB);
-            DaytimeMapper = new DaytimeMapper(DB);
-            TeacherMapper = new TeacherMapper(DB);
-            ExpertMapper = new ExpertMapper(DB);
-            PairMapper = new PairMapper(DB);
-            EmailTemplateMapper = new EmailTemplateMapper(DB);
-            LetterTemplateMapper = new LetterTemplateMapper(DB);
-            TimeslotMapper = new TimeslotMapper(DB);
+            this.BlockedTimeslotMapper = new BlockedTimeslotMapper(this.DB);
+            this.SessionMapper = new SessionMapper(this.DB);
+            this.UserMapper = new UserMapper(this.DB);
+            this.ClassroomMapper = new ClassroomMapper(this.DB);
+            this.StudentMapper = new StudentMapper(this.DB);
+            this.DaytimeMapper = new DaytimeMapper(this.DB);
+            this.TeacherMapper = new TeacherMapper(this.DB);
+            this.ExpertMapper = new ExpertMapper(this.DB);
+            this.PairMapper = new PairMapper(this.DB);
+            this.EmailTemplateMapper = new EmailTemplateMapper(this.DB);
+            this.LetterTemplateMapper = new LetterTemplateMapper(this.DB);
+            this.TimeslotMapper = new TimeslotMapper(this.DB);
 
-            Timeslots = TimeslotMapper.FindAll();
-            toPlanWindow = new UnPlannedPairs();
+            this.Timeslots = this.TimeslotMapper.FindAll();
+            this.toPlanWindow = new UnPlannedPairs();
 
-            MainWindow = mainWindow;
+            this.MainWindow = mainWindow;
         }
 
         public void ExportRoosterClicked()
@@ -172,10 +174,10 @@ namespace PAZ.Control
                 ini.Add("EMAILSETTINGS", section);
 
                 section = new IniSection();
-                section.Add("db_host", "student.aii.avans.nl");
-                section.Add("db_username", "MI4Ie");
-                section.Add("db_password", "4DRcUrzV");
-                section.Add("db_database", "MI4Ie_db");
+                section.Add("this.DB_host", "student.aii.avans.nl");
+                section.Add("this.DB_username", "MI4Ie");
+                section.Add("this.DB_password", "4DRcUrzV");
+                section.Add("this.DB_database", "MI4Ie_this.DB");
                 ini.Add("DATABASESETTINGS", section);
 
                 ini.Save();

@@ -49,19 +49,15 @@ namespace PAZ
             textBoxDeadlineStart.Text = _controller.IniReader["DATES"]["startdate"];
             textBoxDeadlineEind.Text = _controller.IniReader["DATES"]["enddate"];
 
-            //TEST CODE:
             List<Session> tempSessions = _controller.SessionMapper.FindAll();
-            Console.WriteLine(tempSessions);
             _master = new List<SessionRow>();
             foreach (Session s in tempSessions)
             {
                 _master.Add(new SessionRow(s));
             }
-			//END OF TEST CODE
 
             _teachers = _controller.TeacherMapper.FindAll();
             _students = _controller.StudentMapper.FindAll();
-            //END OF TEST CODE
 
             #region test shit
             /*
@@ -241,7 +237,7 @@ namespace PAZ
             
             _classroomTextboxes = new List<TextBox>();
 
-			getAlleLokalen();
+			getAllClassrooms();
 
 
         }
@@ -311,7 +307,7 @@ namespace PAZ
 		{
 			if (comboBoxSelecteerWijziging.SelectedIndex > 0)
 			{
-				verbergAlleWijzigGroupBoxs();
+				HideAllEditGroupBoxes();
 
 				switch (comboBoxSelecteerWijziging.SelectedIndex)
 				{
@@ -333,15 +329,15 @@ namespace PAZ
 			{
 				switch (comboBoxSelecteerWijziging.SelectedIndex)
 				{
-					case 2: getPersoon("student"); break;
-					case 3: getPersoon("expert"); break;
-					case 4: getPersoon("expert"); break;
-					case 5: getPersoon("teacher"); break;
+					case 2: getPerson("student"); break;
+					case 3: getPerson("expert"); break;
+					case 4: getPerson("expert"); break;
+					case 5: getPerson("teacher"); break;
 				}
 			}
 		}
 
-		private void getPersoon(String type)
+		private void getPerson(String type)
 		{
 			// laat juiste velden van geselecteerde persoon zien
 			if (comboBoxSelecteerWijzigPersoon.SelectedIndex > 0)
@@ -450,7 +446,7 @@ namespace PAZ
 		/*
 		 * Verberg alle groupboxes voor de list in de tabblad wijzigen
 		 */
-		private void verbergAlleWijzigGroupBoxs()
+		private void HideAllEditGroupBoxes()
 		{
 			groupBoxWijzigLokaalGegevens.Visibility = Visibility.Hidden;
 			groupBoxWijzigStudent.Visibility = Visibility.Hidden;
@@ -467,7 +463,7 @@ namespace PAZ
 		 * 
 		 * Mark m & Mark b
 		 */
-		private void getAlleLokalen()
+		private void getAllClassrooms()
 		{
 			_classroomTextboxes.Add(textBoxLokaal1);
 			_classroomTextboxes.Add(textBoxLokaal2);
@@ -1223,10 +1219,7 @@ namespace PAZ
                 case MessageBoxResult.No:
                     //doe niks
                     break;
-            }
-            //Planner planner = new Planner();
-            //planner.Plan(_controller.PairMapper.FindAll());
-            
+            }           
             
         }
 
@@ -1259,12 +1252,7 @@ namespace PAZ
                 calendar.updateCalendar();
                 _controller.toPlanWindow.loadAllPairs(_controller.PairMapper);
                 updateOverzicht();
-                MessageBox.Show("Zittingen zijn gegenereerd.", "Actie succesvol"); 
-                
-                /*
-                 *  @CPTJEROEN/LUNITARI: HIER IETS DOEN ALS HET SUCCESVOL IS
-                 */
-                
+                MessageBox.Show("Zittingen zijn gegenereerd.", "Actie succesvol");                 
             }
         }
 

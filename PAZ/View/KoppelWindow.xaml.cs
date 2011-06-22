@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,15 +12,14 @@ using PAZ.View;
 namespace PAZ
 {
     /**
-    * In deze klassen kun je de geadresseerden bepalen(docenten en studenten).
-    * 
-    * Auteur: Gökhan en Yorg 
+    * In deze klasse kun je de koppelingen leggen(studenten, experts en docenten aan paren koppelen)
     */
     public partial class KoppelWindow : Window
     {
         private PAZController _controller;
 
         private List<Pair> _pairs;
+        private List<Student> _students;
         private List<Teacher> _teachers;
         private List<Expert> _experts;
 
@@ -36,29 +35,18 @@ namespace PAZ
             btnSave.IsEnabled = false;
 
             _pairs = _controller.PairMapper.FindAll();
+            _students = _controller.StudentMapper.FindAll();
             _teachers = _controller.TeacherMapper.FindAll();
             _experts = _controller.ExpertMapper.FindAll();
 
             fillPairs();
+            fillStudents();
             fillTeachers();
             fillExperts();
         }
 
-        public KoppelWindow(int id)
+        public KoppelWindow(int id) : this()
         {
-            InitializeComponent();
-
-            _controller = PAZController.GetInstance();
-
-            btnSave.IsEnabled = false;
-
-            _pairs = _controller.PairMapper.FindAll();
-            _teachers = _controller.TeacherMapper.FindAll();
-            _experts = _controller.ExpertMapper.FindAll();
-
-            fillPairs();
-            fillTeachers();
-            fillExperts();
             cbPairs.SelectedIndex = id;
         }
 
@@ -71,6 +59,22 @@ namespace PAZ
                 cbPairs.Items.Add(pair);
 
             cbPairs.SelectedIndex = 0;
+        }
+
+        private void fillStudents()
+        {
+            cbStudent1.Items.Add("Ongekoppeld");
+            cbStudent2.Items.Add("Ongekoppeld");
+
+            List<Student> foundStudents = _students;
+            foreach (Student student in foundStudents)
+            {
+                cbStudent1.Items.Add(student);
+                cbStudent2.Items.Add(student);
+            }
+
+            cbStudent1.SelectedIndex = 0;
+            cbStudent2.SelectedIndex = 0;
         }
 
         private void fillTeachers()
@@ -188,6 +192,8 @@ namespace PAZ
             int selectedIndex = cbPairs.SelectedIndex;
             if (selectedIndex <= 0)
             {
+                cbStudent1.SelectedIndex = 0;
+                cbStudent2.SelectedIndex = 0;
                 cbTeacher1.SelectedIndex = 0;
                 cbTeacher2.SelectedIndex = 0;
                 cbExpert1.SelectedIndex = 0;
@@ -196,6 +202,17 @@ namespace PAZ
             }
 
             Pair selectedPair = (Pair) cbPairs.Items[selectedIndex];
+            for(int i = 1; i < cbStudent1.Items.Count; ++i)
+            {
+                Student student = (Student) cbStudent1.Items[i];
+                if (student.Id == selectedPair.Student1.Id)
+                    cbStudent1.SelectedIndex = i;
+                else if (selectedPair.Student2 == null)
+                    cbStudent2.SelectedIndex = 0;
+                else if (student.Id == selectedPair.Student2.Id)
+                    cbStudent2.SelectedIndex = i;
+            }
+
             SelectCoupledUsers(selectedPair, cbTeacher1, cbTeacher2);
             SelectCoupledUsers(selectedPair, cbExpert1, cbExpert2);
 

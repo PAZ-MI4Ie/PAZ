@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using MySql.Data.MySqlClient;
 using PAZ.Model;
+using PAZ.Control;
 
 namespace PAZMySQL
 {
@@ -72,14 +73,22 @@ namespace PAZMySQL
                 "(?user_id, ?studentnumber, ?study)";
             }
             else
-			{
-                command.CommandText = "UPDATE student SET studentnumber=?studentnumber, study=?study WHERE user_id = ?user_id";
+            {
+                command.CommandText = "UPDATE student (studentnumber, study) VALUES " +
+                "(?studentnumber, ?study) WHERE user_id = ?user_id";
             }
             command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.Int32)).Value = student.Id;
             command.Parameters.Add(new MySqlParameter("?studentnumber", MySqlDbType.Int32)).Value = student.Studentnumber;
             command.Parameters.Add(new MySqlParameter("?study", MySqlDbType.String)).Value = student.Study;
             this._db.ExecuteCommand(command);
             this._db.CloseConnection();
+            if (insert)
+            {
+                Pair pair = new Pair();
+                pair.Student1 = student;
+                pair.Student1_id = student.Id;
+                PAZController.GetInstance().PairMapper.Save(pair);
+            }
         }
     }
 }

@@ -49,7 +49,14 @@ namespace PAZ.Model.Mappers
             }
             command.Parameters.Add(new MySqlParameter("?number_of_guests", MySqlDbType.Int32)).Value = pair.Number_of_guests;
             command.Parameters.Add(new MySqlParameter("?student1", MySqlDbType.Int32)).Value = pair.Student1_id;
-            command.Parameters.Add(new MySqlParameter("?student2", MySqlDbType.Int32)).Value = pair.Student2_id;
+            if (pair.Student2_id == 0)
+            {
+                command.Parameters.Add(new MySqlParameter("?student2", MySqlDbType.Int32)).Value = null;
+            }
+            else
+            {
+                command.Parameters.Add(new MySqlParameter("?student2", MySqlDbType.Int32)).Value = pair.Student2_id;
+            }
             this._db.ExecuteCommand(command);
             this._db.CloseConnection();
             if (pair.ID == 0)
@@ -62,7 +69,7 @@ namespace PAZ.Model.Mappers
                 this._db.CloseConnection();
                 pair.ID = Reader.GetInt32(0);
             }
-            List<User> attachments = pair.Attachments;
+
             this._db.OpenConnection();
             MySqlCommand command3 = this._db.CreateCommand();
             command3.CommandText = "DELETE FROM pair_attachment WHERE pair_id = ?pair_id";
@@ -70,7 +77,7 @@ namespace PAZ.Model.Mappers
             this._db.ExecuteCommand(command3);
             this._db.CloseConnection();
             List<int> had = new List<int>();
-            foreach (User attachment in attachments)
+            foreach (User attachment in pair.Attachments)
             {
                 if (!had.Contains(attachment.Id))
                 {
@@ -159,6 +166,22 @@ namespace PAZ.Model.Mappers
             }
             this._db.CloseConnection();
             return result;
+        }
+
+        public bool Delete(int id)
+        {
+            this._db.OpenConnection();
+            MySqlCommand command = this._db.CreateCommand();
+            command.CommandText = "DELETE FROM pair WHERE id = ?id";
+            command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
+            this._db.ExecuteCommand(command);
+            this._db.CloseConnection();
+            return true;
+        }
+
+        public bool Delete(Pair pair)
+        {
+            return this.Delete(pair.ID);
         }
     }
 }

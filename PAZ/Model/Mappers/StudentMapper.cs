@@ -72,9 +72,8 @@ namespace PAZMySQL
                 "(?user_id, ?studentnumber, ?study)";
             }
             else
-            {
-                command.CommandText = "UPDATE student (studentnumber, study) VALUES " +
-                "(?studentnumber, ?study) WHERE user_id = ?user_id";
+			{
+                command.CommandText = "UPDATE student SET studentnumber=?studentnumber, study=?study WHERE user_id = ?user_id";
             }
             command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.Int32)).Value = student.Id;
             command.Parameters.Add(new MySqlParameter("?studentnumber", MySqlDbType.Int32)).Value = student.Studentnumber;

@@ -36,7 +36,7 @@ namespace PAZ.Model.Mappers
 
         public void Save(Blocked_timeslot slot)
         {
-            this._db.OpenConnection();
+
             MySqlCommand command = this._db.CreateCommand();
             command.CommandText = "INSERT INTO blocked_timeslot (user_id, daytime_id, hardblock) VALUES (?user_id, ?daytime_id, ?hardblock)";
             command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.Int32)).Value = slot.User.Id;
@@ -49,6 +49,7 @@ namespace PAZ.Model.Mappers
             {
                 command.Parameters.Add(new MySqlParameter("?hardblock", MySqlDbType.Int16)).Value = 0;
             }
+            this._db.OpenConnection();
             this._db.ExecuteCommand(command);
             this._db.CloseConnection();
         }

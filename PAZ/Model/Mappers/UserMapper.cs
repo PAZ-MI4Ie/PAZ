@@ -108,13 +108,16 @@ namespace PAZMySQL
             command.Parameters.Add(new MySqlParameter("?was_changed", MySqlDbType.Int32)).Value = user.WasChanged;
             this._db.ExecuteCommand(command);
             this._db.CloseConnection();
-            this._db.OpenConnection();
-            MySqlCommand command2 = this._db.CreateCommand();
-            command2.CommandText = "SELECT LAST_INSERT_ID()";
-            MySqlDataReader Reader = this._db.ExecuteCommand(command2);
-            Reader.Read();
-            this._db.CloseConnection();
-            user.Id = Reader.GetInt32(0);
+			if (user.Id == 0)
+			{
+				this._db.OpenConnection();
+				MySqlCommand command2 = this._db.CreateCommand();
+				command2.CommandText = "SELECT LAST_INSERT_ID()";
+				MySqlDataReader Reader = this._db.ExecuteCommand(command2);
+				Reader.Read();
+				this._db.CloseConnection();
+				user.Id = Reader.GetInt32(0);
+			}
             this._db.OpenConnection();
             MySqlCommand command3 = this._db.CreateCommand();
             command3.CommandText = "DELETE FROM blocked_timeslot WHERE user_id = ?user_id";

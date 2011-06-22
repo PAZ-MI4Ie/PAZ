@@ -36,7 +36,7 @@ namespace PAZ
 		private List<TextBox> _classroomTextboxes;
         private List<Pair> _pairs;
 		private List<Expert> _experts;
-
+        private List<Daytime> dayTimeListTeacher;
         private PAZController _controller;
 
         public MainWindow()
@@ -356,14 +356,12 @@ namespace PAZ
 							{
 								Student student = _students[i];
 								groupBoxWijzigStudent.Visibility = Visibility.Visible;
-								//fillBlockedDaysWijzigenListBox();
+								fillBlockedDaysWijzigenListBox(student.Id);
 								textBoxStudentennummerwijzig.Text = student.Studentnumber.ToString();
 								textBoxStudywijzig.Text = student.Study;
 								textBoxVoornaamwijzig.Text = student.Firstname;
 								textBoxAchternaamwijzig.Text = student.Surname;
 								EmailLeering1wijzig.Text = student.Email;
-								List<Daytime> dayTimeList = _controller.DaytimeMapper.FindAll();
-								//blockedDayTimesWijzig.Items.Add = student.BlockedTimeslots;
 								break;
 							}
 						}
@@ -378,13 +376,8 @@ namespace PAZ
 			ListBoxItem item = new ListBoxItem();
 			int count = 0;
 			List<Blocked_timeslot> blocked_timeslot = _controller.BlockedTimeslotMapper.FindByUserId(user_id);
-			List<Daytime> dayTimeList = new List<Daytime>();
+			List<Daytime> dayTimeList = _controller.DaytimeMapper.FindAll();
 
-			for (int i = 0; i < blocked_timeslot.Count; i++)
-			{
-				//dayTimeList.Add(_controller.DaytimeMapper.Find(blocked_timeslot[i]));
-			}
-			
 			foreach (Daytime daytime in dayTimeList)
 			{
 				if (count == 0)
@@ -394,6 +387,13 @@ namespace PAZ
 					item.Tag = daytime.Id;
 
 					blockedDayTimesWijzig.Items.Add(item);
+					if (blocked_timeslot.Count > 0)
+					{
+						if (daytime.Date == blocked_timeslot[0].Daytime.Date)
+						{
+							blockedDayTimesWijzig.SelectedItem = item;
+						}
+					}
 					count++;
 				}
 				else if (count == 3)
@@ -764,13 +764,6 @@ namespace PAZ
 				sessionSpread = Teacher.session_spread.ANY;
 			}
 
-			if (blockedDayTimesTeacher.SelectedItems != null)
-			{
-				foreach (ListBoxItem selectedBlockdays in blockedDayTimesTeacher.SelectedItems)
-				{
-					
-				}
-			}
 
 			if (hasInputError == false)
 			{
@@ -780,6 +773,31 @@ namespace PAZ
 				newTeacher.Surname = textLeraarAchternaam.Text;
 				newTeacher.Email = EmailLeraar1.Text;
 				newTeacher.Session_spread = sessionSpread;
+                newTeacher.WasChanged = false;
+
+                if (blockedDayTimesTeacher.SelectedItems != null)
+                {
+                    foreach (ListBoxItem selectedBlockdays in blockedDayTimesTeacher.SelectedItems)
+                    {
+                        Blocked_timeslot thisTimeslot = new Blocked_timeslot();
+                        thisTimeslot.Daytime_id = (int)selectedBlockdays.Tag;
+                        thisTimeslot.Hardblock = true;
+                        newTeacher.BlockedTimeslots.Add(thisTimeslot);
+
+                    }
+                }
+
+                if (softblockedDayTimesDocent.SelectedItems != null)
+                {
+                    foreach (ListBoxItem selectedBlockdays in softblockedDayTimesDocent.SelectedItems)
+                    {
+                        Blocked_timeslot thisTimeslot = new Blocked_timeslot();
+                        thisTimeslot.Daytime_id = (int)selectedBlockdays.Tag;
+                        thisTimeslot.Hardblock = true;
+                        newTeacher.BlockedTimeslots.Add(thisTimeslot);
+
+                    }
+                }
 
 				//Send to the database
 				_controller.TeacherMapper.Save(newTeacher);
@@ -937,6 +955,30 @@ namespace PAZ
 				newExpert.Telephone = textBoxBegeleiderTelefoonnummer.Text;
 				newExpert.City = textBoxBegeleiderCity.Text;
 
+                if (blockedDayTimesBegeleider.SelectedItems != null)
+                {
+                    foreach (ListBoxItem selectedBlockdays in blockedDayTimesBegeleider.SelectedItems)
+                    {
+                        Blocked_timeslot thisTimeslot = new Blocked_timeslot();
+                        thisTimeslot.Daytime_id = (int)selectedBlockdays.Tag;
+                        thisTimeslot.Hardblock = true;
+                        newExpert.BlockedTimeslots.Add(thisTimeslot);
+
+                    }
+                }
+
+                if (softblockedDayTimesBegeleider.SelectedItems != null)
+                {
+                    foreach (ListBoxItem selectedBlockdays in softblockedDayTimesBegeleider.SelectedItems)
+                    {
+                        Blocked_timeslot thisTimeslot = new Blocked_timeslot();
+                        thisTimeslot.Daytime_id = (int)selectedBlockdays.Tag;
+                        thisTimeslot.Hardblock = true;
+                        newExpert.BlockedTimeslots.Add(thisTimeslot);
+
+                    }
+                }
+
 				//Send to the database
 				_controller.ExpertMapper.Save(newExpert);
 				MessageBox.Show("Begeleider toegevoegd");
@@ -1066,6 +1108,29 @@ namespace PAZ
 				newExpert.Telephone = textBoxExternTelefoonnummer.Text;
 				newExpert.City = textBoxExpertCity.Text;
 
+                if (blockedDayTimesExpert.SelectedItems != null)
+                {
+                    foreach (ListBoxItem selectedBlockdays in blockedDayTimesExpert.SelectedItems)
+                    {
+                        Blocked_timeslot thisTimeslot = new Blocked_timeslot();
+                        thisTimeslot.Daytime_id = (int)selectedBlockdays.Tag;
+                        thisTimeslot.Hardblock = true;
+                        newExpert.BlockedTimeslots.Add(thisTimeslot);
+
+                    }
+                }
+
+                if (softblockedDayTimesExpert.SelectedItems != null)
+                {
+                    foreach (ListBoxItem selectedBlockdays in softblockedDayTimesExpert.SelectedItems)
+                    {
+                        Blocked_timeslot thisTimeslot = new Blocked_timeslot();
+                        thisTimeslot.Daytime_id = (int)selectedBlockdays.Tag;
+                        thisTimeslot.Hardblock = true;
+                        newExpert.BlockedTimeslots.Add(thisTimeslot);
+
+                    }
+                }
 				//Send to the database
 				_controller.ExpertMapper.Save(newExpert);
 				MessageBox.Show("Expert toegevoegd");
@@ -1334,26 +1399,181 @@ namespace PAZ
 		{
 			ListBoxItem item = new ListBoxItem();
 			ListBoxItem item1 = new ListBoxItem();
-			List<Daytime> dayTimeList = _controller.DaytimeMapper.FindAll();
+            List<Daytime> _dayTimeListTeacher = _controller.DaytimeMapper.FindAll();
 
-			foreach (Daytime daytime in dayTimeList)
+            foreach (Daytime daytime in _dayTimeListTeacher)
 			{
 				item = new ListBoxItem();
 				item1 = new ListBoxItem();
                 item.Content = daytime.Date.ToShortDateString() + " - " + daytime.GetStarttime();
                 item1.Content = daytime.Date.ToShortDateString() + " - " + daytime.GetStarttime();
+                item.Tag = daytime.Id;
+                item1.Tag = daytime.Id;
 
 				blockedDayTimesTeacher.Items.Add(item);
 				softblockedDayTimesDocent.Items.Add(item1);
 			}
 		}
 
+        private void expertToevoegenVisible(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ListBoxItem item = new ListBoxItem();
+            ListBoxItem item1 = new ListBoxItem();
+
+            foreach (Daytime daytime in _controller.DaytimeMapper.FindAll())
+            {
+                item = new ListBoxItem();
+                item1 = new ListBoxItem();
+                item.Content = daytime.Date.ToShortDateString() + " - " + daytime.GetStarttime();
+                item1.Content = daytime.Date.ToShortDateString() + " - " + daytime.GetStarttime();
+                item.Tag = daytime.Id;
+                item1.Tag = daytime.Id;
+
+                blockedDayTimesExpert.Items.Add(item);
+                softblockedDayTimesExpert.Items.Add(item1);
+            }
+        }
+
+        private void begeleiderToevoegenVisible(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ListBoxItem item = new ListBoxItem();
+            ListBoxItem item1 = new ListBoxItem();
+
+            foreach (Daytime daytime in _controller.DaytimeMapper.FindAll())
+            {
+                item = new ListBoxItem();
+                item1 = new ListBoxItem();
+                item.Content = daytime.Date.ToShortDateString() + " - " + daytime.GetStarttime();
+                item1.Content = daytime.Date.ToShortDateString() + " - " + daytime.GetStarttime();
+                item.Tag = daytime.Id;
+                item1.Tag = daytime.Id;
+
+                blockedDayTimesBegeleider.Items.Add(item);
+                softblockedDayTimesBegeleider.Items.Add(item1);
+            }
+
+        }
 
         private void buttonKoppelen_Click(object sender, RoutedEventArgs e)
         {
             KoppelWindow koppelWindow = new KoppelWindow();
             koppelWindow.ShowDialog();
         }
+
+		private void onStudentEditClicked(object sender, RoutedEventArgs e)
+		{
+			//Use this for input errors
+			bool hasInputError = false;
+
+			//Check study
+			if (textBoxStudywijzig.Text.Equals(String.Empty))
+			{
+				textBoxStudywijzig.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxStudywijzig.BorderBrush = Brushes.Gray;
+			}
+
+			//Check email adress
+			if (EmailLeering1wijzig.Text.Equals(String.Empty))
+			{
+				EmailLeering1wijzig.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				EmailLeering1wijzig.BorderBrush = Brushes.Gray;
+			}
+			if (!EmailLeering1wijzig.Text.IsValidEmailAddress())
+			{
+				EmailLeering1wijzig.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				EmailLeering1wijzig.BorderBrush = Brushes.Gray;
+			}
+
+			//Check student number
+			if (textBoxStudentennummerwijzig.Text.Equals(String.Empty))
+			{
+				textBoxStudentennummerwijzig.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxStudentennummerwijzig.BorderBrush = Brushes.Gray;
+			}
+
+			//Check first name
+			if (textBoxVoornaamwijzig.Text.Equals(String.Empty))
+			{
+				textBoxVoornaamwijzig.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxVoornaamwijzig.BorderBrush = Brushes.Gray;
+			}
+
+			//Check surname
+			if (textBoxAchternaamwijzig.Text.Equals(String.Empty))
+			{
+				textBoxAchternaamwijzig.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxAchternaamwijzig.BorderBrush = Brushes.Gray;
+			}
+
+			//Check Blocked timeslots
+
+			if (blockedDayTimesWijzig.SelectedItem == null)
+			{
+				blockedDayTimesWijzig.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				blockedDayTimesWijzig.BorderBrush = Brushes.Gray;
+			}
+
+			if (hasInputError == false)
+			{
+				//Create expert object and add values
+				foreach(Student student in _students)
+				{
+					if(student.Studentnumber == Convert.ToInt32(textBoxStudentennummerwijzig.Text))
+					{
+						student.Firstname = textBoxVoornaamwijzig.Text;
+						student.Surname = textBoxAchternaamwijzig.Text;
+						student.Email = EmailLeering1wijzig.Text;
+						student.Studentnumber = Convert.ToInt32(textBoxStudentennummerwijzig.Text);
+						student.Study = textBoxStudywijzig.Text;
+						student.WasChanged = false;
+
+						Blocked_timeslot timeslot = new Blocked_timeslot();
+
+						//Blocked Timeslot
+						ListBoxItem selectedItem = (ListBoxItem)blockedDayTimesWijzig.SelectedItem;
+						string date = selectedItem.Content.ToString();
+						List<Daytime> foundDayTimes = _controller.DaytimeMapper.FindWithDate(date);
+						student.BlockedTimeslots.Clear();
+						foreach (Daytime thisTimeslot in foundDayTimes)
+						{
+							student.BlockedTimeslots.Add(new Blocked_timeslot(thisTimeslot, true));
+						}
+						//Send to the database
+						_controller.StudentMapper.Save(student);
+						MessageBox.Show("Student gewijzigd");
+						break;
+					}
+				}
+			}
+		}
     }
 
 	public static class ValidatorExtensions

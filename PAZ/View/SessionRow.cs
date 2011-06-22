@@ -30,8 +30,15 @@ namespace PAZ.View
             {
                 this.Lokaal = "";
             }
-            this.Studenten = session.Pair.Student1.Firstname + " " + session.Pair.Student1.Surname + "\r"
-                    + session.Pair.Student2.Firstname + " " + session.Pair.Student2.Surname;
+			if (session.Pair.Student2 != null)
+			{
+				this.Studenten = session.Pair.Student1.Firstname + " " + session.Pair.Student1.Surname + "\r"
+						+ session.Pair.Student2.Firstname + " " + session.Pair.Student2.Surname;
+			}
+			else
+			{
+				this.Studenten = session.Pair.Student1.Firstname + " " + session.Pair.Student1.Surname;
+			}
 
             string returnStringTeachers = String.Empty;
             string returnStringExperts = String.Empty;

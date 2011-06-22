@@ -81,7 +81,10 @@ namespace PAZ.Model
             {
                 List<User> result = this.Attachments;
                 result.Add(this.Student1);
-                result.Add(this.Student2);
+				if (this.Student2 != null)
+				{
+					result.Add(this.Student2);
+				}
                 return result;
             }
         }

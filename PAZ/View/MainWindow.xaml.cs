@@ -389,7 +389,7 @@ namespace PAZ
 					blockedDayTimesWijzig.Items.Add(item);
 					if (blocked_timeslot.Count > 0)
 					{
-						if (daytime.Id == blocked_timeslot[0].Daytime_id)
+						if (daytime.Date == blocked_timeslot[0].Daytime.Date)
 						{
 							blockedDayTimesWijzig.SelectedItem = item;
 						}
@@ -1456,45 +1456,37 @@ namespace PAZ
 				blockedDayTimesWijzig.BorderBrush = Brushes.Gray;
 			}
 
-			if (_controller.StudentMapper.FindWithDuplicateCheck(int.Parse(textBoxStudentennummer.Text), EmailLeering1.Text))
-			{
-				textBoxStudentennummerwijzig.BorderBrush = Brushes.Red;
-				EmailLeering1wijzig.BorderBrush = Brushes.Red;
-				hasInputError = true;
-				MessageBox.Show("Studentnummer of emailadres bestaat al.");
-			}
-
 			if (hasInputError == false)
 			{
 				//Create expert object and add values
-				for(Student student in _students)
+				foreach(Student student in _students)
 				{
+					if(student.Studentnumber == Convert.ToInt32(textBoxStudentennummerwijzig.Text))
+					{
+						student.Firstname = textBoxVoornaamwijzig.Text;
+						student.Surname = textBoxAchternaamwijzig.Text;
+						student.Email = EmailLeering1wijzig.Text;
+						student.Studentnumber = Convert.ToInt32(textBoxStudentennummerwijzig.Text);
+						student.Study = textBoxStudywijzig.Text;
+						student.WasChanged = false;
 
+						Blocked_timeslot timeslot = new Blocked_timeslot();
+
+						//Blocked Timeslot
+						ListBoxItem selectedItem = (ListBoxItem)blockedDayTimesWijzig.SelectedItem;
+						string date = selectedItem.Content.ToString();
+						List<Daytime> foundDayTimes = _controller.DaytimeMapper.FindWithDate(date);
+						student.BlockedTimeslots.Clear();
+						foreach (Daytime thisTimeslot in foundDayTimes)
+						{
+							student.BlockedTimeslots.Add(new Blocked_timeslot(thisTimeslot, true));
+						}
+						//Send to the database
+						_controller.StudentMapper.Save(student);
+						MessageBox.Show("Student gewijzigd");
+						break;
+					}
 				}
-				newStudent.Firstname = textBoxVoornaam.Text;
-				newStudent.Surname = textBoxAchternaam.Text;
-				newStudent.Email = EmailLeering1.Text;
-				newStudent.Studentnumber = Convert.ToInt32(textBoxStudentennummer.Text);
-				newStudent.Study = textBoxStudy.Text;
-				newStudent.WasChanged = false;
-				Blocked_timeslot timeslot = new Blocked_timeslot();
-
-				//Blocked Timeslot
-				ListBoxItem selectedItem = (ListBoxItem)blockedDayTimes.SelectedItem;
-				string date = selectedItem.Content.ToString();
-				List<Daytime> foundDayTimes = _controller.DaytimeMapper.FindWithDate(date);
-				foreach (Daytime thisTimeslot in foundDayTimes)
-				{
-					newStudent.BlockedTimeslots.Add(new Blocked_timeslot(thisTimeslot, true));
-				}
-
-				//Send to the database
-				_controller.StudentMapper.Save(newStudent);
-				MessageBox.Show("Student toegevoegd");
-				textBoxVoornaam.Text = "";
-				textBoxAchternaam.Text = "";
-				EmailLeering1.Text = "";
-				textBoxStudentennummer.Text = "";
 			}
 		}
     }

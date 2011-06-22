@@ -55,7 +55,7 @@ namespace PAZ.Model.Mappers
                 this._db.CloseConnection();
                 pair.ID = Reader.GetInt32(0);
             }
-
+            List<User> attachments = pair.Attachments;
             this._db.OpenConnection();
             MySqlCommand command3 = this._db.CreateCommand();
             command3.CommandText = "DELETE FROM pair_attachment WHERE pair_id = ?pair_id";
@@ -63,7 +63,7 @@ namespace PAZ.Model.Mappers
             this._db.ExecuteCommand(command3);
             this._db.CloseConnection();
             List<int> had = new List<int>();
-            foreach (User attachment in pair.Attachments)
+            foreach (User attachment in attachments)
             {
                 if (!had.Contains(attachment.Id))
                 {

@@ -26,6 +26,8 @@ namespace PAZ
         private bool _isBusyCoupling = false;
         private bool _wasChanged = false;
 
+        private int _previousStudentIndex;
+
         public KoppelWindow()
         {
             InitializeComponent();
@@ -111,8 +113,6 @@ namespace PAZ
 
         /**
         * Sluit het scherm en slaat wijzigingen op
-        * 
-        * Auteur: Gökhan en Yorg
         */
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
@@ -124,8 +124,6 @@ namespace PAZ
 
         /**
         * Sluit het huidige scherm
-        * 
-        * Auteur: Gökhan 
         */
         private void btnAnnuleren(object sender, RoutedEventArgs e)
         {
@@ -162,6 +160,25 @@ namespace PAZ
             Pair pair = (Pair) cbPairs.Items[cbPairs.SelectedIndex];
 
             List<User> newAttachmentList = new List<User>();
+
+            pair.Student1 = (Student) cbStudent1.Items[cbStudent1.SelectedIndex];
+            pair.Student1_id = pair.Student1.Id;
+
+            if (cbStudent2.SelectedIndex <= 0)
+            {
+                pair.Student2 = null;
+                pair.Student2_id = 0;
+            }
+            else
+            {
+                pair.Student2 = (Student)cbStudent2.Items[cbStudent2.SelectedIndex];
+                pair.Student2_id = pair.Student2.Id;
+            }
+
+            int saveIndex = cbPairs.SelectedIndex;
+            cbPairs.Items.Clear();
+            fillPairs();
+            cbPairs.SelectedIndex = saveIndex;
 
             if(cbTeacher1.SelectedIndex > 0)
                 newAttachmentList.Add((User) cbTeacher1.Items[cbTeacher1.SelectedIndex]);
@@ -213,6 +230,8 @@ namespace PAZ
                     cbStudent2.SelectedIndex = i;
             }
 
+            _previousStudentIndex = cbStudent1.SelectedIndex;
+
             SelectCoupledUsers(selectedPair, cbTeacher1, cbTeacher2);
             SelectCoupledUsers(selectedPair, cbExpert1, cbExpert2);
 
@@ -250,6 +269,58 @@ namespace PAZ
 
             if (!userSelected)
                 firstBox.SelectedIndex = 0;
+        }
+
+        private void cbStudent1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_isBusyCoupling)
+                return;
+
+            if (cbStudent1.SelectedIndex == 0)
+            {
+                MessageBox.Show("Er moet minstens een student aan een paar gekoppeld zijn, gebruik het verwijderen scherm als u studenten en hun paren wilt verwijderen.", "Waarschuwing", MessageBoxButton.OK, MessageBoxImage.Warning);
+                cbStudent1.SelectedIndex = _previousStudentIndex;
+                return;
+            }
+
+
+            if (cbPairs.SelectedIndex > 0)
+            {
+                btnSave.IsEnabled = true;
+                ResavePairAttachment();
+            }
+
+            if (cbStudent1.SelectedIndex == 0)
+                return;
+
+            if (cbStudent1.SelectedIndex == cbStudent2.SelectedIndex)
+            {
+                MessageBox.Show("Deze student is al gekoppeld", "Waarschuwing", MessageBoxButton.OK, MessageBoxImage.Warning);
+                cbStudent1.SelectedIndex = _previousStudentIndex;
+            }
+
+            _previousStudentIndex = cbStudent1.SelectedIndex;
+        }
+
+        private void cbStudent2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_isBusyCoupling)
+                return;
+
+            if (cbPairs.SelectedIndex > 0)
+            {
+                btnSave.IsEnabled = true;
+                ResavePairAttachment();
+            }
+
+            if (cbStudent2.SelectedIndex == 0)
+                return;
+
+            if (cbStudent2.SelectedIndex == cbStudent1.SelectedIndex)
+            {
+                MessageBox.Show("Deze student is al gekoppeld", "Waarschuwing", MessageBoxButton.OK, MessageBoxImage.Warning);
+                cbStudent2.SelectedIndex = 0;
+            }
         }
 
         private void cbTeacher1_SelectionChanged(object sender, SelectionChangedEventArgs e)

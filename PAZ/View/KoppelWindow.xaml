@@ -26,8 +26,8 @@
                     <Button Content="Annuleren" Height="29" HorizontalAlignment="Left" Margin="202,237,0,0" Name="btnSluiten" VerticalAlignment="Top" Width="90" Click="btnAnnuleren" />
                     <Label Content="Student 1:" FontStyle="Italic" Foreground="#FF5E5353" Height="28" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="8.997,43,0,0" Name="lblStudent1" VerticalAlignment="Top" Width="77.463" />
                     <Label Content="Student 2:" FontStyle="Italic" Foreground="#FF5E5353" Height="28" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="8.997,72,0,0" Name="lblStudent2" VerticalAlignment="Top" Width="77.463" />
-                    <ComboBox Background="#FFEFEFEF" Foreground="#FF595959" Height="23" HorizontalAlignment="Left" Margin="102.907,43,0,0" Name="cbStudent1" VerticalAlignment="Top" Width="258" />
-                    <ComboBox Background="#FFEFEFEF" Foreground="#FF595959" Height="23" HorizontalAlignment="Left" Margin="102.907,72,0,0" Name="cbStudent2" VerticalAlignment="Top" Width="258" />
+                    <ComboBox Background="#FFEFEFEF" Foreground="#FF595959" Height="23" HorizontalAlignment="Left" Margin="102.907,43,0,0" Name="cbStudent1" VerticalAlignment="Top" Width="258" SelectionChanged="cbStudent1_SelectionChanged" />
+                    <ComboBox Background="#FFEFEFEF" Foreground="#FF595959" Height="23" HorizontalAlignment="Left" Margin="102.907,72,0,0" Name="cbStudent2" VerticalAlignment="Top" Width="258" SelectionChanged="cbStudent2_SelectionChanged" />
                 </Grid>
             </TabItem>
         </TabControl>

@@ -81,9 +81,9 @@ namespace PAZMySQL
             this._db.OpenConnection();
             this._db.ExecuteCommand(command);
             this._db.CloseConnection();
-            this._db.OpenConnection();
             if (insert)
             {
+                this._db.OpenConnection();
                 MySqlCommand command2 = this._db.CreateCommand();
                 command2.CommandText = "SELECT LAST_INSERT_ID()";
                 MySqlDataReader Reader = this._db.ExecuteCommand(command2);

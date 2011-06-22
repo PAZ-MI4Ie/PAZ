@@ -91,7 +91,7 @@ namespace PAZMySQL
             return result;
         }
         
-        public void Save(Daytime daytime)
+        public int Save(Daytime daytime)
         {
             Boolean insert = true;
             if (daytime.Id != 0)
@@ -115,6 +115,17 @@ namespace PAZMySQL
             command.Parameters.Add(new MySqlParameter("?timeslot", MySqlDbType.Int32)).Value = daytime.Timeslot;
             this._db.ExecuteCommand(command);
             this._db.CloseConnection();
+            if (insert)
+            {
+                this._db.OpenConnection();
+                MySqlCommand command2 = this._db.CreateCommand();
+                command2.CommandText = "SELECT LAST_INSERT_ID()";
+                MySqlDataReader Reader = this._db.ExecuteCommand(command2);
+                Reader.Read();
+                this._db.CloseConnection();
+                return Reader.GetInt32(0);
+            }
+            return 0;
         }
     }
 }

@@ -56,9 +56,10 @@ namespace PAZ.View
                         Daytime d = _controller.DaytimeMapper.Find(GetSessionDate(session), Grid.GetRow(session));
                         if (d == null)
                         {
-                            string[] date = other[1].Split('-');
+                            string[] date = GetSessionDate(session).Split('-');
                             d = new Daytime(0, new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0])), Grid.GetRow(session) + 1);
-                            _controller.DaytimeMapper.Save(d);
+                            d.Id = _controller.DaytimeMapper.Save(d);
+                            
                         }
                         s.Daytime = d;
                         s.Classroom = _controller.ClassroomMapper.Find(Grid.GetColumn(session) + 1);
@@ -78,7 +79,7 @@ namespace PAZ.View
                         {
                             string[] date = GetSessionDate(session).Split('-');
                             d = new Daytime(0, new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0])), Grid.GetRow(session) + 1);
-                            _controller.DaytimeMapper.Save(d);
+                            d.Id = _controller.DaytimeMapper.Save(d);
                         }
                         s.Daytime = d;
                         s.Classroom = _controller.ClassroomMapper.Find(Grid.GetColumn(session) + 1);

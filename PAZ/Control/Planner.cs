@@ -66,8 +66,10 @@ namespace PAZ.Control
                 if (!session.Pair.HasExpert())
                 {
                     List<Expert> availableThisSlot = availableExperts.ElementAt(daytimeI).Value;
-                    if (availableThisSlot.Count > 0)
+                    if (availableThisSlot.Count > 1)
                     {
+                        session.Pair.Attachments.Add(availableThisSlot.ElementAt(0));
+                        availableThisSlot.RemoveAt(0);
                         session.Pair.Attachments.Add(availableThisSlot.ElementAt(0));
                         availableThisSlot.RemoveAt(0);
                         PAZController.GetInstance().PairMapper.Save(session.Pair);

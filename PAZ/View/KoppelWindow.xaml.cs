@@ -175,11 +175,6 @@ namespace PAZ
                 pair.Student2_id = pair.Student2.Id;
             }
 
-            int saveIndex = cbPairs.SelectedIndex;
-            cbPairs.Items.Clear();
-            fillPairs();
-            cbPairs.SelectedIndex = saveIndex;
-
             if(cbTeacher1.SelectedIndex > 0)
                 newAttachmentList.Add((User) cbTeacher1.Items[cbTeacher1.SelectedIndex]);
 
@@ -193,6 +188,11 @@ namespace PAZ
                 newAttachmentList.Add((User) cbExpert2.Items[cbExpert2.SelectedIndex]);
 
             pair.Attachments = newAttachmentList;
+
+            int saveIndex = cbPairs.SelectedIndex;
+            cbPairs.Items.Clear();
+            fillPairs();
+            cbPairs.SelectedIndex = saveIndex;
         }
 
         public new bool ShowDialog()

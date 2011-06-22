@@ -134,8 +134,8 @@
 
                     <!-- EXTERN -->
                     <!-- groupboxes, bij default hidden-->
-                    <GroupBox Header="Externe deskundige gegevens" Height="397" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxExternGegevens" VerticalAlignment="Top" Width="757" Visibility="Hidden">
-                        <Grid Height="376" Visibility="Visible">
+                    <GroupBox Header="Externe deskundige gegevens" Height="500" HorizontalAlignment="Left" Margin="6,101,0,0" Name="groupBoxExternGegevens" VerticalAlignment="Top" Width="757" Visibility="Hidden" IsVisibleChanged="expertToevoegenVisible">
+                        <Grid Height="500" Visibility="Visible">
                             <Label Content="Voornaam" Height="28" HorizontalAlignment="Left" Margin="24,19,0,0" Name="labelExternVoornaam" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,21,0,0" Name="textBoxExternVoornaam" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
@@ -160,9 +160,16 @@
                             <Label Content="Stad" Height="28" HorizontalAlignment="Left" Margin="24,301,0,0" Name="labelExpertCity" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,301,0,0" Name="textBoxExpertCity" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
+                            <Label Content="Geblokkeerde dag" Height="28" HorizontalAlignment="Left" Margin="24,341,0,0" Name="labelBlockedDayExpert" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <ListBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="246" Height="50" Name="blockedDayTimesExpert" Margin="293,341,0,0" SelectionMode="Multiple">
+                            </ListBox>
+
+                            <Label Content="Liever niet dagen" Height="28" HorizontalAlignment="Left" Margin="24,400,0,0" Name="labelsoftBlockedDayExpert" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
+                            <ListBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="246" Height="50" Name="softblockedDayTimesExpert" Margin="293,400,0,0" SelectionMode="Multiple">
+                            </ListBox>
 
 
-                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,341,0,0" Name="buttonExtern" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onExpertAddClicked" />
+                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,460,0,0" Name="buttonExtern" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onExpertAddClicked" />
                         </Grid>
                     </GroupBox>
 

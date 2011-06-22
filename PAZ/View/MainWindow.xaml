@@ -185,11 +185,11 @@
                             <RadioButton GroupName="teacher_sessionspread" Height="23" Content="Dicht bij elkaar" Margin="390,139,0,0" Name="sessionDichtBijElkaar" VerticalAlignment="Top" Width="246" Foreground="#FF595959"></RadioButton>
 
                             <Label Content="Geblokkeerde dag" Height="28" HorizontalAlignment="Left" Margin="24,179,0,0" Name="labelBlockedDayTeacher" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
-                            <ListBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="246" Height="50" Name="blockedDayTimesTeacher" Margin="293,179,0,0" SelectionMode="Single">
+                            <ListBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="246" Height="50" Name="blockedDayTimesTeacher" Margin="293,179,0,0" SelectionMode="Multiple">
                             </ListBox>
 
                             <Label Content="Liever niet dagen" Height="28" HorizontalAlignment="Left" Margin="24,239,0,0" Name="labelsoftBlockedDay" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
-                            <ListBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="246" Height="50" Name="softblockedDayTimesDocent" Margin="293,239,0,0">
+                            <ListBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="246" Height="50" Name="softblockedDayTimesDocent" Margin="293,239,0,0" SelectionMode="Multiple">
                             </ListBox>
 
                             <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,301,0,0" Name="buttonLeraar" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onTeacherAddClicked" />

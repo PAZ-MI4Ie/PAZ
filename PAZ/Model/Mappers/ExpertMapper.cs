@@ -20,8 +20,10 @@ namespace PAZMySQL
             base.ProcessRow(expert, Reader);
             //expert data
             expert.Company = Reader.GetString(8);
-            expert.Address = Reader.GetString(9);
-            expert.Postcode = Reader.GetString(10);
+			expert.Address = Reader.GetString(9);
+			expert.Postcode = Reader.GetString(10);
+			expert.Telephone = Reader.GetString(11);
+			expert.City = Reader.GetString(12);
             return expert;
         }
 
@@ -29,7 +31,7 @@ namespace PAZMySQL
         {
             this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
-            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, was_changed, company, address, postcode FROM user, expert WHERE user.id = expert.user_id AND id = ?id";
+            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, was_changed, company, address, postcode, telephone, city FROM user, expert WHERE user.id = expert.user_id AND id = ?id";
             command.Parameters.Add(new MySqlParameter("?id", MySqlDbType.Int32)).Value = id;
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             Reader.Read();//Only 1 row
@@ -41,7 +43,7 @@ namespace PAZMySQL
         {
             this._db.OpenConnection();
             MySqlCommand command = this._db.CreateCommand();
-            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, was_changed, company, address, postcode FROM user, expert WHERE user.id = expert.user_id";
+            command.CommandText = "SELECT id, username, firstname, surname, email, user_type, status, was_changed, company, address, postcode, telephone, city FROM user, expert WHERE user.id = expert.user_id";
             MySqlDataReader Reader = this._db.ExecuteCommand(command);
             List<Expert> result = new List<Expert>();
             while (Reader.Read())

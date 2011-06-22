@@ -348,15 +348,15 @@ namespace PAZ
 					if (type == "student")
 					{
 						String[] nr = identifier.Split('-');
-						nr[1].ToString().Trim();
+						nr[nr.Length - 1].ToString().Trim();
 
 						for (int i = 0; i < _students.Count; i++)
 						{
-							if (_students[i].Studentnumber == Convert.ToInt32(nr[1]))
+							if (_students[i].Studentnumber == Convert.ToInt32(nr[nr.Length - 1]))
 							{
 								Student student = _students[i];
 								groupBoxWijzigStudent.Visibility = Visibility.Visible;
-								fillBlockedDaysWijzigenListBox(student.Id);
+								fillBlockedDaysWijzigenListBoxStudent(student.Id);
 								textBoxStudentennummerwijzig.Text = student.Studentnumber.ToString();
 								textBoxStudywijzig.Text = student.Study;
 								textBoxVoornaamwijzig.Text = student.Firstname;
@@ -366,16 +366,77 @@ namespace PAZ
 							}
 						}
 					}
+					else if (type == "expert")
+					{
+						String[] nr = identifier.Split('-');
+						nr[nr.Length - 1].ToString().Trim();
+
+						for (int i = 0; i < _experts.Count; i++)
+						{
+							if (_experts[i].Id == Convert.ToInt32(nr[nr.Length-1]))
+							{
+								Expert expert = _experts[i];
+								groupBoxBegeleiderGegevenswijzig.Visibility = Visibility.Visible;
+								fillBlockedDaysWijzigenListBoxExpert(expert.Id);
+								textBoxBegeleiderVoornaamwijzig.Text = expert.Firstname;
+								textBoxBegeleiderAchternaamwijzig.Text = expert.Surname;
+								textBoxBegeleiderBedrijfwijzig.Text = expert.Company;
+								textBoxBegeleiderAdreswijzig.Text = expert.Address;
+								textBoxBegeleiderPostcodewijzig.Text = expert.Postcode;
+								textBoxBegeleiderTelefoonnummerwijzig.Text = expert.Telephone;
+								textBoxBegeleiderEmailwijzig.Text = expert.Email;
+								textBoxBegeleiderCitywijzig.Text = expert.City;
+								Console.WriteLine(expert.City + "----" + expert.Telephone);
+
+								break;
+							}
+						}
+					}
 				}
 			}
 		}
 
-		// deze functie moet nog uitgewerkt worden om in wijzigen aan te geven welke data de student al aangegeven had als geblokeerd.
-		private void fillBlockedDaysWijzigenListBox(int user_id)
+		private void fillBlockedDaysWijzigenListBoxExpert(int expert_id)
 		{
 			ListBoxItem item = new ListBoxItem();
 			int count = 0;
-			List<Blocked_timeslot> blocked_timeslot = _controller.BlockedTimeslotMapper.FindByUserId(user_id);
+			List<Blocked_timeslot> blocked_timeslot = _controller.BlockedTimeslotMapper.FindByUserId(expert_id);
+			List<Daytime> dayTimeList = _controller.DaytimeMapper.FindAll();
+
+			foreach (Daytime daytime in dayTimeList)
+			{
+				if (count == 0)
+				{
+					item = new ListBoxItem();
+					item.Content = daytime.Date.ToShortDateString();
+					item.Tag = daytime.Id;
+
+					blockedDayTimesBegeleiderwijzig.Items.Add(item);
+					if (blocked_timeslot.Count > 0)
+					{
+						if (daytime.Date == blocked_timeslot[0].Daytime.Date)
+						{
+							blockedDayTimesBegeleiderwijzig.SelectedItem = item;
+						}
+					}
+					count++;
+				}
+				else if (count == 3)
+				{
+					count = 0;
+				}
+				else
+				{
+					count++;
+				}
+			}
+		}
+
+		private void fillBlockedDaysWijzigenListBoxStudent(int student_id)
+		{
+			ListBoxItem item = new ListBoxItem();
+			int count = 0;
+			List<Blocked_timeslot> blocked_timeslot = _controller.BlockedTimeslotMapper.FindByUserId(student_id);
 			List<Daytime> dayTimeList = _controller.DaytimeMapper.FindAll();
 
 			foreach (Daytime daytime in dayTimeList)
@@ -426,7 +487,7 @@ namespace PAZ
 			comboBoxSelecteerWijzigPersoon.SelectedIndex = 0;
 			for (int i = 0; i < _teachers.Count; i++)
 			{
-				comboBoxSelecteerWijzigPersoon.Items.Add(_teachers[i].Firstname + " " + _teachers[i].Surname);
+				comboBoxSelecteerWijzigPersoon.Items.Add(_teachers[i].Firstname + " " + _teachers[i].Surname + " - " + _teachers[i].Id);
 			}
 			comboBoxSelecteerWijzigPersoon.Visibility = Visibility.Visible;
 		}
@@ -438,7 +499,7 @@ namespace PAZ
 			comboBoxSelecteerWijzigPersoon.SelectedIndex = 0;
 			for (int i = 0; i < _experts.Count; i++)
 			{
-				comboBoxSelecteerWijzigPersoon.Items.Add(_experts[i].Firstname + " " + _experts[i].Surname);
+				comboBoxSelecteerWijzigPersoon.Items.Add(_experts[i].Firstname + " " + _experts[i].Surname + " - " + _experts[i].Id);
 			}
 			comboBoxSelecteerWijzigPersoon.Visibility = Visibility.Visible;
 		}
@@ -450,8 +511,8 @@ namespace PAZ
 		{
 			groupBoxWijzigLokaalGegevens.Visibility = Visibility.Hidden;
 			groupBoxWijzigStudent.Visibility = Visibility.Hidden;
-			groupBoxWijzigBegeleiderGegevens.Visibility = Visibility.Hidden;
-			groupBoxWijzigExternGegevens.Visibility = Visibility.Hidden;
+			groupBoxBegeleiderGegevenswijzig.Visibility = Visibility.Hidden;
+			groupBoxExternGegevenswijzig.Visibility = Visibility.Hidden;
 			groupBoxLeraarGegevenswijzig.Visibility = Visibility.Hidden;
 		}
 
@@ -1573,6 +1634,11 @@ namespace PAZ
 					}
 				}
 			}
+		}
+
+		private void onBegeleiderEditClicked(object sender, RoutedEventArgs e)
+		{
+
 		}
     }
 

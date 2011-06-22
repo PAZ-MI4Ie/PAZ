@@ -356,14 +356,12 @@ namespace PAZ
 							{
 								Student student = _students[i];
 								groupBoxWijzigStudent.Visibility = Visibility.Visible;
-								//fillBlockedDaysWijzigenListBox();
+								fillBlockedDaysWijzigenListBox(student.Id);
 								textBoxStudentennummerwijzig.Text = student.Studentnumber.ToString();
 								textBoxStudywijzig.Text = student.Study;
 								textBoxVoornaamwijzig.Text = student.Firstname;
 								textBoxAchternaamwijzig.Text = student.Surname;
 								EmailLeering1wijzig.Text = student.Email;
-								List<Daytime> dayTimeList = _controller.DaytimeMapper.FindAll();
-								//blockedDayTimesWijzig.Items.Add = student.BlockedTimeslots;
 								break;
 							}
 						}
@@ -378,13 +376,8 @@ namespace PAZ
 			ListBoxItem item = new ListBoxItem();
 			int count = 0;
 			List<Blocked_timeslot> blocked_timeslot = _controller.BlockedTimeslotMapper.FindByUserId(user_id);
-			List<Daytime> dayTimeList = new List<Daytime>();
+			List<Daytime> dayTimeList = _controller.DaytimeMapper.FindAll();
 
-			for (int i = 0; i < blocked_timeslot.Count; i++)
-			{
-				//dayTimeList.Add(_controller.DaytimeMapper.Find(blocked_timeslot[i]));
-			}
-			
 			foreach (Daytime daytime in dayTimeList)
 			{
 				if (count == 0)
@@ -394,6 +387,13 @@ namespace PAZ
 					item.Tag = daytime.Id;
 
 					blockedDayTimesWijzig.Items.Add(item);
+					if (blocked_timeslot.Count > 0)
+					{
+						if (daytime.Id == blocked_timeslot[0].Daytime_id)
+						{
+							blockedDayTimesWijzig.SelectedItem = item;
+						}
+					}
 					count++;
 				}
 				else if (count == 3)
@@ -1354,6 +1354,129 @@ namespace PAZ
             KoppelWindow koppelWindow = new KoppelWindow();
             koppelWindow.ShowDialog();
         }
+
+		private void onStudentEditClicked(object sender, RoutedEventArgs e)
+		{
+			//Use this for input errors
+			bool hasInputError = false;
+
+			//Check study
+			if (textBoxStudywijzig.Text.Equals(String.Empty))
+			{
+				textBoxStudywijzig.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxStudywijzig.BorderBrush = Brushes.Gray;
+			}
+
+			//Check email adress
+			if (EmailLeering1wijzig.Text.Equals(String.Empty))
+			{
+				EmailLeering1wijzig.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				EmailLeering1wijzig.BorderBrush = Brushes.Gray;
+			}
+			if (!EmailLeering1wijzig.Text.IsValidEmailAddress())
+			{
+				EmailLeering1wijzig.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				EmailLeering1wijzig.BorderBrush = Brushes.Gray;
+			}
+
+			//Check student number
+			if (textBoxStudentennummerwijzig.Text.Equals(String.Empty))
+			{
+				textBoxStudentennummerwijzig.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxStudentennummerwijzig.BorderBrush = Brushes.Gray;
+			}
+
+			//Check first name
+			if (textBoxVoornaamwijzig.Text.Equals(String.Empty))
+			{
+				textBoxVoornaamwijzig.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxVoornaamwijzig.BorderBrush = Brushes.Gray;
+			}
+
+			//Check surname
+			if (textBoxAchternaamwijzig.Text.Equals(String.Empty))
+			{
+				textBoxAchternaamwijzig.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				textBoxAchternaamwijzig.BorderBrush = Brushes.Gray;
+			}
+
+			//Check Blocked timeslots
+
+			if (blockedDayTimesWijzig.SelectedItem == null)
+			{
+				blockedDayTimesWijzig.BorderBrush = Brushes.Red;
+				hasInputError = true;
+			}
+			else
+			{
+				blockedDayTimesWijzig.BorderBrush = Brushes.Gray;
+			}
+
+			if (_controller.StudentMapper.FindWithDuplicateCheck(int.Parse(textBoxStudentennummer.Text), EmailLeering1.Text))
+			{
+				textBoxStudentennummerwijzig.BorderBrush = Brushes.Red;
+				EmailLeering1wijzig.BorderBrush = Brushes.Red;
+				hasInputError = true;
+				MessageBox.Show("Studentnummer of emailadres bestaat al.");
+			}
+
+			if (hasInputError == false)
+			{
+				//Create expert object and add values
+				for(Student student in _students)
+				{
+
+				}
+				newStudent.Firstname = textBoxVoornaam.Text;
+				newStudent.Surname = textBoxAchternaam.Text;
+				newStudent.Email = EmailLeering1.Text;
+				newStudent.Studentnumber = Convert.ToInt32(textBoxStudentennummer.Text);
+				newStudent.Study = textBoxStudy.Text;
+				newStudent.WasChanged = false;
+				Blocked_timeslot timeslot = new Blocked_timeslot();
+
+				//Blocked Timeslot
+				ListBoxItem selectedItem = (ListBoxItem)blockedDayTimes.SelectedItem;
+				string date = selectedItem.Content.ToString();
+				List<Daytime> foundDayTimes = _controller.DaytimeMapper.FindWithDate(date);
+				foreach (Daytime thisTimeslot in foundDayTimes)
+				{
+					newStudent.BlockedTimeslots.Add(new Blocked_timeslot(thisTimeslot, true));
+				}
+
+				//Send to the database
+				_controller.StudentMapper.Save(newStudent);
+				MessageBox.Show("Student toegevoegd");
+				textBoxVoornaam.Text = "";
+				textBoxAchternaam.Text = "";
+				EmailLeering1.Text = "";
+				textBoxStudentennummer.Text = "";
+			}
+		}
     }
 
 	public static class ValidatorExtensions

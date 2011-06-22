@@ -246,7 +246,7 @@
                             <Label Content="E-mail" Height="28" HorizontalAlignment="Left" Margin="24,139,0,0" Name="EmailLeerlingwijzig" Foreground="#FF5E5353" VerticalAlignment="Top" Width="152" />
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="293,139,0,0" Name="EmailLeering1wijzig" VerticalAlignment="Top" Width="246" Foreground="#FF595959"/>
 
-                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,301,0,0" Name="buttonGebruikerGegevenswijzig" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onStudentAddClicked" />
+                            <Button Content="Bevestig actie" Height="23" HorizontalAlignment="Left" Margin="446,301,0,0" Name="buttonGebruikerGegevenswijzig" VerticalAlignment="Top" Width="93" Background="#FFEFEFEF" Foreground="#FF595959" Click="onStudentEditClicked" />
                         </Grid>
                     </GroupBox>
 

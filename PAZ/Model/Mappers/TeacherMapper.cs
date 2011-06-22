@@ -70,7 +70,7 @@ namespace PAZMySQL
             }
             else
             {
-                command.CommandText = "UPDATE student (session_spread) VALUES " +
+                command.CommandText = "UPDATE teacher (session_spread) VALUES " +
                 "(?session_spread) WHERE user_id = ?user_id";
             }
             command.Parameters.Add(new MySqlParameter("?user_id", MySqlDbType.Int32)).Value = teacher.Id;

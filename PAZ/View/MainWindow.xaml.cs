@@ -36,7 +36,7 @@ namespace PAZ
 		private List<TextBox> _classroomTextboxes;
         private List<Pair> _pairs;
 		private List<Expert> _experts;
-
+        private List<Daytime> dayTimeListTeacher;
         private PAZController _controller;
 
         public MainWindow()
@@ -764,13 +764,6 @@ namespace PAZ
 				sessionSpread = Teacher.session_spread.ANY;
 			}
 
-			if (blockedDayTimesTeacher.SelectedItems != null)
-			{
-				foreach (ListBoxItem selectedBlockdays in blockedDayTimesTeacher.SelectedItems)
-				{
-					
-				}
-			}
 
 			if (hasInputError == false)
 			{
@@ -780,6 +773,31 @@ namespace PAZ
 				newTeacher.Surname = textLeraarAchternaam.Text;
 				newTeacher.Email = EmailLeraar1.Text;
 				newTeacher.Session_spread = sessionSpread;
+                newTeacher.WasChanged = false;
+
+                if (blockedDayTimesTeacher.SelectedItems != null)
+                {
+                    foreach (ListBoxItem selectedBlockdays in blockedDayTimesTeacher.SelectedItems)
+                    {
+                        Blocked_timeslot thisTimeslot = new Blocked_timeslot();
+                        thisTimeslot.Daytime_id = (int)selectedBlockdays.Tag;
+                        thisTimeslot.Hardblock = true;
+                        newTeacher.BlockedTimeslots.Add(thisTimeslot);
+
+                    }
+                }
+
+                if (softblockedDayTimesDocent.SelectedItems != null)
+                {
+                    foreach (ListBoxItem selectedBlockdays in softblockedDayTimesDocent.SelectedItems)
+                    {
+                        Blocked_timeslot thisTimeslot = new Blocked_timeslot();
+                        thisTimeslot.Daytime_id = (int)selectedBlockdays.Tag;
+                        thisTimeslot.Hardblock = true;
+                        newTeacher.BlockedTimeslots.Add(thisTimeslot);
+
+                    }
+                }
 
 				//Send to the database
 				_controller.TeacherMapper.Save(newTeacher);
@@ -1334,14 +1352,16 @@ namespace PAZ
 		{
 			ListBoxItem item = new ListBoxItem();
 			ListBoxItem item1 = new ListBoxItem();
-			List<Daytime> dayTimeList = _controller.DaytimeMapper.FindAll();
+            List<Daytime> _dayTimeListTeacher = _controller.DaytimeMapper.FindAll();
 
-			foreach (Daytime daytime in dayTimeList)
+            foreach (Daytime daytime in _dayTimeListTeacher)
 			{
 				item = new ListBoxItem();
 				item1 = new ListBoxItem();
                 item.Content = daytime.Date.ToShortDateString() + " - " + daytime.GetStarttime();
                 item1.Content = daytime.Date.ToShortDateString() + " - " + daytime.GetStarttime();
+                item.Tag = daytime.Id;
+                item1.Tag = daytime.Id;
 
 				blockedDayTimesTeacher.Items.Add(item);
 				softblockedDayTimesDocent.Items.Add(item1);

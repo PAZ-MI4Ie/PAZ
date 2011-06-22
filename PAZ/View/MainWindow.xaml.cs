@@ -955,6 +955,30 @@ namespace PAZ
 				newExpert.Telephone = textBoxBegeleiderTelefoonnummer.Text;
 				newExpert.City = textBoxBegeleiderCity.Text;
 
+                if (blockedDayTimesBegeleider.SelectedItems != null)
+                {
+                    foreach (ListBoxItem selectedBlockdays in blockedDayTimesBegeleider.SelectedItems)
+                    {
+                        Blocked_timeslot thisTimeslot = new Blocked_timeslot();
+                        thisTimeslot.Daytime_id = (int)selectedBlockdays.Tag;
+                        thisTimeslot.Hardblock = true;
+                        newExpert.BlockedTimeslots.Add(thisTimeslot);
+
+                    }
+                }
+
+                if (softblockedDayTimesBegeleider.SelectedItems != null)
+                {
+                    foreach (ListBoxItem selectedBlockdays in softblockedDayTimesBegeleider.SelectedItems)
+                    {
+                        Blocked_timeslot thisTimeslot = new Blocked_timeslot();
+                        thisTimeslot.Daytime_id = (int)selectedBlockdays.Tag;
+                        thisTimeslot.Hardblock = true;
+                        newExpert.BlockedTimeslots.Add(thisTimeslot);
+
+                    }
+                }
+
 				//Send to the database
 				_controller.ExpertMapper.Save(newExpert);
 				MessageBox.Show("Begeleider toegevoegd");
@@ -1408,6 +1432,26 @@ namespace PAZ
                 blockedDayTimesExpert.Items.Add(item);
                 softblockedDayTimesExpert.Items.Add(item1);
             }
+        }
+
+        private void begeleiderToevoegenVisible(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ListBoxItem item = new ListBoxItem();
+            ListBoxItem item1 = new ListBoxItem();
+
+            foreach (Daytime daytime in _controller.DaytimeMapper.FindAll())
+            {
+                item = new ListBoxItem();
+                item1 = new ListBoxItem();
+                item.Content = daytime.Date.ToShortDateString() + " - " + daytime.GetStarttime();
+                item1.Content = daytime.Date.ToShortDateString() + " - " + daytime.GetStarttime();
+                item.Tag = daytime.Id;
+                item1.Tag = daytime.Id;
+
+                blockedDayTimesBegeleider.Items.Add(item);
+                softblockedDayTimesBegeleider.Items.Add(item1);
+            }
+
         }
 
         private void buttonKoppelen_Click(object sender, RoutedEventArgs e)

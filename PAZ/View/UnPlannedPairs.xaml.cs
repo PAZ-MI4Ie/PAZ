@@ -33,8 +33,16 @@ namespace PAZ.View
             {
                 CustomLabel label = new CustomLabel();
                 label.Id = pair.ID;
-                string content = pair.Student1.Firstname + " " + pair.Student1.Surname + "\n" +
-                                 pair.Student2.Firstname + " " + pair.Student2.Surname + "\n\n";
+				string content = "";
+				if (pair.Student2 != null)
+				{
+					content = pair.Student1.Firstname + " " + pair.Student1.Surname + "\n" +
+									 pair.Student2.Firstname + " " + pair.Student2.Surname + "\n\n";
+				}
+				else
+				{
+					content = pair.Student1.Firstname + " " + pair.Student1.Surname + "\n\n";
+				}
                 string teachers = "";
                 string experts = "";
                 foreach (Model.User attachment in pair.Attachments)

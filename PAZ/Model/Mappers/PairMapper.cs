@@ -22,7 +22,14 @@ namespace PAZ.Model.Mappers
             pair.Number_of_guests = Reader.GetInt32(1);
             StudentMapper studentmapper = new StudentMapper(MysqlDb.GetInstance());
             pair.Student1_id = Reader.GetInt32(2);
-            pair.Student2_id = Reader.GetInt32(3);
+			try
+			{
+				pair.Student2_id = Reader.GetInt32(3);
+			}
+			catch (Exception e)
+			{
+				pair.Student2_id = 0;
+			}
             return pair;
         }
 

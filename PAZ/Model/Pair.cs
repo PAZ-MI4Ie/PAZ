@@ -33,7 +33,7 @@ namespace PAZ.Model
         {
             get
             {
-                if (this._student2 == null)
+                if (this._student2 == null && this.Student2_id != 0)
                 {
                     this.Student2 = (new StudentMapper(MysqlDb.GetInstance())).Find(this.Student2_id);
                 }
